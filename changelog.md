@@ -265,7 +265,7 @@
 - A bug with the proxy chip extraction from other servers
 
 ### Language File Changed
-- <html> and <center> are not required in the text anymore
+- `<html>` and `<center>` are not required in the text anymore
 
 ## 4.5.0 (6/14/2019)
 
