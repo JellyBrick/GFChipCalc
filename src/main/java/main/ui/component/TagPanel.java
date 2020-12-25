@@ -56,7 +56,7 @@ public class TagPanel extends JPanel {
         tm.addColumn("tag");
         tagTable.getTableHeader().setUI(null);
 
-        app.mf.inv_getAllTags().forEach((t) -> {
+        app.mf.inv_getAllTags().parallelStream().forEach((t) -> {
             if (checkBox) {
                 Object[] obj = {checkFn.test(t), t};
                 tm.addRow(obj);

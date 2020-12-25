@@ -62,7 +62,7 @@ public class TagDialog extends JDialog {
     private void applyTag() {
         int i = tp.getSelectedRow();
         if (0 <= i) {
-            chips.forEach((c) -> c.setTag(tp.getTag(i), tp.isChecked(i)));
+            chips.parallelStream().forEach((c) -> c.setTag(tp.getTag(i), tp.isChecked(i)));
             app.mf.invStat_enableSave();
             app.mf.invStat_loadStats();
         }

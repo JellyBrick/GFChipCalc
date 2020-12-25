@@ -7,6 +7,7 @@ import main.puzzle.Shape;
 import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import main.util.ThreadPoolManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -251,7 +252,7 @@ public class ImageDialog extends JDialog {
 
     private void readImage(BufferedImage image) {
         this.image = image;
-        new Thread(() -> {
+        ThreadPoolManager.getThreadPool().execute(() -> {
             SwingUtilities.invokeLater(() -> scanProgressBar.setIndeterminate(true));
             List<Rectangle> candidates = ImageProcessor.detectChips(image);
             rcs.clear();
@@ -270,7 +271,7 @@ public class ImageDialog extends JDialog {
                 addRect(r, false);
                 SwingUtilities.invokeLater(() -> scanProgressBar.setValue(scanProgressBar.getValue() + 1));
             });
-        }).start();
+        });
     }
 
     private void addRect(Rectangle rect, boolean addedByUser) {

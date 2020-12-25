@@ -46,8 +46,8 @@ public class ExactCoverMatrix {
         Set<Integer> hiddenColSet = hiddenColSetStack.pop();
         Set<Integer> hiddenRowSet = hiddenRowSetStack.pop();
 
-        hiddenColSet.forEach((j) -> hiddenCols[j] = false);
-        hiddenRowSet.forEach((j) -> hiddenRows[j] = false);
+        hiddenColSet.parallelStream().forEach((j) -> hiddenCols[j] = false);
+        hiddenRowSet.parallelStream().forEach((j) -> hiddenRows[j] = false);
 
         nVisibleCol += hiddenColSet.size();
         nVisibleRow += hiddenRowSet.size();
@@ -57,10 +57,10 @@ public class ExactCoverMatrix {
         Set<Integer> hiddenColSet = new HashSet<>();
         Set<Integer> hiddenRowSet = new HashSet<>();
 
-        getCols().parallelStream().filter((j) -> get(r, j)).forEach((j) -> {
+        getCols().parallelStream().filter((j) -> get(r, j)).parallel().forEach((j) -> {
             hiddenColSet.add(j);
             hiddenCols[j] = true;
-            getRows().parallelStream().filter((i) -> get(i, j)).forEach((i) -> {
+            getRows().parallelStream().filter((i) -> get(i, j)).parallel().forEach((i) -> {
                 hiddenRowSet.add(i);
                 hiddenRows[i] = true;
             });

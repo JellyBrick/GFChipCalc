@@ -7,6 +7,7 @@ import main.puzzle.*;
 import main.puzzle.assembly.dxz.DXZ;
 import main.setting.Setting;
 import main.util.IO;
+import main.util.ThreadPoolManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.function.BooleanSupplier;
 
 /**
@@ -98,7 +101,7 @@ public class Assembler {
         this.cs = cs;
         this.ces = ces;
         this.progress = p;
-        new Thread(() -> {
+        ThreadPoolManager.getThreadPool().execute(() -> {
             if (status == Status.STOPPED) {
                 status = Status.PAUSED;
             }
@@ -109,7 +112,7 @@ public class Assembler {
             }
             status = Status.STOPPED;
             intermediate.stop();
-        }).start();
+        });
     }
 
     private void prog_inc() {
@@ -154,14 +157,12 @@ public class Assembler {
         BlockingQueue<BoardTemplate> q = new ArrayBlockingQueue<>(5);
         ChipCiterator cIt = new ChipCiterator(ces.chips);
 
-        Thread templateThread = new Thread(() -> combine_template(q, cIt));
-        Thread assembleThread = new Thread(() -> combine_assemble(q, cIt));
+        List<Callable<Object>> calls = new ArrayList<>();
+        calls.add(Executors.callable(() -> combine_template(q, cIt)));
+        calls.add(Executors.callable(() -> combine_assemble(q, cIt)));
 
-        templateThread.start();
-        assembleThread.start();
         try {
-            templateThread.join();
-            assembleThread.join();
+            ThreadPoolManager.getThreadPool().invokeAll(calls);
         } catch (InterruptedException ignored) {
         }
     }

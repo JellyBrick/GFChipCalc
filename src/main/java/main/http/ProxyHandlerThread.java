@@ -171,7 +171,7 @@ public class ProxyHandlerThread extends Thread {
     private void handleRequest(HttpURLConnection connection) throws IOException {
         connection.setRequestMethod(pm.reqMethod);
         // Header
-        pm.getReqHeaders().forEach((key) -> connection.setRequestProperty(key, pm.getReqHeader(key)));
+        pm.getReqHeaders().parallelStream().forEach((key) -> connection.setRequestProperty(key, pm.getReqHeader(key)));
         // Body
         boolean bodyTE = pm.containsReqHeader(Proxy.TRANSFER_ENCODING) && "chunked".equalsIgnoreCase(pm.getReqHeader(Proxy.TRANSFER_ENCODING));
         boolean bodyCL = pm.containsReqHeader(Proxy.CONTENT_LENGTH);

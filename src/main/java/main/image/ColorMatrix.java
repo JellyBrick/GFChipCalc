@@ -1,6 +1,7 @@
 package main.image;
 
 import main.util.Fn;
+import main.util.ThreadPoolManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -189,14 +190,16 @@ public class ColorMatrix {
     }
 
     public void drawRect(Rectangle r, int red, int green, int blue) {
-        for (int x = 0; x < r.width; x++) {
-            setColor(r.x + x, r.y, red, green, blue);
-            setColor(r.x + x, r.y + r.height, red, green, blue);
-        }
-        for (int y = 0; y < r.height; y++) {
-            setColor(r.x, r.y + y, red, green, blue);
-            setColor(r.x + r.width, r.y + y, red, green, blue);
-        }
+        ThreadPoolManager.getThreadPool().execute(() -> {
+            for (int x = 0; x < r.width; x++) {
+                setColor(r.x + x, r.y, red, green, blue);
+                setColor(r.x + x, r.y + r.height, red, green, blue);
+            }
+            for (int y = 0; y < r.height; y++) {
+                setColor(r.x, r.y + y, red, green, blue);
+                setColor(r.x + r.width, r.y + y, red, green, blue);
+            }
+        });
     }
 
     public void fillWhiteRect(int x1, int y1, int x2, int y2) {
@@ -530,6 +533,7 @@ public class ColorMatrix {
                         get8Neighbors(pt, width, height).parallelStream()
                                 .filter((p) -> temp.getRed(p.x, p.y) == 0)
                                 .filter((p) -> !pts.contains(p))
+                                .parallel()
                                 .forEach(pts::add);
                     }
                     rects.add(new Rectangle(xMin, yMin, xMax - xMin, yMax - yMin));

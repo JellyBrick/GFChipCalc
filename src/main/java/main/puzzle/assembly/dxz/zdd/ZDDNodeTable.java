@@ -1,5 +1,7 @@
 package main.puzzle.assembly.dxz.zdd;
 
+import main.util.ThreadPoolManager;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,11 +28,13 @@ public class ZDDNodeTable {
     }
 
     void add(ZDDNode node) {
-        int key = node.label;
-        if (!map.containsKey(key)) {
-            map.put(key, new HashSet<>());
-        }
-        map.get(key).add(node);
+        ThreadPoolManager.getThreadPool().execute(() -> {
+            int key = node.label;
+            if (!map.containsKey(key)) {
+                map.put(key, new HashSet<>());
+            }
+            map.get(key).add(node);
+        });
     }
 
 }

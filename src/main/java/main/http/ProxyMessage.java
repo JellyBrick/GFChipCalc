@@ -101,20 +101,16 @@ public class ProxyMessage {
         }
     }
 
+    private static String getBodyHex(List<Byte> byteList) {
+        StringBuilder sb = new StringBuilder();
+        byteList.parallelStream().forEach((b) -> sb.append(byteToHex(b)));
+        return sb.toString();
+    }
+
     public String getRequestHeader() {
         String out = reqMethod + " " + reqUrl + " " + reqVersion + System.lineSeparator();
         List<String> headers = new ArrayList<>();
-        reqHeader.keySet().parallelStream().map((key) -> key + ": " + reqHeader.get(key)).forEach(headers::add);
-        Collections.sort(headers);
-        out += String.join(System.lineSeparator(), headers);
-        return out;
-    }
-
-    public String getRepsonseHeader() {
-        fixForConnect();
-        String out = reqVersion + " " + resCode + " " + resMsg + System.lineSeparator();
-        List<String> headers = new ArrayList<>();
-        resHeader.keySet().parallelStream().map((key) -> key + ": " + resHeader.get(key)).forEach(headers::add);
+        reqHeader.keySet().parallelStream().map((key) -> key + ": " + reqHeader.get(key)).parallel().forEach(headers::add);
         Collections.sort(headers);
         out += String.join(System.lineSeparator(), headers);
         return out;
@@ -149,10 +145,14 @@ public class ProxyMessage {
         return Integer.toHexString(v);
     }
 
-    private static String getBodyHex(List<Byte> byteList) {
-        StringBuilder sb = new StringBuilder();
-        byteList.forEach((b) -> sb.append(byteToHex(b)));
-        return sb.toString();
+    public String getRepsonseHeader() {
+        fixForConnect();
+        String out = reqVersion + " " + resCode + " " + resMsg + System.lineSeparator();
+        List<String> headers = new ArrayList<>();
+        resHeader.keySet().parallelStream().map((key) -> key + ": " + resHeader.get(key)).parallel().forEach(headers::add);
+        Collections.sort(headers);
+        out += String.join(System.lineSeparator(), headers);
+        return out;
     }
 
     private static String getBodyString(List<Byte> byteList) {

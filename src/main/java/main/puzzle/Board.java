@@ -844,7 +844,7 @@ public class Board implements Comparable<Board>, Serializable {
     }
 
     public void forEachChip(Consumer<? super Chip> action) {
-        chips.forEach(action);
+        chips.parallelStream().forEach(action);
     }
 
     public Chip getChip(String id) {

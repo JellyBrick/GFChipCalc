@@ -26,6 +26,7 @@ import main.ui.transfer.InvListTransferHandler;
 import main.util.Fn;
 import main.util.IO;
 import main.util.Ref;
+import main.util.ThreadPoolManager;
 
 import javax.swing.Timer;
 import javax.swing.*;
@@ -118,22 +119,22 @@ public class MainFrame extends JFrame {
     private final Assembler assembler = new Assembler(new Assembler.Intermediate() {
         @Override
         public void stop() {
-            process_stop();
+            ThreadPoolManager.getThreadPool().execute(() -> process_stop());
         }
 
         @Override
         public void update(int nDone) {
-            process_prog(nDone);
+            ThreadPoolManager.getThreadPool().execute(() -> process_prog(nDone));
         }
 
         @Override
         public void set(int nDone, int nTotal) {
-            process_setProgBar(nDone, nTotal);
+            ThreadPoolManager.getThreadPool().execute(() -> process_setProgBar(nDone, nTotal));
         }
 
         @Override
         public void show(BoardTemplate template) {
-            process_showImage(template);
+            ThreadPoolManager.getThreadPool().execute(() -> process_showImage(template));
         }
     });
     private long time, pauseTime;

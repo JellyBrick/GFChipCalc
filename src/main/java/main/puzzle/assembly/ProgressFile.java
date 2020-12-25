@@ -54,15 +54,15 @@ public class ProgressFile {
 
         // Chips
         lines.add(String.valueOf(ces.chips.size()));
-        ces.chips.forEach((c) -> lines.add(c.toData()));
+        ces.chips.parallelStream().forEach((c) -> lines.add(c.toData()));
 
         // Boards
-        p.getBoards().forEach((b) -> {
+        p.getBoards().parallelStream().forEach((b) -> {
             lines.add(String.valueOf(b.getChipCount()));
             b.forEachChip((c) -> lines.add(
                     ces.chips.indexOf(c) + ","
-                    + c.getRotation() + ","
-                    + IO.data(b.getLocation(c))
+                            + c.getRotation() + ","
+                            + IO.data(b.getLocation(c))
             ));
         });
         // Done
