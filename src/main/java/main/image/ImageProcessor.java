@@ -69,7 +69,7 @@ public class ImageProcessor {
         // Remove outliers using width median
         rects_ratio.sort(Comparator.comparingInt(o -> o.width));
         int medianWidth = rects_ratio.get(rects_ratio.size() / 2).width;
-        List<Rectangle> rects = rects_ratio.stream().filter((r) -> Math.abs(r.width - medianWidth) < 10).collect(Collectors.toList());
+        List<Rectangle> rects = rects_ratio.parallelStream().filter((r) -> Math.abs(r.width - medianWidth) < 10).collect(Collectors.toList());
 
         return rects;
     }
@@ -518,14 +518,14 @@ public class ImageProcessor {
         if (rects.isEmpty()) {
             return defaultValue;
         }
-        return rects.stream().map((r) -> r.y).min(Integer::compare).get();
+        return rects.parallelStream().map((r) -> r.y).min(Integer::compare).get();
     }
 
     private static int getMaxY(Set<Rectangle> rects, int defaultValue) {
         if (rects.isEmpty()) {
             return defaultValue;
         }
-        return rects.stream().map((r) -> r.y + r.height).max(Integer::compare).get();
+        return rects.parallelStream().map((r) -> r.y + r.height).max(Integer::compare).get();
     }
 
     private static Rectangle biggest(Collection<Rectangle> rects) {

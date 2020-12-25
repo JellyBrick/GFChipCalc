@@ -35,7 +35,7 @@ public class CombListCellRenderer extends DefaultListCellRenderer {
             boolean freqChipIncluded = false;
             if (!combChipFreqList.isSelectionEmpty()) {
                 String freqID = ((ChipFreq) combChipFreqList.getSelectedValue()).chip.getID();
-                freqChipIncluded = b.getChipIDs().stream().anyMatch((id) -> id.equals(freqID));
+                freqChipIncluded = b.getChipIDs().parallelStream().anyMatch((id) -> id.equals(freqID));
             }
 
             DefaultListModel<?> combList = (DefaultListModel<?>) list.getModel();

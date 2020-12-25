@@ -78,7 +78,7 @@ public class ApplyDialog extends JDialog {
         if (chips.parallelStream().allMatch((chip) -> chip.containsTag(tag))) {
             // remove
             confirmAndApply((t) -> t.setTag(tag, false));
-            if (app.mf.inv_getAllTags().stream().noneMatch((t) -> t.equals(tag))) {
+            if (app.mf.inv_getAllTags().parallelStream().noneMatch((t) -> t.equals(tag))) {
                 app.filter.includedTags.removeIf((t) -> t.equals(tag));
                 app.filter.excludedTags.removeIf((t) -> t.equals(tag));
                 app.mf.display_applyFilterSort();

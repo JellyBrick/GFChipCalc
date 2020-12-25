@@ -59,7 +59,7 @@ public class JsonFilterDialog extends JDialog {
 
     private void getMarkNames() {
         Set<String> tagStrs = new HashSet<>();
-        chipsInput.stream().map(Chip::getTags).forEach((ts) -> ts.forEach((t) -> tagStrs.add(t.getName())));
+        chipsInput.parallelStream().map(Chip::getTags).forEach((ts) -> ts.forEach((t) -> tagStrs.add(t.getName())));
         markListLabel.setText(app.getText(AppText.CHIP_TAG) + ": " + String.join(", ", tagStrs));
     }
 

@@ -31,9 +31,9 @@ public class TagTableCellRenderer extends DefaultTableCellRenderer {
         cr.setForeground(tag.getColor());
         if (!checkBox) {
             List<Chip> chips = app.mf.inv_getFilteredChips();
-            if (chips.stream().allMatch((t) ->  t.containsTag(tag))) {
+            if (chips.parallelStream().allMatch((t) -> t.containsTag(tag))) {
                 cr.setBackground(app.green());
-            }else{
+            } else {
                 cr.setBackground(Color.WHITE);
             }
         }

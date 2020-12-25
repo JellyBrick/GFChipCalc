@@ -24,7 +24,7 @@ hs_err_pid*
 
 # Private files
 AuthCode.java
-/src/main/pvt/
+/src/main/java/main/pvt/
 
 # Ignore Gradle project-specific cache directory
 .gradle

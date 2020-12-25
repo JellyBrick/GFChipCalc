@@ -57,10 +57,10 @@ public class ExactCoverMatrix {
         Set<Integer> hiddenColSet = new HashSet<>();
         Set<Integer> hiddenRowSet = new HashSet<>();
 
-        getCols().stream().filter((j) -> get(r, j)).forEach((j) -> {
+        getCols().parallelStream().filter((j) -> get(r, j)).forEach((j) -> {
             hiddenColSet.add(j);
             hiddenCols[j] = true;
-            getRows().stream().filter((i) -> get(i, j)).forEach((i) -> {
+            getRows().parallelStream().filter((i) -> get(i, j)).forEach((i) -> {
                 hiddenRowSet.add(i);
                 hiddenRows[i] = true;
             });

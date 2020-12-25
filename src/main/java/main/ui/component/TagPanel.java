@@ -149,7 +149,7 @@ public class TagPanel extends JPanel {
         Tag tag = getTag(getSelectedRow());
         tag.setName(nameTextField.getText());
         tag.setColor(nameTextField.getForeground());
-        app.mf.inv_getAllTags().stream().filter(tag::equals).forEach((t) -> {
+        app.mf.inv_getAllTags().parallelStream().filter(tag::equals).forEach((t) -> {
             t.setName(nameTextField.getText());
             t.setColor(nameTextField.getForeground());
         });

@@ -347,7 +347,7 @@ public class MainFrame extends JFrame {
             invList.removeKeyListener(kl);
         }
 
-        Fn.getAllComponents(this).stream()
+        Fn.getAllComponents(this).parallelStream()
                 .filter(Component::isFocusable)
                 .forEach((c) -> c.addKeyListener(initSKA_focusable()));
 
@@ -1392,10 +1392,10 @@ public class MainFrame extends JFrame {
             }
             // Tag
             if (pass && !app.filter.includedTags.isEmpty()) {
-                pass = app.filter.includedTags.stream().allMatch((fTag) -> c.getTags().stream().anyMatch(fTag::equals));
+                pass = app.filter.includedTags.parallelStream().allMatch((fTag) -> c.getTags().parallelStream().anyMatch(fTag::equals));
             }
             if (pass && !app.filter.excludedTags.isEmpty()) {
-                pass = app.filter.excludedTags.stream().noneMatch((fTag) -> c.getTags().stream().anyMatch(fTag::equals));
+                pass = app.filter.excludedTags.parallelStream().noneMatch((fTag) -> c.getTags().parallelStream().anyMatch(fTag::equals));
             }
 
             // Final
@@ -2143,7 +2143,7 @@ public class MainFrame extends JFrame {
 
         boolean warn = false;
         if (!doneTimes.isEmpty()) {
-            long avg = doneTimes.stream().mapToLong((v) -> v).sum() / doneTimes.size();
+            long avg = doneTimes.parallelStream().mapToLong((v) -> v).sum() / doneTimes.size();
             long remaining = avg * (progress.nTotal - progress.nDone) / 1000;
             warn = 60 * 60 < remaining;
             sb.append(" (").append(app.getText(AppText.COMB_REMAINING, Fn.getTime(remaining))).append(")");

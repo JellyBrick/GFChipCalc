@@ -82,7 +82,7 @@ public class ProxyMessage {
     }
 
     private static boolean containsHeader(String header, Map<String, String> headerMap) {
-        return headerMap.keySet().stream().map(String::toLowerCase).anyMatch((key) -> key.equals(header.toLowerCase()));
+        return headerMap.keySet().parallelStream().map(String::toLowerCase).anyMatch((key) -> key.equals(header.toLowerCase()));
     }
 
     private static String getHeader(String header, Map<String, String> headerMap) {
@@ -104,7 +104,7 @@ public class ProxyMessage {
     public String getRequestHeader() {
         String out = reqMethod + " " + reqUrl + " " + reqVersion + System.lineSeparator();
         List<String> headers = new ArrayList<>();
-        reqHeader.keySet().stream().map((key) -> key + ": " + reqHeader.get(key)).forEach(headers::add);
+        reqHeader.keySet().parallelStream().map((key) -> key + ": " + reqHeader.get(key)).forEach(headers::add);
         Collections.sort(headers);
         out += String.join(System.lineSeparator(), headers);
         return out;
@@ -114,7 +114,7 @@ public class ProxyMessage {
         fixForConnect();
         String out = reqVersion + " " + resCode + " " + resMsg + System.lineSeparator();
         List<String> headers = new ArrayList<>();
-        resHeader.keySet().stream().map((key) -> key + ": " + resHeader.get(key)).forEach(headers::add);
+        resHeader.keySet().parallelStream().map((key) -> key + ": " + resHeader.get(key)).forEach(headers::add);
         Collections.sort(headers);
         out += String.join(System.lineSeparator(), headers);
         return out;

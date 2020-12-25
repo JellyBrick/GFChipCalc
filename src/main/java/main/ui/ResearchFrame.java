@@ -64,7 +64,7 @@ public class ResearchFrame extends javax.swing.JFrame {
                         BoardTemplate result = Assembler.generateTemplate(boardName, boardStar, shapes, () -> running);
                         if (running) {
                             if (result.isEmpty()) {
-                                ResearchConnection.sendResult(shapes.stream().map(s -> String.valueOf(s.id)).collect(Collectors.joining(",")) + ";-");
+                                ResearchConnection.sendResult(shapes.parallelStream().map(s -> String.valueOf(s.id)).collect(Collectors.joining(",")) + ";-");
                             } else {
                                 ResearchConnection.sendResult(result.toData());
                             }

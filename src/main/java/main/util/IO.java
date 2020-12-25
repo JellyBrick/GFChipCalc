@@ -606,7 +606,7 @@ public class IO {
     //========== Board Setting ==========//
     public static BoardSetting parseBS(List<String> data, boolean advancedSetting) {
         BoardSetting out = new BoardSetting();
-        data.stream().map((line) -> line.split(";")).forEachOrdered((parts) -> {
+        data.parallelStream().map((line) -> line.split(";")).forEachOrdered((parts) -> {
             String name = parts[0];
             if (Arrays.asList(Board.NAMES).contains(name)) {
                 int star = Integer.parseInt(parts[1]);

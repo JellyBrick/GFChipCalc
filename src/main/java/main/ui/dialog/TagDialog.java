@@ -51,7 +51,7 @@ public class TagDialog extends JDialog {
     }
 
     private static boolean allChipContainsTag(List<Chip> chips, Tag t) {
-        return chips.stream().allMatch((chip) -> (chip.containsTag(t)));
+        return chips.parallelStream().allMatch((chip) -> (chip.containsTag(t)));
     }
 
     private void addListeners() {

@@ -511,7 +511,7 @@ public class Chip implements Serializable {
     }
 
     public boolean containsTag(Tag tag) {
-        return tags.stream().anyMatch((t) -> (t.equals(tag)));
+        return tags.parallelStream().anyMatch((t) -> (t.equals(tag)));
     }
 
     public void setTag(Tag t, boolean enabled) {
@@ -600,7 +600,7 @@ public class Chip implements Serializable {
             String.valueOf(initLevel),
             String.valueOf(initRotation),
             IO.data(marked),
-            IO.data(getTags().stream().map(Tag::toData), ",")
+                IO.data(getTags().parallelStream().map(Tag::toData), ",")
         };
 
         return String.join(";", s);
