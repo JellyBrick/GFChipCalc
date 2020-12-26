@@ -27,6 +27,7 @@ import main.util.Fn;
 import main.util.IO;
 import main.util.Ref;
 import main.util.ThreadPoolManager;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.Timer;
 import javax.swing.*;
@@ -84,6 +85,7 @@ public class MainFrame extends JFrame {
     private Dimension initSize;
     private Border onBorder;
     private final Border offBorder = new LineBorder(this.getBackground(), BORDERSIZE);
+    @NotNull
     private final TipMouseListener tml;
 
     // Chip
@@ -93,6 +95,7 @@ public class MainFrame extends JFrame {
     private final JFileChooser iofc = new JFileChooser(new File(".")); // Inventory File Chooser
     private final JFileChooser isfc = new JFileChooser(new File(".")); // Inventory File Chooser
     private final JFileChooser cfc = new JFileChooser(new File(".")); // Combination File Chooser
+    @NotNull
     private String invFile_path = "";
 
     // List
@@ -104,6 +107,7 @@ public class MainFrame extends JFrame {
 
     private int invListMouseDragIndex;
     private final Ref<Boolean> blink = new Ref<>(false);
+    @NotNull
     private final Timer blinkTimer;
 
     // Chip Stat 
@@ -133,7 +137,7 @@ public class MainFrame extends JFrame {
         }
 
         @Override
-        public void show(BoardTemplate template) {
+        public void show(@NotNull BoardTemplate template) {
             ThreadPoolManager.getThreadPool().execute(() -> process_showImage(template));
         }
     });
@@ -377,7 +381,7 @@ public class MainFrame extends JFrame {
         });
         poolList.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(@NotNull java.awt.event.MouseEvent evt) {
                 if (!poolList.isSelectionEmpty() && 2 <= evt.getClickCount()) {
                     pool_addToInv();
                 }
@@ -528,6 +532,7 @@ public class MainFrame extends JFrame {
         combFreqTagButton.addActionListener((e) -> comb_freq_openTagDialog());
     }
 
+    @NotNull
     private ShortcutKeyAdapter initSKA_focusable() {
         ShortcutKeyAdapter ska = new ShortcutKeyAdapter();
 
@@ -542,6 +547,7 @@ public class MainFrame extends JFrame {
         return ska;
     }
 
+    @NotNull
     private ShortcutKeyAdapter initSKA_pi() {
         ShortcutKeyAdapter ska = new ShortcutKeyAdapter();
 
@@ -564,6 +570,7 @@ public class MainFrame extends JFrame {
         return ska;
     }
 
+    @NotNull
     private ShortcutKeyAdapter initSKA_pool() {
         ShortcutKeyAdapter ska = new ShortcutKeyAdapter();
 
@@ -578,6 +585,7 @@ public class MainFrame extends JFrame {
         return ska;
     }
 
+    @NotNull
     private ShortcutKeyAdapter initSKA_inv() {
         ShortcutKeyAdapter ska = new ShortcutKeyAdapter();
 
@@ -602,6 +610,7 @@ public class MainFrame extends JFrame {
         return ska;
     }
 
+    @NotNull
     private ShortcutKeyAdapter initSKA_comb() {
         ShortcutKeyAdapter ska = new ShortcutKeyAdapter();
 
@@ -629,15 +638,16 @@ public class MainFrame extends JFrame {
     //</editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Util Methods">
-    private void openDialog(JDialog dialog) {
+    private void openDialog(@NotNull JDialog dialog) {
         Fn.open(this, dialog);
     }
 
-    private void openFrame(JFrame frame) {
+    private void openFrame(@NotNull JFrame frame) {
         Fn.open(this, frame);
         this.setVisible(false);
     }
 
+    @NotNull
     public Dimension getPreferredDialogSize() {
         Dimension dim = new Dimension();
         dim.width = piButtonPanel.getWidth() + invPanel.getWidth() + combLeftPanel.getWidth() + combRightPanel.getWidth();
@@ -805,7 +815,7 @@ public class MainFrame extends JFrame {
         addTip(combFreqTagButton, app.getText(AppText.TIP_COMB_TAG));
     }
 
-    private void addTip(JComponent c, String s) {
+    private void addTip(@NotNull JComponent c, String s) {
         tml.setTip(c, s);
         c.setToolTipText(s);
     }
@@ -973,19 +983,19 @@ public class MainFrame extends JFrame {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Inventory Chip Methods">
-    private void inv_chipsAdd(int i, Chip c) {
+    private void inv_chipsAdd(int i, @NotNull Chip c) {
         invChips.add(i, c);
         invLM.add(i, c);
         c.setDisplayType(app.setting.displayType);
     }
 
-    private void inv_chipsAdd(Chip c) {
+    private void inv_chipsAdd(@NotNull Chip c) {
         invChips.add(c);
         invLM.addElement(c);
         c.setDisplayType(app.setting.displayType);
     }
 
-    public void inv_chipsLoad(Collection<Chip> cs) {
+    public void inv_chipsLoad(@NotNull Collection<Chip> cs) {
         inv_chipsClear();
         invChips.addAll(cs);
         invChips.forEach((c) -> c.setDisplayType(app.setting.displayType));
@@ -1010,6 +1020,7 @@ public class MainFrame extends JFrame {
         }
     }
 
+    @NotNull
     public List<Chip> inv_getFilteredChips() {
         List<Chip> chips = new ArrayList<>();
         for (int i = 0; i < invLM.size(); i++) {
@@ -1018,6 +1029,7 @@ public class MainFrame extends JFrame {
         return chips;
     }
 
+    @NotNull
     public List<Tag> inv_getAllTags() {
         return Tag.getTags(invChips);
     }
@@ -1732,6 +1744,7 @@ public class MainFrame extends JFrame {
         combFreqList.repaint();
     }
 
+    @NotNull
     private List<Chip> comb_result_getChipsFromInv() {
         List<Chip> out = new ArrayList<>();
         for (Enumeration<Chip> chipEnum = combChipLM.elements(); chipEnum.hasMoreElements();) {
@@ -1746,6 +1759,7 @@ public class MainFrame extends JFrame {
         return out;
     }
 
+    @NotNull
     private List<Chip> comb_freq_getChipsFromInv() {
         List<Chip> out = new ArrayList<>();
         for (Enumeration<ChipFreq> cfEnum = combFreqLM.elements(); cfEnum.hasMoreElements();) {
@@ -2047,7 +2061,7 @@ public class MainFrame extends JFrame {
 
     }
 
-    private void process_setUI(Assembler.Status status) {
+    private void process_setUI(@NotNull Assembler.Status status) {
         switch (status) {
             case RUNNING:
                 loadingLabel.setIcon(AppImage.LOADING);
@@ -2208,7 +2222,7 @@ public class MainFrame extends JFrame {
         combProgressBar.setValue(n);
     }
 
-    private void process_showImage(BoardTemplate template) {
+    private void process_showImage(@NotNull BoardTemplate template) {
         SwingUtilities.invokeLater(() -> {
             if (app.setting.showProgImage && assembler.getStatus() == Assembler.Status.RUNNING) {
                 boardImageLabel.setIcon(AppImage.Board.get(app, boardImageLabel.getWidth(), template.getMatrix()));

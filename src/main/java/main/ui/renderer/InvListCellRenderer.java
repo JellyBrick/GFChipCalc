@@ -6,6 +6,7 @@ import main.puzzle.Chip;
 import main.puzzle.assembly.ChipFreq;
 import main.ui.resource.AppImage;
 import main.util.Ref;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +36,7 @@ public class InvListCellRenderer extends DefaultListCellRenderer {
 
     }
 
+    @NotNull
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         DefaultListCellRenderer cr = (DefaultListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);

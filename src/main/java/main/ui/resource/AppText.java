@@ -4,6 +4,7 @@ import main.App;
 import main.puzzle.Chip;
 import main.puzzle.Shape;
 import main.util.IO;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -25,7 +26,7 @@ public class AppText {
         }
     }; // </editor-fold>
 
-    public static String text_type(App app, Shape.Type type) {
+    public static String text_type(@NotNull App app, @NotNull Shape.Type type) {
         switch (type.id) {
             case 6:
                 return app.getText(UNIT_CELLTYPE, "5", "B");
@@ -397,7 +398,7 @@ public class AppText {
 
     private static final String DISPLAY_LANGUAGE_PREVIEW_DEFAULT = "ABC abc 1234567890 ★";
 
-    public String getText(Locale locale, String key, String... replaces) {
+    public String getText(@NotNull Locale locale, @NotNull String key, @NotNull String... replaces) {
         String value = getValue(locale, key);
 
         for (int i = 0; i < replaces.length; i++) {
@@ -427,7 +428,7 @@ public class AppText {
         return value;
     }
 
-    private String getValue(Locale locale, String key) {
+    private String getValue(@NotNull Locale locale, String key) {
         if (!propTag.equals(locale.toLanguageTag())) {
             prop = IO.getProp(locale);
             propTag = locale.toLanguageTag();
@@ -444,6 +445,7 @@ public class AppText {
         return LANGMAP.get(EN_US).getProperty(key);
     }
 
+    @NotNull
     public static String getFileContent(Locale locale) {
         Properties prop;
         if (LANGMAP.containsKey(locale)) {

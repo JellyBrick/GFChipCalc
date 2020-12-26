@@ -10,6 +10,7 @@ import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
 import main.util.ThreadPoolManager;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,17 +26,21 @@ import java.util.stream.Collectors;
  */
 public class ResearchFrame extends javax.swing.JFrame {
 
+    @NotNull
     private final App app;
+    @NotNull
     private final Timer progTimer;
+    @NotNull
     private final Runnable aRunnable;
     private volatile boolean running = false;
     private final List<Future<?>> tasks = new ArrayList<>();
 
-    public static ResearchFrame getInstance(App app) {
+    @NotNull
+    public static ResearchFrame getInstance(@NotNull App app) {
         return new ResearchFrame(app);
     }
 
-    private ResearchFrame(App app) {
+    private ResearchFrame(@NotNull App app) {
         this.app = app;
 
         progTimer = new Timer(1000, (e) -> updateProgress());
@@ -135,7 +140,7 @@ public class ResearchFrame extends javax.swing.JFrame {
             if (t != null && !(t.isDone() || t.isCancelled())) {
                 try {
                     t.get();
-                } catch (InterruptedException | ExecutionException ignored) {
+                } catch (@NotNull InterruptedException | ExecutionException ignored) {
                 }
             }
         });

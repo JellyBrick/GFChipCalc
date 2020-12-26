@@ -2,6 +2,7 @@ package main.ui.component;
 
 import main.App;
 import main.ui.resource.AppColor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class ColorLabel extends JLabel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(@NotNull Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
 
         int[] threeWidths = {0, getWidth() / 3, getWidth() * 2 / 3, getWidth()};

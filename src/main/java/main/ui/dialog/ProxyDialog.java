@@ -8,6 +8,8 @@ import main.puzzle.Tag;
 import main.ui.help.HelpProxyDialog;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -29,7 +31,8 @@ public class ProxyDialog extends JDialog {
     private List<Chip> chips;
     private boolean cancelled = true;
 
-    public static List<Chip> extract(App app) {
+    @Nullable
+    public static List<Chip> extract(@NotNull App app) {
         ProxyDialog dialog = new ProxyDialog(app);
         Fn.open(app.mf, dialog);
         if (dialog.cancelled) {
@@ -65,7 +68,7 @@ public class ProxyDialog extends JDialog {
         Fn.addEscListener(this, this::terminate);
     }
 
-    private void setStage(Stage stage) {
+    private void setStage(@NotNull Stage stage) {
         switch (stage) {
             case START:
                 instructionLabel.setText(app.getText(AppText.PROXY_STAGE1_INST));

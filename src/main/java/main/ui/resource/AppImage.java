@@ -4,6 +4,8 @@ import main.App;
 import main.puzzle.PuzzleMatrix;
 import main.setting.Setting;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +19,7 @@ import java.io.IOException;
  */
 public class AppImage {
 
+    @Nullable
     public static final Image FAVICON = getImage("favicon.png");
     public static final ImageIcon BANNER = getIcon("banner.png");
 
@@ -24,8 +27,11 @@ public class AppImage {
     public static final ImageIcon PAYPALQR = getIcon("paypalqr.png");
     public static final ImageIcon PAYPAL = getIcon("paypal.png");
 
+    @Nullable
     public static final Image CHIP_MARKED = getImage("chip_marked.png");
+    @Nullable
     public static final Image CHIP_ROTATED = getImage("chip_rotated.png");
+    @Nullable
     public static final Image CHIP_EQUIPPED = getImage("chip_equipped.png");
 
     public static final Icon UI_INFO = UIManager.getIcon("OptionPane.informationIcon");
@@ -87,30 +93,47 @@ public class AppImage {
 
     public static final ImageIcon HELP_PROXY = getIcon("help/proxy.jpg");
 
+    @Nullable
     private static final BufferedImage IP_0 = getImage("imgproc/0.png");
+    @Nullable
     private static final BufferedImage IP_1 = getImage("imgproc/1.png");
+    @Nullable
     private static final BufferedImage IP_2 = getImage("imgproc/2.png");
+    @Nullable
     private static final BufferedImage IP_3 = getImage("imgproc/3.png");
+    @Nullable
     private static final BufferedImage IP_4 = getImage("imgproc/4.png");
+    @Nullable
     private static final BufferedImage IP_5 = getImage("imgproc/5.png");
+    @Nullable
     private static final BufferedImage IP_6 = getImage("imgproc/6.png");
+    @Nullable
     private static final BufferedImage IP_7 = getImage("imgproc/7.png");
+    @Nullable
     private static final BufferedImage IP_8 = getImage("imgproc/8.png");
+    @Nullable
     private static final BufferedImage IP_9 = getImage("imgproc/9.png");
+    @Nullable
     public static final BufferedImage[] IP_DIGITS = new BufferedImage[]{
         IP_0, IP_1, IP_2, IP_3, IP_4,
         IP_5, IP_6, IP_7, IP_8, IP_9
     };
 
+    @Nullable
     public static final BufferedImage IP_DMG = getImage("imgproc/dmg.png");
+    @Nullable
     public static final BufferedImage IP_BRK = getImage("imgproc/brk.png");
+    @Nullable
     public static final BufferedImage IP_HIT = getImage("imgproc/hit.png");
+    @Nullable
     public static final BufferedImage IP_RLD = getImage("imgproc/rld.png");
 
+    @NotNull
     private static ImageIcon getIcon(String path) {
         return new ImageIcon(App.getResource(path));
     }
 
+    @Nullable
     private static BufferedImage getImage(String path) {
         try {
             return ImageIO.read(App.getResource(path));
@@ -120,7 +143,8 @@ public class AppImage {
         return null;
     }
 
-    public static ImageIcon getScaledIcon(Icon icon, int width, int height) {
+    @NotNull
+    public static ImageIcon getScaledIcon(@NotNull Icon icon, int width, int height) {
         BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = bi.createGraphics();
         icon.paintIcon(null, g, 0, 0);
@@ -135,7 +159,8 @@ public class AppImage {
         private static final int CHIP_HEIGHT1 = CHIP_TILESIZE * 6 + CHIP_GAP * 2;
         private static final int CHIP_HEIGHT2 = CHIP_TILESIZE * 3 + CHIP_GAP * 4;
 
-        public static ImageIcon get(App app, main.puzzle.Chip chip) {
+        @NotNull
+        public static ImageIcon get(@NotNull App app, @NotNull main.puzzle.Chip chip) {
             boolean statExists = chip.statExists();
             // Chip
             int star = chip.getStar();
@@ -246,15 +271,18 @@ public class AppImage {
 
     public static class Board {
 
-        public static ImageIcon get(App app, int size, String boardName, int boardStar) {
+        @NotNull
+        public static ImageIcon get(@NotNull App app, int size, String boardName, int boardStar) {
             return get(app, size, main.puzzle.Board.initMatrix(boardName, boardStar));
         }
 
-        public static ImageIcon get(App app, int size, main.puzzle.Board board) {
+        @NotNull
+        public static ImageIcon get(@NotNull App app, int size, @NotNull main.puzzle.Board board) {
             return get(app, size, board.getMatrix());
         }
 
-        public static ImageIcon get(App app, int size, PuzzleMatrix<Integer> matrix) {
+        @NotNull
+        public static ImageIcon get(@NotNull App app, int size, @NotNull PuzzleMatrix<Integer> matrix) {
             int tileSize = size / 8;
             int h = main.puzzle.Board.HEIGHT;
             int w = main.puzzle.Board.WIDTH;

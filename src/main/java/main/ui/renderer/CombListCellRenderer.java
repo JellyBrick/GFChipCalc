@@ -4,6 +4,7 @@ import main.App;
 import main.puzzle.Board;
 import main.puzzle.assembly.ChipFreq;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,8 +24,9 @@ public class CombListCellRenderer extends DefaultListCellRenderer {
         this.combChipFreqList = combChipFreqList;
     }
 
+    @NotNull
     @Override
-    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(@NotNull JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         DefaultListCellRenderer cr = (DefaultListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         try {
             cr.setHorizontalAlignment(CENTER);

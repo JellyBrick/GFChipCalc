@@ -1,5 +1,7 @@
 package main.json;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  *
  * @author Bunnyspa
@@ -11,6 +13,7 @@ public class NullJson implements Json {
         return Json.NULL;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "null";

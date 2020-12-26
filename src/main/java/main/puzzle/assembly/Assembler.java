@@ -8,6 +8,8 @@ import main.puzzle.assembly.dxz.DXZ;
 import main.setting.Setting;
 import main.util.IO;
 import main.util.ThreadPoolManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class Assembler {
 
     private static final int RESULT_LIMIT = 100;
 
+    @NotNull
     private static final BoardTemplateMap fullBTM, partialBTM;
 
     static {
@@ -74,6 +77,7 @@ public class Assembler {
     private Progress progress;
     private boolean boardsChanged;
 
+    @NotNull
     private volatile Status status = Status.STOPPED;
     private final BooleanSupplier checkPause = this::checkPause;
 
@@ -97,7 +101,7 @@ public class Assembler {
         return partialBTM.containsKey(name, star);
     }
 
-    public void set(CalcSetting cs, CalcExtraSetting ces, Progress p) {
+    public void set(CalcSetting cs, @NotNull CalcExtraSetting ces, Progress p) {
         this.cs = cs;
         this.ces = ces;
         this.progress = p;
@@ -132,6 +136,7 @@ public class Assembler {
         status = Status.STOPPED;
     }
 
+    @NotNull
     public Status getStatus() {
         return status;
     }
@@ -144,6 +149,7 @@ public class Assembler {
         return progress.getBoardSize() == 0;
     }
 
+    @NotNull
     public AssemblyResult getResult() {
         boardsChanged = false;
         return new AssemblyResult(progress.getBoards(), progress.getChipFreqs());
@@ -167,7 +173,7 @@ public class Assembler {
         }
     }
 
-    private void combine_template(BlockingQueue<BoardTemplate> q, ChipCiterator cIt) {
+    private void combine_template(@NotNull BlockingQueue<BoardTemplate> q, @NotNull ChipCiterator cIt) {
         // Dictionary
         if (ces.calcMode == CalcExtraSetting.CALCMODE_DICTIONARY) {
             List<BoardTemplate> templates = getBT(cs.boardName, cs.boardStar, ces.calcModeTag == 1);
@@ -208,7 +214,7 @@ public class Assembler {
         offer(q, BoardTemplate.end());
     }
 
-    private BoardTemplate combine_template_algX(ShapeCiterator iterator) {
+    private BoardTemplate combine_template_algX(@NotNull ShapeCiterator iterator) {
         if (!iterator.isNextValid()) {
             iterator.skip();
             return BoardTemplate.empty();
@@ -217,11 +223,11 @@ public class Assembler {
         return generateTemplate(cs.boardName, cs.boardStar, shapes, checkPause);
     }
 
-    public static BoardTemplate generateTemplate(String boardName, int boardStar, List<Shape> shapes, BooleanSupplier checkPause) {
+    public static BoardTemplate generateTemplate(String boardName, int boardStar, @NotNull List<Shape> shapes, BooleanSupplier checkPause) {
         return generateTemplate_DXZ(boardName, boardStar, shapes, checkPause);
     }
 
-    private static BoardTemplate generateTemplate_DXZ(String boardName, int boardStar, List<Shape> shapes, BooleanSupplier checkPause) {
+    private static BoardTemplate generateTemplate_DXZ(String boardName, int boardStar, @NotNull List<Shape> shapes, BooleanSupplier checkPause) {
         PuzzleMatrix<Integer> puzzle = Board.initMatrix(boardName, boardStar);
 
         Set<Point> emptyCoords = puzzle.getPoints(Board.EMPTY);
@@ -269,7 +275,8 @@ public class Assembler {
         return bt;
     }
 
-    private static Set<Point> translate(Shape shape, int rotation, Point bp) {
+    @NotNull
+    private static Set<Point> translate(@NotNull Shape shape, int rotation, @NotNull Point bp) {
         Point cfp = shape.getPivot(rotation);
         Set<Point> cps = shape.getPoints(rotation);
         for (Point cp : cps) {
@@ -278,7 +285,7 @@ public class Assembler {
         return cps;
     }
 
-    private void combine_assemble(BlockingQueue<BoardTemplate> q, ChipCiterator cIt) {
+    private void combine_assemble(@NotNull BlockingQueue<BoardTemplate> q, @NotNull ChipCiterator cIt) {
         while (checkPause()) {
             BoardTemplate template = poll(q);
             if (template == null || template.isEnd()) {
@@ -321,7 +328,7 @@ public class Assembler {
         }
     }
 
-    public synchronized void publishBoard(Board board) {
+    public synchronized void publishBoard(@NotNull Board board) {
         switch (ces.markType) {
             case Setting.BOARD_MARKTYPE_CELL:
                 if (board.getMarkedCellCount() < ces.markMin || ces.markMax < board.getMarkedCellCount()) {
@@ -357,13 +364,14 @@ public class Assembler {
         return status == Status.RUNNING;
     }
 
-    private void offer(BlockingQueue<BoardTemplate> q, BoardTemplate template) {
+    private void offer(@NotNull BlockingQueue<BoardTemplate> q, @NotNull BoardTemplate template) {
         while (checkPause() && !q.offer(template)) {
             wait_();
         }
     }
 
-    private BoardTemplate poll(BlockingQueue<BoardTemplate> q) {
+    @Nullable
+    private BoardTemplate poll(@NotNull BlockingQueue<BoardTemplate> q) {
         BoardTemplate template = null;
         while (checkPause() && null == (template = q.poll())) {
             wait_();

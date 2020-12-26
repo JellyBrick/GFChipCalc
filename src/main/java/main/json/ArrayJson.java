@@ -1,5 +1,7 @@
 package main.json;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  */
 public class ArrayJson implements Json {
 
+    @NotNull
     private final List<Json> data;
 
     public ArrayJson(String data) {
@@ -33,6 +36,7 @@ public class ArrayJson implements Json {
         }
     }
 
+    @NotNull
     public List<Json> getList() {
         return new ArrayList<>(data);
     }
@@ -42,6 +46,7 @@ public class ArrayJson implements Json {
         return Json.ARRAY;
     }
 
+    @NotNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

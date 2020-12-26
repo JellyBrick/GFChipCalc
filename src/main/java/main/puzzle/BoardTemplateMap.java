@@ -1,6 +1,8 @@
 package main.puzzle;
 
 import main.util.DoubleKeyHashMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -13,13 +15,14 @@ public class BoardTemplateMap {
     private final DoubleKeyHashMap<String, Integer, List<BoardTemplate>> data = new DoubleKeyHashMap<>();
     private final DoubleKeyHashMap<String, Integer, Shape.Type> minTypeMap = new DoubleKeyHashMap<>();
 
-    public void put(String name, int star, List<BoardTemplate> templates, Shape.Type minType) {
+    public void put(String name, int star, @NotNull List<BoardTemplate> templates, Shape.Type minType) {
         if (!templates.isEmpty()) {
             data.put(name, star, templates);
         }
         minTypeMap.put(name, star, minType);
     }
 
+    @Nullable
     public List<BoardTemplate> get(String name, int star) {
         if (containsKey(name, star)) {
             return data.get(name, star);
@@ -27,6 +30,7 @@ public class BoardTemplateMap {
         return null;
     }
 
+    @Nullable
     public Shape.Type getMinType(String name, int star) {
         if (containsMinTypeKey(name, star)) {
             return minTypeMap.get(name, star);

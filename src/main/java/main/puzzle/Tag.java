@@ -1,6 +1,8 @@
 package main.puzzle;
 
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -45,11 +47,13 @@ public class Tag implements Serializable, Comparable<Object> {
         this.name = name;
     }
 
+    @NotNull
     public String toData() {
         Color c = getColor();
         return String.format("%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue()) + getName();
     }
 
+    @NotNull
     @Override
     public String toString() {
         return toData();
@@ -62,7 +66,7 @@ public class Tag implements Serializable, Comparable<Object> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -82,7 +86,8 @@ public class Tag implements Serializable, Comparable<Object> {
         return hash;
     }
 
-    public static List<Tag> getTags(Collection<Chip> chips) {
+    @NotNull
+    public static List<Tag> getTags(@NotNull Collection<Chip> chips) {
         Set<Tag> tagSet = new HashSet<>();
         chips.forEach((c) -> tagSet.addAll(c.getTags()));
         List<Tag> tagList = new ArrayList<>(tagSet);

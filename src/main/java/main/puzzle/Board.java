@@ -6,6 +6,8 @@ import main.util.DoubleKeyHashMap;
 import main.util.Fn;
 import main.util.IO;
 import main.util.Rational;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -35,6 +37,7 @@ public class Board implements Comparable<Board>, Serializable {
     public static final String NAME_MK153 = "Mk 153";
     public static final String[] NAMES = {NAME_BGM71, NAME_AGS30, NAME_2B14, NAME_M2, NAME_AT4, NAME_QLZ04, NAME_MK153};
 
+    @NotNull
     public static String getTrueName(String fileName) {
         for (String name : NAMES) {
             if (IO.toFileName(name).equals(fileName)) {
@@ -438,7 +441,7 @@ public class Board implements Comparable<Board>, Serializable {
     private final int xp;
 
     @Override
-    public int compareTo(Board o) {
+    public int compareTo(@NotNull Board o) {
         int size = Integer.compare(chips.size(), o.chips.size());
         if (size != 0) {
             return size;
@@ -453,7 +456,7 @@ public class Board implements Comparable<Board>, Serializable {
     }
 
     // Combinator - fitness
-    public Board(Board board) {
+    public Board(@NotNull Board board) {
         this.name = board.name;
         this.star = board.star;
 
@@ -473,7 +476,7 @@ public class Board implements Comparable<Board>, Serializable {
     }
 
     // Combination File / Board Template
-    public Board(String name, int star, Stat maxStat, List<Chip> chips, List<Point> chipLocs) {
+    public Board(String name, int star, Stat maxStat, @NotNull List<Chip> chips, @NotNull List<Point> chipLocs) {
         this.name = name;
         this.star = star;
 
@@ -506,12 +509,14 @@ public class Board implements Comparable<Board>, Serializable {
         return star;
     }
 
+    @NotNull
     public static String getStarHTML_star(int star) {
         StringBuilder starStr = new StringBuilder();
         starStr.append(AppText.TEXT_STAR_FULL.repeat(Math.max(0, star)));
         return Fn.toHTML(Fn.htmlColor(starStr.toString(), AppColor.YELLOW_STAR));
     }
 
+    @NotNull
     public static String getStarHTML_version(int version) {
         int nFullRed = version / 2;
         StringBuilder fullRedStr = new StringBuilder();
@@ -628,11 +633,13 @@ public class Board implements Comparable<Board>, Serializable {
         return pt;
     }
 
+    @NotNull
     public static Stat getMaxPt(String name, int star) {
         return getMaxPt(name, star, getMaxStat(name, star));
     }
 
-    public static Stat getMaxPt(String name, int star, Stat stat) {
+    @NotNull
+    public static Stat getMaxPt(String name, int star, @NotNull Stat stat) {
         int[] statArray = stat.toArray();
         int[] optimalPtArray = new int[4];
 
@@ -671,6 +678,7 @@ public class Board implements Comparable<Board>, Serializable {
         return stat;
     }
 
+    @NotNull
     public Stat getOldStat() {
         return Stat.chipOldStatSum(chips);
     }
@@ -699,7 +707,7 @@ public class Board implements Comparable<Board>, Serializable {
         return getStatPerc(type, s, m);
     }
 
-    private static double getStatPerc(Stat stat, Stat max) {
+    private static double getStatPerc(@NotNull Stat stat, @NotNull Stat max) {
         if (max.allZero()) {
             return 1.0;
         }
@@ -720,7 +728,7 @@ public class Board implements Comparable<Board>, Serializable {
         return s / m;
     }
 
-    public static double getStatPerc(int type, Stat stat, Stat max) {
+    public static double getStatPerc(int type, @NotNull Stat stat, @NotNull Stat max) {
         int s = stat.toArray()[type];
         int m = max.toArray()[type];
 
@@ -736,6 +744,7 @@ public class Board implements Comparable<Board>, Serializable {
         return MAP_STAT_UNIT.get(name);
     }
 
+    @NotNull
     public Stat getResonance() {
         int numCell = 0;
         for (Chip chip : chips) {
@@ -753,6 +762,7 @@ public class Board implements Comparable<Board>, Serializable {
         return new Stat(stats);
     }
 
+    @NotNull
     public static Stat getVersionStat(String name, int v) {
         List<Stat> stats = new ArrayList<>(v);
         Stat[] array = MAP_STAT_ITERATION.get(name);
@@ -762,7 +772,8 @@ public class Board implements Comparable<Board>, Serializable {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Stat Calc">
-    private static int[] getPtDistribution(Rational rate, int nChip, int stat) {
+    @NotNull
+    private static int[] getPtDistribution(@NotNull Rational rate, int nChip, int stat) {
         int stat_1pt = Chip.getMaxEffStat(rate, 1);
         int[] ptArray = new int[nChip];
         int i = 0;
@@ -780,7 +791,7 @@ public class Board implements Comparable<Board>, Serializable {
         return ptArray;
     }
 
-    private static int calcStat(Rational rate, int[] pts) {
+    private static int calcStat(@NotNull Rational rate, @NotNull int[] pts) {
         int out = 0;
         for (int pt : pts) {
             out += Chip.getMaxEffStat(rate, pt);
@@ -788,6 +799,7 @@ public class Board implements Comparable<Board>, Serializable {
         return out;
     }
 
+    @NotNull
     private static List<Integer> get56ChipCount(String name, int star) {
         int nCell = getCellCount(name, star);
         List<Integer> out = new ArrayList<>();
@@ -835,6 +847,7 @@ public class Board implements Comparable<Board>, Serializable {
         return chips.size();
     }
 
+    @NotNull
     public List<String> getChipIDs() {
         List<String> IDs = new ArrayList<>();
         for (Chip c : chips) {
@@ -847,6 +860,7 @@ public class Board implements Comparable<Board>, Serializable {
         chips.parallelStream().forEach(action);
     }
 
+    @Nullable
     public Chip getChip(String id) {
         for (Chip c : chips) {
             if (c.getID().equals(id)) {
@@ -856,6 +870,7 @@ public class Board implements Comparable<Board>, Serializable {
         return null;
     }
 
+    @NotNull
     public List<Chip> getChips() {
         List<Chip> out = new ArrayList<>();
         for (Chip chip : chips) {
@@ -864,7 +879,7 @@ public class Board implements Comparable<Board>, Serializable {
         return out;
     }
 
-    public static boolean isChipPlaceable(PuzzleMatrix<Integer> matrix, Set<Point> cps) {
+    public static boolean isChipPlaceable(@NotNull PuzzleMatrix<Integer> matrix, @NotNull Set<Point> cps) {
         for (Point cp : cps) {
             if (matrix.get(cp.x, cp.y) == null || matrix.get(cp.x, cp.y) != EMPTY) {
                 return false;
@@ -875,6 +890,7 @@ public class Board implements Comparable<Board>, Serializable {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Matrix and Cells">
+    @NotNull
     public static PuzzleMatrix<Integer> initMatrix(String name, int star) {
         PuzzleMatrix<Integer> matrix = new PuzzleMatrix<>(MAP_MATRIX.get(name));
         for (int r = 0; r < matrix.getNumRow(); r++) {
@@ -889,6 +905,7 @@ public class Board implements Comparable<Board>, Serializable {
         return matrix;
     }
 
+    @Nullable
     public Point getLocation(Chip c) {
         int i = chips.indexOf(c);
         if (i < 0) {
@@ -902,7 +919,7 @@ public class Board implements Comparable<Board>, Serializable {
         return s.getNumNotContaining(UNUSED);
     }
 
-    public static boolean rs_isValid(String name, int star, String data) {
+    public static boolean rs_isValid(String name, int star, @NotNull String data) {
         String[] split = data.split(";");
         String[] shapeStrs = split[0].split(",");
         Integer[] rotations = Stream.of(split[1].split(","))
@@ -935,6 +952,7 @@ public class Board implements Comparable<Board>, Serializable {
         return true;
     }
 
+    @NotNull
     private static PuzzleMatrix<Boolean> rs_getBoolMatrix(String name, int star) {
         Integer[][] im = MAP_MATRIX.get(name);
         PuzzleMatrix<Boolean> bm = new PuzzleMatrix<>(HEIGHT, WIDTH, false);
@@ -946,7 +964,7 @@ public class Board implements Comparable<Board>, Serializable {
         return bm;
     }
 
-    private static Set<Point> rs_getPts(Shape shape, int rotation, Point location) {
+    private static Set<Point> rs_getPts(Shape shape, int rotation, @NotNull Point location) {
         PuzzleMatrix<Boolean> cm = new PuzzleMatrix<>(Chip.generateMatrix(shape, rotation));
         Point pivot = cm.getPivot(true);
         Set<Point> pts = cm.getPoints(true);
@@ -965,7 +983,8 @@ public class Board implements Comparable<Board>, Serializable {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="File">
-    public static PuzzleMatrix<Integer> toPlacement(String name, int star, List<Chip> chips, List<Point> locations) {
+    @NotNull
+    public static PuzzleMatrix<Integer> toPlacement(String name, int star, @NotNull List<Chip> chips, @NotNull List<Point> locations) {
         List<Puzzle> puzzles = new ArrayList<>(chips.size());
         for (int i = 0; i < chips.size(); i++) {
             Chip c = chips.get(i);
@@ -978,7 +997,8 @@ public class Board implements Comparable<Board>, Serializable {
         return toPlacement(name, star, puzzles);
     }
 
-    public static PuzzleMatrix<Integer> toPlacement(String name, int star, List<Puzzle> puzzles) {
+    @NotNull
+    public static PuzzleMatrix<Integer> toPlacement(String name, int star, @NotNull List<Puzzle> puzzles) {
         // Placement
         PuzzleMatrix<Integer> placement = initMatrix(name, star);
         for (int i = 0; i < puzzles.size(); i++) {
@@ -994,7 +1014,8 @@ public class Board implements Comparable<Board>, Serializable {
         return placement;
     }
 
-    public static List<Point> toLocation(PuzzleMatrix<Integer> placement) {
+    @NotNull
+    public static List<Point> toLocation(@NotNull PuzzleMatrix<Integer> placement) {
         List<Point> location = new ArrayList<>();
         int i = 0;
         boolean found = true;

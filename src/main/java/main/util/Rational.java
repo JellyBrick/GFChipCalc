@@ -1,5 +1,7 @@
 package main.util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  *
  * @author Bunnyspa
@@ -36,6 +38,7 @@ public class Rational {
         return nDouble / denominator;
     }
 
+    @NotNull
     public Rational add(int n, int d) {
         int lcm = lcm(denominator, d);
         int n1 = numerator * (lcm / denominator);
@@ -43,34 +46,42 @@ public class Rational {
         return reduce(n1 + n2, lcm);
     }
 
+    @NotNull
     public Rational add(int n) {
         return add(n, 1);
     }
 
-    public Rational add(Rational r) {
+    @NotNull
+    public Rational add(@NotNull Rational r) {
         return add(r.numerator, r.denominator);
     }
 
+    @NotNull
     public Rational mult(int n, int d) {
         return reduce(this.numerator * n, this.denominator * d);
     }
 
+    @NotNull
     public Rational mult(int n) {
         return mult(n, 1);
     }
 
-    public Rational mult(Rational r) {
+    @NotNull
+    public Rational mult(@NotNull Rational r) {
         return mult(r.numerator, r.denominator);
     }
 
+    @NotNull
     public Rational div(int d) {
         return mult(1, d);
     }
 
-    public Rational div(Rational r) {
+    @NotNull
+    public Rational div(@NotNull Rational r) {
         return mult(r.denominator, r.numerator);
     }
 
+    @NotNull
     private static Rational reduce(int n, int d) {
         int div = gcd(n, d);
         return new Rational(n / div, d / div);
@@ -91,6 +102,7 @@ public class Rational {
         return a * b / gcd(a, b);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return numerator + "/" + denominator;

@@ -1,6 +1,8 @@
 package main.puzzle.assembly.dxz.zdd;
 
 import main.util.ThreadPoolManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +17,7 @@ public class ZDDNodeTable {
 
     private final Map<Integer, Set<ZDDNode>> map = new HashMap<>();
 
+    @Nullable
     ZDDNode get(int i, ZDDNode l, ZDDNode h) {
         if (!map.containsKey(i)) {
             return null;
@@ -27,7 +30,7 @@ public class ZDDNodeTable {
         return null;
     }
 
-    void add(ZDDNode node) {
+    void add(@NotNull ZDDNode node) {
         ThreadPoolManager.getThreadPool().execute(() -> {
             int key = node.label;
             if (!map.containsKey(key)) {

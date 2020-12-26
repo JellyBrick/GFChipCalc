@@ -4,6 +4,7 @@ import main.App;
 import main.ui.resource.AppText;
 import main.util.Fn;
 import main.util.IO;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -17,6 +18,7 @@ public class HelpDialog extends JDialog {
 
     private final App app;
 
+    @NotNull
     public static HelpDialog getInstance(App app) {
         return new HelpDialog(app);
     }

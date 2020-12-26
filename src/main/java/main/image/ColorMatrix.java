@@ -2,6 +2,7 @@ package main.image;
 
 import main.util.Fn;
 import main.util.ThreadPoolManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -45,11 +46,11 @@ public class ColorMatrix {
         }
     }
 
-    public ColorMatrix(BufferedImage image) {
+    public ColorMatrix(@NotNull BufferedImage image) {
         setData(image);
     }
 
-    public ColorMatrix(ColorMatrix matrix) {
+    public ColorMatrix(@NotNull ColorMatrix matrix) {
         int height = matrix.getHeight();
         int width = matrix.getWidth();
         setDimension(width, height);
@@ -68,7 +69,7 @@ public class ColorMatrix {
         blue = new int[width][height];
     }
 
-    private void setData(BufferedImage image) {
+    private void setData(@NotNull BufferedImage image) {
         setDimension(image.getWidth(), image.getHeight());
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
@@ -83,12 +84,14 @@ public class ColorMatrix {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Get Methods">
+    @NotNull
     public Color getColor(int x, int y) {
         int xx = Fn.limit(x, 0, getWidth() - 1);
         int yy = Fn.limit(y, 0, getHeight() - 1);
         return new Color(getRed(xx, yy), getGreen(xx, yy), getBlue(xx, yy));
     }
 
+    @NotNull
     public int[] getColorArray(int x, int y) {
         int xx = Fn.limit(x, 0, getWidth() - 1);
         int yy = Fn.limit(y, 0, getHeight() - 1);
@@ -124,6 +127,7 @@ public class ColorMatrix {
         return red[0].length;
     }
 
+    @NotNull
     public BufferedImage getImage() {
         BufferedImage out = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         for (int y = 0; y < getHeight(); y++) {
@@ -153,7 +157,7 @@ public class ColorMatrix {
         }
     }
 
-    public void setColor(int x, int y, Color color) {
+    public void setColor(int x, int y, @NotNull Color color) {
         if (!isOB(x, y)) {
             setRed(x, y, color.getRed());
             setGreen(x, y, color.getGreen());
@@ -189,7 +193,7 @@ public class ColorMatrix {
         blue[x][y] = Fn.limit(value, 0, 255);
     }
 
-    public void drawRect(Rectangle r, int red, int green, int blue) {
+    public void drawRect(@NotNull Rectangle r, int red, int green, int blue) {
         ThreadPoolManager.getThreadPool().execute(() -> {
             for (int x = 0; x < r.width; x++) {
                 setColor(r.x + x, r.y, red, green, blue);
@@ -212,7 +216,8 @@ public class ColorMatrix {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Modification Methods">
-    public ColorMatrix appendRight(ColorMatrix matrix) {
+    @NotNull
+    public ColorMatrix appendRight(@NotNull ColorMatrix matrix) {
         int newWidth = getWidth() + matrix.getWidth() + 1;
         int newHeight = Math.max(getHeight(), matrix.getHeight());
 
@@ -233,7 +238,8 @@ public class ColorMatrix {
         return out;
     }
 
-    public ColorMatrix appendDown(ColorMatrix matrix) {
+    @NotNull
+    public ColorMatrix appendDown(@NotNull ColorMatrix matrix) {
         int newWidth = Math.max(getWidth(), matrix.getWidth());
         int newHeight = getHeight() + matrix.getHeight() + 1;
 
@@ -255,7 +261,8 @@ public class ColorMatrix {
         return out;
     }
 
-    public ColorMatrix crop(Rectangle rect) {
+    @NotNull
+    public ColorMatrix crop(@NotNull Rectangle rect) {
         ColorMatrix out = new ColorMatrix(rect.width + 1, rect.height + 1);
         for (int y = 0; y < rect.height + 1; y++) {
             for (int x = 0; x < rect.width + 1; x++) {
@@ -265,6 +272,7 @@ public class ColorMatrix {
         return out;
     }
 
+    @NotNull
     private ColorMatrix resize(int newWidth, int newHeight, boolean smooth) {
         ColorMatrix out = new ColorMatrix(newWidth, newHeight);
         if (smooth) {
@@ -302,6 +310,7 @@ public class ColorMatrix {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Filter Methods">
+    @NotNull
     public ColorMatrix grayscale() {
         int width = getWidth();
         int height = getHeight();
@@ -317,6 +326,7 @@ public class ColorMatrix {
         return out;
     }
 
+    @NotNull
     public ColorMatrix monochrome(double threshold) {
         int width = getWidth();
         int height = getHeight();
@@ -333,6 +343,7 @@ public class ColorMatrix {
         return out;
     }
 
+    @NotNull
     public ColorMatrix monochrome(Color color) {
         int width = getWidth();
         int height = getHeight();
@@ -347,7 +358,8 @@ public class ColorMatrix {
         return out;
     }
 
-    public ColorMatrix monochrome(Color color, double threshold) {
+    @NotNull
+    public ColorMatrix monochrome(@NotNull Color color, double threshold) {
         int width = getWidth();
         int height = getHeight();
         ColorMatrix out = new ColorMatrix(width, height);
@@ -379,6 +391,7 @@ public class ColorMatrix {
 //        return out;
 //    }
 
+    @NotNull
     public ColorMatrix invert() {
         int width = getWidth();
         int height = getHeight();
@@ -393,7 +406,8 @@ public class ColorMatrix {
 
     private static final double FACTOR_USED = 0.6;
 
-    private static Color used(Color c) {
+    @NotNull
+    private static Color used(@NotNull Color c) {
         int red = c.getRed();
         int green = c.getGreen();
         int blue = c.getBlue();
@@ -404,7 +418,8 @@ public class ColorMatrix {
         );
     }
 
-    public ColorMatrix simplify(boolean used, Color... colors) {
+    @NotNull
+    public ColorMatrix simplify(boolean used, @NotNull Color... colors) {
         int width = getWidth();
         int height = getHeight();
         ColorMatrix out = new ColorMatrix(width, height);
@@ -427,7 +442,7 @@ public class ColorMatrix {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Convolution Methods">
-    public int convR(int x, int y, double[][] factor) {
+    public int convR(int x, int y, @NotNull double[][] factor) {
         if (factor.length == 0) {
             return 0;
         }
@@ -445,7 +460,7 @@ public class ColorMatrix {
         return (int) out;
     }
 
-    public int convG(int x, int y, double[][] factor) {
+    public int convG(int x, int y, @NotNull double[][] factor) {
         if (factor.length == 0) {
             return 0;
         }
@@ -463,7 +478,7 @@ public class ColorMatrix {
         return (int) out;
     }
 
-    public int convB(int x, int y, double[][] factor) {
+    public int convB(int x, int y, @NotNull double[][] factor) {
         if (factor.length == 0) {
             return 0;
         }
@@ -482,7 +497,7 @@ public class ColorMatrix {
     }
     // </editor-fold>
 
-    public int monochromeCount(Color color, double threshold) {
+    public int monochromeCount(@NotNull Color color, double threshold) {
         int out = 0;
         ColorMatrix cm = monochrome(color, threshold);
         for (int y = 0; y < getHeight(); y++) {
@@ -495,6 +510,7 @@ public class ColorMatrix {
         return out;
     }
 
+    @NotNull
     public Set<Rectangle> findRects() {
         int width = getWidth();
         int height = getHeight();
@@ -546,7 +562,7 @@ public class ColorMatrix {
 
     private static final double THRESHOLD_SIMILARITY = 0.01;
 
-    public double similarity(ColorMatrix matrix) {
+    public double similarity(@NotNull ColorMatrix matrix) {
         int width = getWidth();
         int height = getHeight();
         ColorMatrix resized = matrix.resize(width, height, false);
@@ -567,7 +583,7 @@ public class ColorMatrix {
         return count / total;
     }
 
-    private double variance(int x, int y, Color c) {
+    private double variance(int x, int y, @NotNull Color c) {
         int dR = Math.abs(getRed(x, y) - c.getRed());
         int dG = Math.abs(getGreen(x, y) - c.getGreen());
         int dB = Math.abs(getBlue(x, y) - c.getBlue());
@@ -575,7 +591,7 @@ public class ColorMatrix {
         return sqSum / SQSUMMAX;
     }
 
-    private boolean isSimColor(int x, int y, Color c, double threshold) {
+    private boolean isSimColor(int x, int y, @NotNull Color c, double threshold) {
         return variance(x, y, c) < threshold;
     }
 
@@ -598,7 +614,8 @@ public class ColorMatrix {
 //        }
 //        return out;
 //    }
-    private static Set<Point> get8Neighbors(Point p, int width, int height) {
+    @NotNull
+    private static Set<Point> get8Neighbors(@NotNull Point p, int width, int height) {
         Point[] pts = new Point[]{
             new Point(p.x, p.y - 1),
             new Point(p.x, p.y + 1),

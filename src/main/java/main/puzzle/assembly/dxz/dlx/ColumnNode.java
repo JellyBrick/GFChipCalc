@@ -5,6 +5,8 @@
  */
 package main.puzzle.assembly.dxz.dlx;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  *
  * @author Bunnyspa
@@ -29,7 +31,7 @@ public class ColumnNode extends DLXNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

@@ -1,5 +1,7 @@
 package main.util;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  *
  * @author Bunnyspa
@@ -14,7 +16,7 @@ public class Version3 {
         v3 = 0;
     }
 
-    public Version3(String version) {
+    public Version3(@NotNull String version) {
         String[] verStrs = version.split("\\.");
         if (3 == verStrs.length) {
             v1 = Integer.parseInt(verStrs[0]);
@@ -43,15 +45,17 @@ public class Version3 {
         return !(v1 == cv1 && v2 == cv2 && v3 < cv3);
     }
 
-    public boolean isCurrent(String version) {
+    public boolean isCurrent(@NotNull String version) {
         Version3 v = new Version3(version);
         return isCurrent(v.v1, v.v2, v.v3);
     }
 
+    @NotNull
     public String toData() {
         return String.join(".", String.valueOf(v1), String.valueOf(v2), String.valueOf(v3));
     }
 
+    @NotNull
     @Override
     public String toString() {
         return toData();

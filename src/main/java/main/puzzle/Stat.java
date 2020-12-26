@@ -1,5 +1,8 @@
 package main.puzzle;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -15,7 +18,8 @@ public class Stat implements Comparable<Stat>, Serializable {
     public static final int RLD = 3;
     public final int dmg, brk, hit, rld;
 
-    public static Stat chipStatSum(Collection<Chip> chips) {
+    @NotNull
+    public static Stat chipStatSum(@NotNull Collection<Chip> chips) {
         int dmg = 0;
         int brk = 0;
         int hit = 0;
@@ -30,7 +34,8 @@ public class Stat implements Comparable<Stat>, Serializable {
         return new Stat(dmg, brk, hit, rld);
     }
 
-    public static Stat chipPtSum(Collection<Chip> chips) {
+    @NotNull
+    public static Stat chipPtSum(@NotNull Collection<Chip> chips) {
         int dmg = 0;
         int brk = 0;
         int hit = 0;
@@ -45,7 +50,8 @@ public class Stat implements Comparable<Stat>, Serializable {
         return new Stat(dmg, brk, hit, rld);
     }
 
-    public static Stat chipOldStatSum(Collection<Chip> chips) {
+    @NotNull
+    public static Stat chipOldStatSum(@NotNull Collection<Chip> chips) {
         int dmg = 0;
         int brk = 0;
         int hit = 0;
@@ -88,7 +94,7 @@ public class Stat implements Comparable<Stat>, Serializable {
         this.rld = v[3];
     }
 
-    public Stat(Collection<Stat> stats) {
+    public Stat(@NotNull Collection<Stat> stats) {
         int[] s = new int[4];
         for (Stat stat : stats) {
             int[] array = stat.toArray();
@@ -103,21 +109,22 @@ public class Stat implements Comparable<Stat>, Serializable {
         this.rld = s[3];
     }
 
-    public boolean allGeq(Stat s) {
+    public boolean allGeq(@NotNull Stat s) {
         return s.dmg <= dmg
                 && s.brk <= brk
                 && s.hit <= hit
                 && s.rld <= rld;
     }
 
-    public boolean allLeq(Stat s) {
+    public boolean allLeq(@NotNull Stat s) {
         return dmg <= s.dmg
                 && brk <= s.brk
                 && hit <= s.hit
                 && rld <= s.rld;
     }
 
-    public Stat limit(Stat max) {
+    @NotNull
+    public Stat limit(@NotNull Stat max) {
         int newDmg = Math.min(this.dmg, max.dmg);
         int newBrk = Math.min(this.brk, max.brk);
         int newHit = Math.min(this.hit, max.hit);
@@ -125,6 +132,7 @@ public class Stat implements Comparable<Stat>, Serializable {
         return new Stat(newDmg, newBrk, newHit, newRld);
     }
 
+    @NotNull
     public String toStringSlash() {
         return String.join("/",
                 String.valueOf(dmg),
@@ -138,6 +146,7 @@ public class Stat implements Comparable<Stat>, Serializable {
         return dmg == 0 && brk == 0 && hit == 0 && rld == 0;
     }
 
+    @NotNull
     public int[] toArray() {
         int[] out = {dmg, brk, hit, rld};
         return out;
@@ -147,6 +156,7 @@ public class Stat implements Comparable<Stat>, Serializable {
         return dmg + brk + hit + rld;
     }
 
+    @NotNull
     public String toData() {
         return String.join(",", String.valueOf(dmg), String.valueOf(brk), String.valueOf(hit), String.valueOf(rld));
     }
@@ -162,7 +172,7 @@ public class Stat implements Comparable<Stat>, Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -177,7 +187,7 @@ public class Stat implements Comparable<Stat>, Serializable {
     }
 
     @Override
-    public int compareTo(Stat o) {
+    public int compareTo(@NotNull Stat o) {
         if (dmg != o.dmg) {
             return o.dmg - dmg;
         }
@@ -193,6 +203,7 @@ public class Stat implements Comparable<Stat>, Serializable {
         return 0;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "[" + toData() + "]";

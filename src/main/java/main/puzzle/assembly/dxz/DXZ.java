@@ -13,6 +13,8 @@ import main.puzzle.assembly.dxz.zdd.ZDDMemoCache;
 import main.puzzle.assembly.dxz.zdd.ZDDNode;
 import main.puzzle.assembly.dxz.zdd.ZDDNodeTable;
 import main.util.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,12 +28,14 @@ import java.util.function.BooleanSupplier;
  */
 public class DXZ {
 
-    public static Set<Integer> solve(List<boolean[]> rows, BooleanSupplier checkPause) {
+    @Nullable
+    public static Set<Integer> solve(@NotNull List<boolean[]> rows, BooleanSupplier checkPause) {
         DancingLinksMatrix X = new DancingLinksMatrix(rows);
         return dxz(X, checkPause);
     }
 
-    private static Set<Integer> axz(ExactCoverMatrix X, BooleanSupplier checkPause) {
+    @Nullable
+    private static Set<Integer> axz(@NotNull ExactCoverMatrix X, @NotNull BooleanSupplier checkPause) {
         ZDDNode node = axz_search(X, new ZDDMemoCache(), new ZDDNodeTable(), checkPause);
         if (node == null) {
             return null;
@@ -43,7 +47,8 @@ public class DXZ {
         return sets.iterator().next();
     }
 
-    private static ZDDNode axz_search(ExactCoverMatrix A, ZDDMemoCache C, ZDDNodeTable Z, BooleanSupplier checkPause) {
+    @Nullable
+    private static ZDDNode axz_search(@NotNull ExactCoverMatrix A, @NotNull ZDDMemoCache C, @NotNull ZDDNodeTable Z, @NotNull BooleanSupplier checkPause) {
         if (A.isEmpty()) {
             return ZDD.TRUE_TERMINAL;
         }
@@ -68,7 +73,8 @@ public class DXZ {
         return x;
     }
 
-    private static Set<Integer> dlx(DancingLinksMatrix X, BooleanSupplier checkPause) {
+    @Nullable
+    private static Set<Integer> dlx(@NotNull DancingLinksMatrix X, BooleanSupplier checkPause) {
         Set<Integer> ans = new HashSet<>();
         dlx_search(X, new Stack<>(), ans, checkPause);
         if (ans.isEmpty()) {
@@ -77,7 +83,7 @@ public class DXZ {
         return ans;
     }
 
-    private static boolean dlx_search(DancingLinksMatrix A, Stack<Integer> R, Set<Integer> ans, BooleanSupplier checkPause) {
+    private static boolean dlx_search(@NotNull DancingLinksMatrix A, @NotNull Stack<Integer> R, @NotNull Set<Integer> ans, BooleanSupplier checkPause) {
         Set<Integer> colA = A.getColumns();
         if (colA.isEmpty()) {
             ans.addAll(R);
@@ -102,7 +108,8 @@ public class DXZ {
         return false;
     }
 
-    private static Set<Integer> dxz(DancingLinksMatrix X, BooleanSupplier checkPause) {
+    @Nullable
+    private static Set<Integer> dxz(@NotNull DancingLinksMatrix X, BooleanSupplier checkPause) {
         ZDDNode node = dxz_search(X, new ZDDMemoCache(), new ZDDNodeTable(), checkPause).first;
         if (node == null) {
             return null;
@@ -114,7 +121,8 @@ public class DXZ {
         return sets.iterator().next();
     }
 
-    private static Pair<ZDDNode, Boolean> dxz_search(DancingLinksMatrix A, ZDDMemoCache C, ZDDNodeTable Z, BooleanSupplier checkPause) {
+    @NotNull
+    private static Pair<ZDDNode, Boolean> dxz_search(@NotNull DancingLinksMatrix A, @NotNull ZDDMemoCache C, @NotNull ZDDNodeTable Z, BooleanSupplier checkPause) {
         // System.out.println(depth + ": " + A);
         Set<Integer> colA = A.getColumns();
         if (colA.isEmpty()) {

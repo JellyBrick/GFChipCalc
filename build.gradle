@@ -8,6 +8,8 @@ buildscript {
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30-M1'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
@@ -36,6 +38,17 @@ sourceSets {
         resources {
             srcDirs "src/main/resources"
         }
+    }
+}
+
+compileKotlin {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    kotlinOptions {
+        jvmTarget = '11'
+        apiVersion = '1.4'
+        languageVersion = '1.4'
     }
 }
 

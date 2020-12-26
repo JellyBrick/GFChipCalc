@@ -5,6 +5,8 @@ import main.puzzle.assembly.ChipFreq;
 import main.ui.resource.AppImage;
 import main.util.Fn;
 import main.util.Ref;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,8 +26,9 @@ public class ChipFreqListCellRenderer extends DefaultListCellRenderer {
         this.blink = blink;
     }
 
+    @NotNull
     @Override
-    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList<?> list, @Nullable Object value, int index, boolean isSelected, boolean cellHasFocus) {
         DefaultListCellRenderer cr = (DefaultListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
         cr.setHorizontalAlignment(CENTER);

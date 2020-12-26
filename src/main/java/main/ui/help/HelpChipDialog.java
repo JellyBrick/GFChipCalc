@@ -13,6 +13,8 @@ import main.ui.resource.AppText;
 import main.util.Fn;
 import main.util.Rational;
 import main.util.Ref;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Timer;
 import javax.swing.*;
@@ -53,6 +55,7 @@ public class HelpChipDialog extends JDialog {
 
     private static class HelpTableModel extends DefaultTableModel {
 
+        @NotNull
         @Override
         public Class<?> getColumnClass(int column) {
             return String.class;
@@ -227,11 +230,13 @@ public class HelpChipDialog extends JDialog {
         Fn.addEscDisposeListener(this);
     }
 
+    @NotNull
     private static JPanel genTextPanel(String text, JPanel pageEndPanel) {
         return genTextPanel(text, pageEndPanel, null);
     }
 
-    private static JPanel genTextPanel(String text, JPanel pageEndPanel, JPanel lineEndPanel) {
+    @NotNull
+    private static JPanel genTextPanel(String text, @Nullable JPanel pageEndPanel, @Nullable JPanel lineEndPanel) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JLabel label = new JLabel(text);

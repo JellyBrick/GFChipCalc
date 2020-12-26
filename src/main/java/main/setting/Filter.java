@@ -3,6 +3,7 @@ package main.setting;
 import main.puzzle.Chip;
 import main.puzzle.Stat;
 import main.puzzle.Tag;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -65,19 +66,19 @@ public class Filter {
     }
 
     // setAll
-    public void setStars(boolean... bools) {
+    public void setStars(@NotNull boolean... bools) {
         setAll(stars, bools);
     }
 
-    public void setColors(boolean... bools) {
+    public void setColors(@NotNull boolean... bools) {
         setAll(colors, bools);
     }
 
-    public void setTypes(boolean... bools) {
+    public void setTypes(@NotNull boolean... bools) {
         setAll(types, bools);
     }
 
-    public void setMarks(boolean... bools) {
+    public void setMarks(@NotNull boolean... bools) {
         setAll(marks, bools);
     }
 
@@ -123,17 +124,17 @@ public class Filter {
                 && this.ptMax.equals(ptMax);
     }
 
-    private static void set(boolean[] data, int i, boolean b) {
+    private static void set(@NotNull boolean[] data, int i, boolean b) {
         if (i < data.length) {
             data[i] = b;
         }
     }
 
-    private static void setAll(boolean[] data, boolean[] bools) {
+    private static void setAll(@NotNull boolean[] data, @NotNull boolean[] bools) {
         System.arraycopy(bools, 0, data, 0, Math.min(data.length, bools.length));
     }
 
-    private static boolean anyTrue(boolean[] list) {
+    private static boolean anyTrue(@NotNull boolean[] list) {
         for (boolean b : list) {
             if (b) {
                 return true;

@@ -10,6 +10,7 @@ import main.ui.resource.AppColor;
 import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -34,6 +35,7 @@ public class ImageModifyDialog extends JDialog {
 
     private boolean cancelled = true;
 
+    @Nullable
     public static Chip modify(App app, Chip c) {
         ImageModifyDialog d = new ImageModifyDialog(app, c);
         d.setVisible(true);
@@ -114,7 +116,7 @@ public class ImageModifyDialog extends JDialog {
         Fn.addEscDisposeListener(this);
     }
 
-    private void readChip(Chip chip) {
+    private void readChip(@Nullable Chip chip) {
         // Read data
         if (chip != null) {
             shape = chip.getShape();

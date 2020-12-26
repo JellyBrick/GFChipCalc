@@ -6,6 +6,7 @@
 package main.puzzle;
 
 import main.util.IO;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -25,7 +26,7 @@ public class Puzzle implements Comparable<Puzzle> {
         this.location = location;
     }
 
-    public static int compareLocation(Point o1, Point o2) {
+    public static int compareLocation(@NotNull Point o1, @NotNull Point o2) {
         int xCompare = Integer.compare(o1.x, o2.x);
         if (xCompare != 0) {
             return xCompare;
@@ -35,7 +36,7 @@ public class Puzzle implements Comparable<Puzzle> {
     }
 
     @Override
-    public int compareTo(Puzzle o) {
+    public int compareTo(@NotNull Puzzle o) {
         int shapeCompare = Shape.compare(shape, o.shape);
         if (shapeCompare != 0) {
             return shapeCompare;
@@ -43,6 +44,7 @@ public class Puzzle implements Comparable<Puzzle> {
         return compareLocation(location, o.location);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "{" + shape + ", " + rotation + ", " + IO.data(location) + "}";

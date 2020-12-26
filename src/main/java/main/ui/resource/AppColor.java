@@ -9,6 +9,8 @@ import main.App;
 import main.puzzle.Chip;
 import main.puzzle.Shape;
 import main.setting.Setting;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -30,7 +32,7 @@ public class AppColor {
     public static final Color YELLOW_STAR = new Color(255, 170, 0);
     public static final Color RED_STAR = Color.RED;
 
-    static Color getPoolColor(App app, Chip chip) {
+    static Color getPoolColor(@Nullable App app, @NotNull Chip chip) {
         if (app == null) {
             return Color.GRAY;
         }
@@ -81,6 +83,7 @@ public class AppColor {
             new Color(13400487)
         }; // </editor-fold>
 
+        @NotNull
         public static Color[] colors(int alt) {
             if (alt % Setting.NUM_COLOR == 1) {
                 return CB;

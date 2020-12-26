@@ -1,6 +1,8 @@
 package main.ui.transfer;
 
 import main.ui.MainFrame;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +21,9 @@ public class InvListTransferHandler extends TransferHandler {
 
     private final MainFrame mf;
 
+    @NotNull
     protected final DataFlavor localObjectFlavor;
+    @Nullable
     protected int[] indices;
     protected int addIndex = -1; // Location where items were added
     protected int addCount; // Number of items added.
@@ -32,7 +36,7 @@ public class InvListTransferHandler extends TransferHandler {
     }
 
     @Override
-    protected Transferable createTransferable(JComponent c) {
+    protected Transferable createTransferable(@NotNull JComponent c) {
         JList<?> source = (JList<?>) c;
         c.getRootPane().getGlassPane().setVisible(true);
 
@@ -40,6 +44,7 @@ public class InvListTransferHandler extends TransferHandler {
         Object[] transferedObjects = source.getSelectedValuesList().toArray(new Object[0]);
         // return new DataHandler(transferedObjects, localObjectFlavor.getMimeType());
         return new Transferable() {
+            @NotNull
             @Override
             public DataFlavor[] getTransferDataFlavors() {
                 return new DataFlavor[]{localObjectFlavor};
@@ -50,6 +55,7 @@ public class InvListTransferHandler extends TransferHandler {
                 return Objects.equals(localObjectFlavor, flavor);
             }
 
+            @NotNull
             @Override
             public Object getTransferData(DataFlavor flavor)
                     throws UnsupportedFlavorException {
@@ -63,12 +69,12 @@ public class InvListTransferHandler extends TransferHandler {
     }
 
     @Override
-    public boolean canImport(TransferSupport info) {
+    public boolean canImport(@NotNull TransferSupport info) {
         return exporting && info.isDrop() && info.isDataFlavorSupported(localObjectFlavor);
     }
 
     @Override
-    public int getSourceActions(JComponent c) {
+    public int getSourceActions(@NotNull JComponent c) {
         Component glassPane = c.getRootPane().getGlassPane();
         glassPane.setCursor(DragSource.DefaultMoveDrop);
         return MOVE; // COPY_OR_MOVE;
@@ -76,7 +82,7 @@ public class InvListTransferHandler extends TransferHandler {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean importData(TransferSupport info) {
+    public boolean importData(@NotNull TransferSupport info) {
         TransferHandler.DropLocation tdl = info.getDropLocation();
         if (!canImport(info) || !(tdl instanceof JList.DropLocation)) {
             return false;
@@ -100,7 +106,7 @@ public class InvListTransferHandler extends TransferHandler {
             }
             addCount = values.length;
             return true;
-        } catch (UnsupportedFlavorException | IOException ex) {
+        } catch (@NotNull UnsupportedFlavorException | IOException ex) {
             //ex.printStackTrace();
         }
         return false;
@@ -113,7 +119,7 @@ public class InvListTransferHandler extends TransferHandler {
     }
 
     @Override
-    protected void exportDone(JComponent c, Transferable data, int action) {
+    protected void exportDone(@NotNull JComponent c, Transferable data, int action) {
         c.getRootPane().getGlassPane().setVisible(false);
         cleanup(c, action == MOVE);
         mf.invListTransferHandler_ExportDone();

@@ -10,6 +10,8 @@ import main.puzzle.assembly.ProgressFile;
 import main.setting.BoardSetting;
 import main.setting.Setting;
 import main.ui.resource.AppText;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +47,7 @@ public class IO {
     private static final String URL_GITHUB_UPDATE = "https://github.com/Bunnyspa/GFChipCalc-Update/releases/latest";
     private static final String URL_DOWNLOAD_UPDATE = URL_GITHUB_UPDATE + "/download/GFChipCalc-Update.jar";
 
-    private static int pre420rotation(Shape shape) {
+    private static int pre420rotation(@NotNull Shape shape) {
         switch (shape) {
             case _4_I:
             case _5A_I:
@@ -75,7 +77,8 @@ public class IO {
         }
     }
 
-    public static List<Chip> loadInventory(String fileName) {
+    @NotNull
+    public static List<Chip> loadInventory(@NotNull String fileName) {
         List<Chip> chips = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             Iterator<String> bri = br.lines().iterator();
@@ -109,7 +112,7 @@ public class IO {
         return chips;
     }
 
-    public static void saveInventory(String fileName, List<Chip> chips) {
+    public static void saveInventory(@NotNull String fileName, @NotNull List<Chip> chips) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             bw.write(App.VERSION.toData());
             bw.newLine();
@@ -123,7 +126,8 @@ public class IO {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Combination (Pre 5.3.0)">
-    private static List<Board> loadCombination(String s, Iterator<String> bri) {
+    @NotNull
+    private static List<Board> loadCombination(@NotNull String s, @NotNull Iterator<String> bri) {
         List<Board> boards = new ArrayList<>();
         Version3 v = new Version3(s);
         if (v.isCurrent(4, 0, 0)) {
@@ -237,7 +241,8 @@ public class IO {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Progress">
-    public static ProgressFile loadProgressFile(String fileName, List<Chip> invChips) {
+    @Nullable
+    public static ProgressFile loadProgressFile(@NotNull String fileName, @NotNull List<Chip> invChips) {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             Iterator<String> bri = br.lines().iterator();
             if (bri.hasNext()) {
@@ -272,7 +277,7 @@ public class IO {
         return null;
     }
 
-    public static void saveProgressFile(String fileName, ProgressFile pf) {
+    public static void saveProgressFile(@NotNull String fileName, @NotNull ProgressFile pf) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             bw.write(App.VERSION.toData());
             bw.newLine();
@@ -284,6 +289,7 @@ public class IO {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setting">
+    @NotNull
     public static Setting loadSettings() {
         List<String> lines = new ArrayList<>();
         List<String> sgLines = new ArrayList<>();
@@ -308,7 +314,7 @@ public class IO {
         return new Setting(lines, sgLines);
     }
 
-    public static void saveSettings(Setting settings) {
+    public static void saveSettings(@NotNull Setting settings) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME_SETTINGS))) {
             String s = settings.toData();
             bw.write(s);
@@ -319,7 +325,8 @@ public class IO {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Preset">
-    public static List<BoardTemplate> loadBoardTemplates(String name, int star, boolean isPartial) {
+    @NotNull
+    public static List<BoardTemplate> loadBoardTemplates(@NotNull String name, int star, boolean isPartial) {
         List<BoardTemplate> out = new ArrayList<>();
 
         String fileName = "template_" + toFileName(name) + "_" + star + (isPartial ? "_p" : "") + ".dat";
@@ -335,7 +342,8 @@ public class IO {
         return out;
     }
 
-    private static BoardTemplate loadBoardTemplate(String name, int star, String line) {
+    @NotNull
+    private static BoardTemplate loadBoardTemplate(String name, int star, @NotNull String line) {
         String[] split = line.split(";");
         String[] names = split[0].split(",");
         String[] rotations = split[1].split(",");
@@ -362,22 +370,26 @@ public class IO {
         }
     }
 
-    public static String toFileName(String boardName) {
+    @NotNull
+    public static String toFileName(@NotNull String boardName) {
         return boardName.replace("-", "").replace(" ", "").toLowerCase();
     }
     // </editor-fold>
 
-    private static String getNameWOExt(String s) {
+    @NotNull
+    private static String getNameWOExt(@NotNull String s) {
         int lastIndex = s.lastIndexOf('.');
         return s.substring(0, lastIndex);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Locales and Properties">
+    @NotNull
     public static List<Locale> getInternalLocales() {
         List<Locale> locales = new ArrayList<>(Arrays.asList(AppText.LOCALES));
         return locales;
     }
 
+    @NotNull
     public static List<Locale> getExternalLocales() {
         List<Locale> locales = new ArrayList<>();
         File folder = new File(PATH_EX_LANG);
@@ -391,6 +403,7 @@ public class IO {
         return locales;
     }
 
+    @NotNull
     public static List<Locale> getLocales() {
         List<Locale> locales = new ArrayList<>(getInternalLocales());
         getExternalLocales().forEach((locale) -> {
@@ -401,7 +414,7 @@ public class IO {
         return locales;
     }
 
-    public static void exportProps(App app, Component component) {
+    public static void exportProps(@NotNull App app, Component component) {
         File folder = new File(PATH_EX_LANG);
         if (!folder.exists()) {
             if (!folder.mkdir()) {
@@ -421,7 +434,8 @@ public class IO {
         }
     }
 
-    public static Properties getProp(Locale locale) {
+    @NotNull
+    public static Properties getProp(@NotNull Locale locale) {
         String lang = locale.getLanguage() + "-" + locale.getCountry();
         if (getExternalLocales().contains(locale)) {
             return getProp(PATH_EX_LANG + "/" + lang + ".properties");
@@ -429,7 +443,8 @@ public class IO {
         return new Properties();
     }
 
-    private static Properties getProp(String filePath) {
+    @NotNull
+    private static Properties getProp(@NotNull String filePath) {
         try (Reader r = new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)) {
             Properties props = new Properties();
             props.load(r);
@@ -439,7 +454,7 @@ public class IO {
         }
     }
 
-    public static void sortProp(String order, String target, String save) {
+    public static void sortProp(@NotNull String order, @NotNull String target, @NotNull String save) {
         try {
             List<String> l = read(order);
             Properties props = getProp(target);
@@ -458,13 +473,14 @@ public class IO {
     }
     // </editor-fold>
 
-    public static void write(String filePath, String fileContent) throws IOException {
+    public static void write(@NotNull String filePath, @NotNull String fileContent) throws IOException {
         try (BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
             w.write(fileContent);
         }
     }
 
-    public static List<String> read(String filePath) throws IOException {
+    @NotNull
+    public static List<String> read(@NotNull String filePath) throws IOException {
         List<String> l = new ArrayList<>();
         try (BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
             Stream<String> s = r.lines();
@@ -473,7 +489,7 @@ public class IO {
         return l;
     }
 
-    public static void checkNewVersion(App app) {
+    public static void checkNewVersion(@NotNull App app) {
         String mainLatest = getVersion(URL_GITHUB_MAIN, App.VERSION.toData());
         if (!App.VERSION.isCurrent(mainLatest)) {
             int retval = JOptionPane.showConfirmDialog(app.mf,
@@ -488,7 +504,7 @@ public class IO {
         }
     }
 
-    private static String getVersion(String url, String defaultVersion) {
+    private static String getVersion(@NotNull String url, String defaultVersion) {
         try {
             String latest;
             URLConnection con = new URL(url).openConnection();
@@ -503,7 +519,7 @@ public class IO {
         }
     }
 
-    private static boolean runUpdate(App app) {
+    private static boolean runUpdate(@NotNull App app) {
         String updateLatest = getVersion(URL_GITHUB_UPDATE, app.setting.updateVersion.toData());
         String path = new File("").getAbsolutePath();
         try {
@@ -538,7 +554,7 @@ public class IO {
         }
     }
 
-    public static void openWeb(App app, Component c, String link) {
+    public static void openWeb(@NotNull App app, Component c, @NotNull String link) {
         try {
             Desktop.getDesktop().browse(new URI(link));
         } catch (Exception ex) {
@@ -548,6 +564,7 @@ public class IO {
 
     // <editor-fold defaultstate="collapsed" desc="Parsing">
     //========== Boolean ==========//
+    @NotNull
     public static String data(boolean b) {
         return b ? "1" : "0";
     }
@@ -557,33 +574,38 @@ public class IO {
     }
 
     //========== String ==========//
-    public static String data(Stream<String> s, String delim) {
+    @NotNull
+    public static String data(@NotNull Stream<String> s, @NotNull String delim) {
         List<String> l = new ArrayList<>();
         s.forEach(l::add);
         return String.join(delim, l);
     }
 
-    private static List<String> parseStringList(String s) {
+    @NotNull
+    private static List<String> parseStringList(@NotNull String s) {
         return Arrays.asList(s.split(","));
     }
 
     //========== UUID ==========//
-    public static String data(UUID u) {
+    public static String data(@NotNull UUID u) {
         return u.toString();
     }
 
     //========== Point ==========//
-    public static String data(Point p) {
+    @NotNull
+    public static String data(@NotNull Point p) {
         return p.x + "." + p.y;
     }
 
-    public static Point parsePoint(String s) {
+    @NotNull
+    public static Point parsePoint(@NotNull String s) {
         String[] split = s.split("\\.");
         return new Point(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
     }
 
     //========== Tag ==========//
-    public static Tag parseTag(String s) {
+    @NotNull
+    public static Tag parseTag(@NotNull String s) {
         if (s.length() > 6) {
             Color color = Color.decode("#" + s.substring(0, 6));
             String name = s.substring(6);
@@ -594,7 +616,8 @@ public class IO {
     }
 
     //========== Stat ==========//
-    public static Stat parseStat(String s) {
+    @NotNull
+    public static Stat parseStat(@NotNull String s) {
         String[] d = s.split(",");
         int dmg = d.length > 0 ? Integer.parseInt(d[0]) : 0;
         int brk = d.length > 1 ? Integer.parseInt(d[1]) : 0;
@@ -604,7 +627,8 @@ public class IO {
     }
 
     //========== Board Setting ==========//
-    public static BoardSetting parseBS(List<String> data, boolean advancedSetting) {
+    @NotNull
+    public static BoardSetting parseBS(@NotNull List<String> data, boolean advancedSetting) {
         BoardSetting out = new BoardSetting();
         data.parallelStream().map((line) -> line.split(";")).forEachOrdered((parts) -> {
             String name = parts[0];
@@ -627,7 +651,8 @@ public class IO {
     }
 
     //========== Chip ==========//
-    public static Chip parseChip(Version3 v, String s, Set<Tag> tagPool) {
+    @NotNull
+    public static Chip parseChip(@NotNull Version3 v, @NotNull String s, @NotNull Set<Tag> tagPool) {
         Iterator<String> it = Arrays.asList(s.split(";")).iterator();
         String id = it.next();
         Shape shape = v.isCurrent(7, 0, 0) ? Shape.byId(Integer.parseInt(it.next())) : Shape.byName(it.next());
@@ -664,7 +689,8 @@ public class IO {
     }
 
     //========== Progress ==========//
-    public static ProgressFile parseProgressFile(Version3 v, Iterator<String> it, List<Chip> invChips) {
+    @NotNull
+    public static ProgressFile parseProgressFile(@NotNull Version3 v, @NotNull Iterator<String> it, @NotNull List<Chip> invChips) {
         int calcMode = Integer.parseInt(it.next());
         String name = it.next();
         int star = Integer.parseInt(it.next());
@@ -725,7 +751,8 @@ public class IO {
         );
     }
 
-    private static List<Chip> parseProgress_chips(Version3 v, Iterator<String> it, List<Chip> invChips) {
+    @NotNull
+    private static List<Chip> parseProgress_chips(@NotNull Version3 v, @NotNull Iterator<String> it, @NotNull List<Chip> invChips) {
         int nChip = Integer.parseInt(it.next());
         List<Chip> chips = new ArrayList<>();
         Set<Tag> tags = new HashSet<>();
@@ -736,7 +763,7 @@ public class IO {
         return chips;
     }
 
-    private static void loadProgress_adjustInits(Collection<Chip> chips, List<Chip> invChips) {
+    private static void loadProgress_adjustInits(@NotNull Collection<Chip> chips, @NotNull List<Chip> invChips) {
         chips.forEach((c) -> {
             for (Chip ic : invChips) {
                 if (c.equals(ic)) {
@@ -748,7 +775,8 @@ public class IO {
         });
     }
 
-    private static List<Board> parseProgress_boards(String name, int star, Stat stat, List<Chip> chips, Iterator<String> it) {
+    @NotNull
+    private static List<Board> parseProgress_boards(String name, int star, Stat stat, @NotNull List<Chip> chips, @NotNull Iterator<String> it) {
         List<Board> boards = new ArrayList<>();
         while (it.hasNext()) {
             int n = Integer.parseInt(it.next());

@@ -3,6 +3,7 @@ package main.ui.help;
 import main.App;
 import main.ui.resource.AppImage;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ public class HelpAboutHiddenDialog extends JDialog {
 
     private final App app;
 
+    @NotNull
     public static HelpAboutHiddenDialog getInstance(App app) {
         return new HelpAboutHiddenDialog(app);
     }

@@ -1,5 +1,7 @@
 package main.puzzle.assembly.dxz;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,16 +13,19 @@ import java.util.Stack;
  */
 public class ExactCoverMatrix {
 
+    @NotNull
     private final boolean[][] array;
     private final int nRow, nCol;
 
     private final Stack<Set<Integer>> hiddenRowSetStack = new Stack<>();
     private final Stack<Set<Integer>> hiddenColSetStack = new Stack<>();
+    @NotNull
     private final boolean[] hiddenRows, hiddenCols;
+    @NotNull
     private final int[] rowCounts;
     private int nVisibleRow, nVisibleCol;
 
-    public ExactCoverMatrix(List<boolean[]> rows) {
+    public ExactCoverMatrix(@NotNull List<boolean[]> rows) {
         nRow = rows.size();
         nCol = rows.isEmpty() ? 0 : rows.get(0).length;
 
@@ -81,10 +86,12 @@ public class ExactCoverMatrix {
         array[row][col] = b;
     }
 
+    @NotNull
     public Set<Integer> getRows() {
         return getVisibleIndices(hiddenRows);
     }
 
+    @NotNull
     public Set<Integer> getCols() {
         return getVisibleIndices(hiddenCols);
     }
@@ -102,7 +109,8 @@ public class ExactCoverMatrix {
         return minCol;
     }
 
-    private static Set<Integer> getVisibleIndices(boolean[] hidden) {
+    @NotNull
+    private static Set<Integer> getVisibleIndices(@NotNull boolean[] hidden) {
         Set<Integer> out = new HashSet<>();
         for (int i = 0; i < hidden.length; i++) {
             if (!hidden[i]) {
@@ -116,6 +124,7 @@ public class ExactCoverMatrix {
         return nVisibleRow == 0 && nVisibleCol == 0;
     }
 
+    @NotNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -1,5 +1,7 @@
 package main.ui.renderer;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -17,6 +19,7 @@ public class HelpTableCellRenderer extends DefaultTableCellRenderer {
         this.colHeaderNum = colHeaderNum;
     }
 
+    @NotNull
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         DefaultTableCellRenderer cr = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

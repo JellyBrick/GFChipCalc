@@ -5,6 +5,8 @@
  */
 package main.puzzle.assembly.dxz.dlx;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,13 +18,14 @@ import java.util.Set;
  */
 public class DancingLinksMatrix {
 
+    @NotNull
     private final ColumnNode header;
 
-    public DancingLinksMatrix(List<boolean[]> matrix) {
+    public DancingLinksMatrix(@NotNull List<boolean[]> matrix) {
         header = create(matrix);
     }
 
-    private ColumnNode create(List<boolean[]> matrix) {
+    private ColumnNode create(@NotNull List<boolean[]> matrix) {
         final int nCol = matrix.get(0).length;
         ColumnNode headerNode = new ColumnNode(-1);
         List<ColumnNode> columnNodes = new ArrayList<>();
@@ -72,6 +75,7 @@ public class DancingLinksMatrix {
         return out;
     }
 
+    @NotNull
     public Set<Integer> getColumns() {
         Set<Integer> out = new HashSet<>();
 
@@ -82,6 +86,7 @@ public class DancingLinksMatrix {
         return out;
     }
 
+    @NotNull
     @Override
     public String toString() {
         StringBuilder sb= new StringBuilder();

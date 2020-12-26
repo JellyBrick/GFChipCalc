@@ -11,6 +11,7 @@ import main.ui.component.TagPanel;
 import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -21,20 +22,29 @@ import javax.swing.border.TitledBorder;
  */
 public class FilterDialog extends JDialog {
 
+    @NotNull
     private final App app;
+    @NotNull
     private final TagPanel tip, txp;
+    @NotNull
     private final JToggleButton[] starTBs;
+    @NotNull
     private final JToggleButton[] colorTBs;
+    @NotNull
     private final JToggleButton[] typeTBs;
+    @NotNull
     private final JToggleButton[] markedTBs;
+    @NotNull
     private final JSpinner[] ptMinSpinners;
+    @NotNull
     private final JSpinner[] ptMaxSpinners;
 
-    public static FilterDialog getInstance(App app) {
+    @NotNull
+    public static FilterDialog getInstance(@NotNull App app) {
         return new FilterDialog(app);
     }
 
-    private FilterDialog(App app) {
+    private FilterDialog(@NotNull App app) {
         initComponents();
 
         this.app = app;

@@ -3,6 +3,8 @@ package main.iterator;
 import main.puzzle.BoardTemplate;
 import main.puzzle.Chip;
 import main.puzzle.Shape;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -12,11 +14,14 @@ import java.util.*;
  */
 public class ChipCiterator implements Iterator<List<Chip>> {
 
+    @NotNull
     private final Map<Shape, List<Chip>> candidateMap;
+    @NotNull
     private final List<Shape> shapes;
+    @NotNull
     private final List<int[]> combs;
 
-    public ChipCiterator(Collection<Chip> candidates) {
+    public ChipCiterator(@NotNull Collection<Chip> candidates) {
         candidateMap = new HashMap<>();
         for (Chip c : candidates) {
             Shape shape = c.getShape();
@@ -34,6 +39,7 @@ public class ChipCiterator implements Iterator<List<Chip>> {
         return combs.isEmpty() || combs.get(combs.size() - 1) != null;
     }
 
+    @NotNull
     @Override
     public List<Chip> next() {
         // Generate output
@@ -58,11 +64,11 @@ public class ChipCiterator implements Iterator<List<Chip>> {
         return out;
     }
 
-    public void init(BoardTemplate bt) {
+    public void init(@NotNull BoardTemplate bt) {
         init(bt.getShapeCountMap());
     }
 
-    public void init(Map<Shape, Integer> shapeCountMap) {
+    public void init(@NotNull Map<Shape, Integer> shapeCountMap) {
         shapes.clear();
         combs.clear();
         List<Shape> keys = new ArrayList<>(shapeCountMap.keySet());
@@ -81,7 +87,7 @@ public class ChipCiterator implements Iterator<List<Chip>> {
         return candidateMap.get(shape).size();
     }
 
-    public boolean hasEnoughChips(BoardTemplate template) {
+    public boolean hasEnoughChips(@NotNull BoardTemplate template) {
         Map<Shape, Integer> nameCountMap = template.getShapeCountMap();
         for (Shape shape : nameCountMap.keySet()) {
             if (nameCountMap.get(shape) > getCandidateSize(shape)) {
@@ -91,10 +97,12 @@ public class ChipCiterator implements Iterator<List<Chip>> {
         return true;
     }
 
+    @Nullable
     private int[] nextComb(int i) {
         return nCrNext(combs.get(i), getCandidateSize(shapes.get(i)));
     }
 
+    @NotNull
     private static int[] nCrInit(int n) {
         int[] out = new int[n];
         for (int i = 0; i < n; i++) {
@@ -103,7 +111,8 @@ public class ChipCiterator implements Iterator<List<Chip>> {
         return out;
     }
 
-    private static int[] nCrNext(int[] l, int max) {
+    @Nullable
+    private static int[] nCrNext(@NotNull int[] l, int max) {
         int currentMax = max - 1;
         int index = l.length - 1;
         while (-1 < index) {

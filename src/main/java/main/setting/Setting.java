@@ -5,6 +5,7 @@ import main.puzzle.Chip;
 import main.util.IO;
 import main.util.Version2;
 import main.util.Version3;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class Setting {
     public static final int DEFAULT_FONTSIZE = 12;
 
     //// Variables ////
+    @NotNull
     public Version2 updateVersion = new Version2(1, 0);
 
     // Display
@@ -74,12 +76,13 @@ public class Setting {
     public boolean showProgImage = true;
 
     // Board
+    @NotNull
     public BoardSetting board = new BoardSetting();
 
     public Setting() {
     }
 
-    public Setting(List<String> generalLines, List<String> boardStatLines) {
+    public Setting(@NotNull List<String> generalLines, @NotNull List<String> boardStatLines) {
         try {
             Version3 v = new Version3(generalLines.get(0));
             if (v.isCurrent(4, 2, 0)) {
@@ -156,10 +159,12 @@ public class Setting {
         }
     }
 
-    private static String afterEqual(String line) {
+    @NotNull
+    private static String afterEqual(@NotNull String line) {
         return line.split("=")[1].trim();
     }
 
+    @NotNull
     public String toData() {
         List<String> lines = new ArrayList<>();
         lines.add(App.VERSION.toData());

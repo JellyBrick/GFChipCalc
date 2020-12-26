@@ -1,5 +1,8 @@
 package main.json;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +14,9 @@ import java.util.Map;
  */
 public class ObjectJson implements Json {
 
+    @NotNull
     private final List<String> keys;
+    @NotNull
     private final Map<String, Json> data;
 
     public ObjectJson(String data) {
@@ -42,6 +47,7 @@ public class ObjectJson implements Json {
         }
     }
 
+    @NotNull
     public List<String> getKeys() {
         return new ArrayList<>(keys);
     }
@@ -54,6 +60,7 @@ public class ObjectJson implements Json {
         return keys.contains(key);
     }
 
+    @Nullable
     public Json getValue(String s) {
         if (keys.contains(s)) {
             return data.get(s);
@@ -73,6 +80,7 @@ public class ObjectJson implements Json {
         return Json.OBJECT;
     }
 
+    @NotNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

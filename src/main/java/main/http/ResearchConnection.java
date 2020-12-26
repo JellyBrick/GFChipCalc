@@ -1,5 +1,8 @@
 package main.http;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -21,26 +24,29 @@ public class ResearchConnection {
     // chips;-
     // OR
     // chips;rotaions;locations
-    public static void sendResult(String data) {
+    public static void sendResult(@NotNull String data) {
         put("", data);
     }
 
     // version: version;name;star
+    @Nullable
     public static String getVersion() {
         return get("version");
     }
 
     // progress: prog;total
+    @Nullable
     public static String getProgress() {
         return get("progress");
     }
 
     // task: chips
+    @Nullable
     public static String getTask() {
         return get("task");
     }
 
-    private static void put(String path, String data) {
+    private static void put(String path, @NotNull String data) {
         try {
             URL u = new URL(URL + path);
             HttpURLConnection con = (HttpURLConnection) u.openConnection();
@@ -60,6 +66,7 @@ public class ResearchConnection {
         }
     }
 
+    @Nullable
     private static String get(String path) {
         try {
             URL u = new URL(URL + path);

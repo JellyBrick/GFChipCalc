@@ -2,6 +2,8 @@ package main.http;
 
 import main.json.JsonParser;
 import main.ui.dialog.ProxyDialog;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.ByteArrayInputStream;
@@ -28,6 +30,7 @@ public class Proxy {
     private final ProxyDialog dialog;
     private final ServerSocket serverSocket = initServerSocket();
 
+    @NotNull
     private ServerSocket initServerSocket() throws IOException {
         try {
             return new ServerSocket(PORT);
@@ -69,7 +72,7 @@ public class Proxy {
                 }
             }
             return InetAddress.getLocalHost().getHostAddress();
-        } catch (SocketException | UnknownHostException ignored) {
+        } catch (@NotNull SocketException | UnknownHostException ignored) {
         }
         return "";
     }
@@ -83,7 +86,7 @@ public class Proxy {
         mainThread.start();
     }
 
-    public void process_sign(ProxyMessage pm) {
+    public void process_sign(@NotNull ProxyMessage pm) {
         String data = getBody(pm);
         try {
             key = JsonParser.parseSign(decode(data, AuthCode.SIGN_KEY));
@@ -92,7 +95,7 @@ public class Proxy {
         }
     }
 
-    public synchronized void process_index(ProxyMessage pm) {
+    public synchronized void process_index(@NotNull ProxyMessage pm) {
         String data = getBody(pm);
 
         if (!data.contains("{")) {
@@ -108,7 +111,7 @@ public class Proxy {
         parse(data);
     }
 
-    private String getBody(ProxyMessage pm) {
+    private String getBody(@NotNull ProxyMessage pm) {
         List<Byte> byteList = pm.resBody;
         byte[] byteArray = new byte[byteList.size()];
         for (int i = 0; i < byteList.size(); i++) {
@@ -124,7 +127,8 @@ public class Proxy {
         return new String(byteArray);
     }
 
-    private static String decode(String text, String key) {
+    @Nullable
+    private static String decode(@Nullable String text, String key) {
         try {
             if (text == null || text.isEmpty()) {
                 return "";
@@ -141,7 +145,7 @@ public class Proxy {
         return "";
     }
 
-    public static String decode_gzip(byte[] array) throws IOException {
+    public static String decode_gzip(@NotNull byte[] array) throws IOException {
         GZIPInputStream gzipIS = new GZIPInputStream(new ByteArrayInputStream(array));
         ByteArrayOutputStream byteOS = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];

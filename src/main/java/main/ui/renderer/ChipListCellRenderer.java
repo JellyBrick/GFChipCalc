@@ -3,6 +3,8 @@ package main.ui.renderer;
 import main.App;
 import main.puzzle.Chip;
 import main.ui.resource.AppImage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,8 +33,9 @@ public class ChipListCellRenderer extends DefaultListCellRenderer {
         this.factor = factor;
     }
 
+    @NotNull
     @Override
-    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList<?> list, @Nullable Object value, int index, boolean isSelected, boolean cellHasFocus) {
         DefaultListCellRenderer cr = (DefaultListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
         cr.setHorizontalAlignment(CENTER);

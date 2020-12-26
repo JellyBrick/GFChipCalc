@@ -1,5 +1,8 @@
 package main.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,11 +23,12 @@ public class DoubleKeyHashMap<KA, KB, V> {
         data.get(s).put(i, value);
     }
 
-    public void put(KA s, Map<KB, V> m) {
+    public void put(KA s, @NotNull Map<KB, V> m) {
         init(s);
         data.get(s).putAll(m);
     }
 
+    @Nullable
     public V get(KA s, KB i) {
         if (containsKey(s, i)) {
             return data.get(s).get(i);
@@ -36,6 +40,7 @@ public class DoubleKeyHashMap<KA, KB, V> {
         return data.containsKey(s) && data.get(s).containsKey(i);
     }
 
+    @Nullable
     public Set<KB> keySet(KA s) {
         if (data.containsKey(s)) {
             return data.get(s).keySet();

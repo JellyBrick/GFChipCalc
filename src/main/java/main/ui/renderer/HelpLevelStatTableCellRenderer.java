@@ -4,6 +4,7 @@ import main.App;
 import main.ui.help.HelpChipDialog;
 import main.util.Fn;
 import main.util.Ref;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -29,6 +30,7 @@ public class HelpLevelStatTableCellRenderer extends DefaultTableCellRenderer {
         this.toggleType = toggleType;
     }
 
+    @NotNull
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         DefaultTableCellRenderer cr = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

@@ -4,6 +4,7 @@ import main.App;
 import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -22,12 +23,15 @@ public class HelpAppDialog extends JDialog {
 
     private static class ImageCycler {
 
+        @NotNull
         private final JLabel label;
+        @NotNull
         private final ImageIcon[] icons;
+        @NotNull
         private final Timer timer;
         private int cycle;
 
-        public ImageCycler(JLabel label, ImageIcon... icons) {
+        public ImageCycler(@NotNull JLabel label, @NotNull ImageIcon... icons) {
             this.label = label;
             if (0 < icons.length) {
                 label.setIcon(icons[0]);
@@ -88,7 +92,8 @@ public class HelpAppDialog extends JDialog {
         ));
     }
 
-    private JPanel generatePanels(IconText... its) {
+    @NotNull
+    private JPanel generatePanels(@NotNull IconText... its) {
         JPanel out = new JPanel();
         out.setLayout(new BoxLayout(out, BoxLayout.Y_AXIS));
         for (int i = 0; i < its.length; i++) {
@@ -101,6 +106,7 @@ public class HelpAppDialog extends JDialog {
         return out;
     }
 
+    @NotNull
     private JPanel generatePanel(String text, ImageIcon... icons) {
         JPanel out = new JPanel(new BorderLayout(10, 10));
 

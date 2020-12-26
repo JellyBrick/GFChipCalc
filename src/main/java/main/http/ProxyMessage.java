@@ -1,5 +1,8 @@
 package main.http;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 /**
@@ -9,12 +12,16 @@ import java.util.*;
 public class ProxyMessage {
 
     public String reqMethod, reqUrl, reqVersion;
+    @NotNull
     private final Map<String, String> reqHeader;
+    @NotNull
     public final List<Byte> reqBody;
 
     public int resCode;
     public String resMsg;
+    @NotNull
     private final Map<String, String> resHeader;
+    @NotNull
     public final List<Byte> resBody;
 
     public ProxyMessage() {
@@ -26,9 +33,9 @@ public class ProxyMessage {
 
     public ProxyMessage(
             String reqMethod, String reqUrl, String reqVersion,
-            Map<String, String> reqHeader,
+            @NotNull Map<String, String> reqHeader,
             int resCode, String resMsg,
-            Map<String, String> resHeader
+            @NotNull Map<String, String> resHeader
     ) {
         this.reqMethod = reqMethod;
         this.reqUrl = reqUrl;
@@ -41,10 +48,12 @@ public class ProxyMessage {
         this.resBody = new ArrayList<>();
     }
 
+    @NotNull
     public Set<String> getReqHeaders() {
         return getHeaders(reqHeader);
     }
 
+    @NotNull
     public Set<String> getResHeaders() {
         return getHeaders(resHeader);
     }
@@ -57,35 +66,39 @@ public class ProxyMessage {
         addHeader(header, field, resHeader);
     }
 
-    public boolean containsReqHeader(String header) {
+    public boolean containsReqHeader(@NotNull String header) {
         return containsHeader(header, reqHeader);
     }
 
-    public boolean containsResHeader(String header) {
+    public boolean containsResHeader(@NotNull String header) {
         return containsHeader(header, resHeader);
     }
 
+    @Nullable
     public String getReqHeader(String header) {
         return getHeader(header, reqHeader);
     }
 
+    @Nullable
     public String getResHeader(String header) {
         return getHeader(header, resHeader);
     }
 
-    private static Set<String> getHeaders(Map<String, String> headerMap) {
+    @NotNull
+    private static Set<String> getHeaders(@NotNull Map<String, String> headerMap) {
         return headerMap.keySet();
     }
 
-    private static void addHeader(String header, String field, Map<String, String> headerMap) {
+    private static void addHeader(String header, String field, @NotNull Map<String, String> headerMap) {
         headerMap.put(header, field);
     }
 
-    private static boolean containsHeader(String header, Map<String, String> headerMap) {
+    private static boolean containsHeader(@NotNull String header, @NotNull Map<String, String> headerMap) {
         return headerMap.keySet().parallelStream().map(String::toLowerCase).anyMatch((key) -> key.equals(header.toLowerCase()));
     }
 
-    private static String getHeader(String header, Map<String, String> headerMap) {
+    @Nullable
+    private static String getHeader(String header, @NotNull Map<String, String> headerMap) {
         for (String key : headerMap.keySet()) {
             if (key.equalsIgnoreCase(header)) {
                 return headerMap.get(key);
@@ -101,12 +114,14 @@ public class ProxyMessage {
         }
     }
 
-    private static String getBodyHex(List<Byte> byteList) {
+    @NotNull
+    private static String getBodyHex(@NotNull List<Byte> byteList) {
         StringBuilder sb = new StringBuilder();
         byteList.parallelStream().forEach((b) -> sb.append(byteToHex(b)));
         return sb.toString();
     }
 
+    @NotNull
     public String getRequestHeader() {
         String out = reqMethod + " " + reqUrl + " " + reqVersion + System.lineSeparator();
         List<String> headers = new ArrayList<>();
@@ -116,6 +131,7 @@ public class ProxyMessage {
         return out;
     }
 
+    @NotNull
     public String getRequest() {
         String out = getRequestHeader();
         out += System.lineSeparator() + System.lineSeparator();
@@ -128,6 +144,7 @@ public class ProxyMessage {
         return out;
     }
 
+    @NotNull
     public String getRepsonse() {
         String out = getRepsonseHeader();
         out += System.lineSeparator() + System.lineSeparator();
@@ -140,11 +157,13 @@ public class ProxyMessage {
         return out;
     }
 
+    @NotNull
     public static String byteToHex(byte b) {
         int v = b & 0xFF;
         return Integer.toHexString(v);
     }
 
+    @NotNull
     public String getRepsonseHeader() {
         fixForConnect();
         String out = reqVersion + " " + resCode + " " + resMsg + System.lineSeparator();
@@ -155,7 +174,8 @@ public class ProxyMessage {
         return out;
     }
 
-    private static String getBodyString(List<Byte> byteList) {
+    @NotNull
+    private static String getBodyString(@NotNull List<Byte> byteList) {
         byte[] byteArray = new byte[byteList.size()];
         for (int i = 0; i < byteList.size(); i++) {
             byteArray[i] = byteList.get(i);
@@ -163,6 +183,7 @@ public class ProxyMessage {
         return new String(byteArray);
     }
 
+    @NotNull
     public String toData() {
         String out = getRequest() + System.lineSeparator();
         out += "-----" + System.lineSeparator();

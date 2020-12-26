@@ -4,6 +4,8 @@ import main.App;
 import main.puzzle.Tag;
 import main.ui.renderer.TagTableCellRenderer;
 import main.ui.resource.AppText;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.TableModelListener;
@@ -23,11 +25,13 @@ public class TagPanel extends JPanel {
 
     private final App app;
     private final JDialog dialog;
+    @Nullable
     private final Predicate<Tag> checkFn;
     private final boolean checkBox;
+    @NotNull
     private final DefaultTableModel tm;
 
-    public TagPanel(App app, JDialog dialog, Predicate<Tag> checkFn, boolean editable) {
+    public TagPanel(App app, JDialog dialog, @Nullable Predicate<Tag> checkFn, boolean editable) {
         initComponents();
 
         this.app = app;
@@ -75,7 +79,7 @@ public class TagPanel extends JPanel {
     private void addListeners() {
         nameTextField.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyTyped(@NotNull KeyEvent e) {
                 char c = e.getKeyChar();
                 if (c == ',' || c == ';') {
                     e.consume();  // ignore event
@@ -128,6 +132,7 @@ public class TagPanel extends JPanel {
         }
     }
 
+    @NotNull
     public Tag getTag(int i) {
         if (checkBox) {
             return (Tag) tm.getValueAt(i, 1);
@@ -163,7 +168,7 @@ public class TagPanel extends JPanel {
         nameTextField.setForeground(color);
     }
 
-    private static void resizeCheckBoxWidth(JTable tagTable) {
+    private static void resizeCheckBoxWidth(@NotNull JTable tagTable) {
         if (tagTable.getRowCount() > 0) {
             // Col 0
             TableCellRenderer tcr0 = tagTable.getCellRenderer(0, 0);
@@ -194,6 +199,7 @@ public class TagPanel extends JPanel {
             return checkBox && column == 0;
         }
 
+        @NotNull
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             return checkBox && columnIndex == 0 ? Boolean.class : Tag.class;

@@ -2,6 +2,7 @@ package main.iterator;
 
 import main.puzzle.Chip;
 import main.puzzle.Shape;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -11,12 +12,13 @@ import java.util.*;
  */
 public class ShapeCiterator implements Iterator<List<Shape>> {
 
+    @NotNull
     private final Map<Shape, Integer> chipNameCountMap;
     private final List<PerTypeShapeCiterator> iterators = new ArrayList<>();
     private final boolean limited;
     private int iteratorIndex = 0;
 
-    public ShapeCiterator(String name, int star, List<Chip> chips) {
+    public ShapeCiterator(String name, int star, @NotNull List<Chip> chips) {
         List<Shape.Type> chipTypes = new ArrayList<>();
         List<Shape> chipShapes = new ArrayList<>();
         for (Chip c : chips) {
@@ -115,7 +117,8 @@ public class ShapeCiterator implements Iterator<List<Shape>> {
         return allShapeEnough(nameCount, chipNameCountMap);
     }
 
-    private static Map<Shape.Type, Integer> getTypeCount(Collection<Shape.Type> types) {
+    @NotNull
+    private static Map<Shape.Type, Integer> getTypeCount(@NotNull Collection<Shape.Type> types) {
         Map<Shape.Type, Integer> out = new HashMap<>();
         for (Shape.Type t : types) {
             if (!out.containsKey(t)) {
@@ -128,7 +131,8 @@ public class ShapeCiterator implements Iterator<List<Shape>> {
         return out;
     }
 
-    private static Map<Shape, Integer> getShapeCount(Collection<Shape> shapes) {
+    @NotNull
+    private static Map<Shape, Integer> getShapeCount(@NotNull Collection<Shape> shapes) {
         Map<Shape, Integer> out = new HashMap<>();
         for (Shape s : shapes) {
             if (!out.containsKey(s)) {
@@ -141,7 +145,7 @@ public class ShapeCiterator implements Iterator<List<Shape>> {
         return out;
     }
 
-    private static boolean allTypeEnough(Map<Shape.Type, Integer> required, Map<Shape.Type, Integer> candidates) {
+    private static boolean allTypeEnough(@NotNull Map<Shape.Type, Integer> required, @NotNull Map<Shape.Type, Integer> candidates) {
         for (Shape.Type type : required.keySet()) {
             if (!candidates.containsKey(type) || required.get(type) > candidates.get(type)) {
                 return false;
@@ -150,7 +154,7 @@ public class ShapeCiterator implements Iterator<List<Shape>> {
         return true;
     }
 
-    private static boolean allShapeEnough(Map<Shape, Integer> required, Map<Shape, Integer> candidates) {
+    private static boolean allShapeEnough(@NotNull Map<Shape, Integer> required, @NotNull Map<Shape, Integer> candidates) {
         for (Shape type : required.keySet()) {
             if (!candidates.containsKey(type) || required.get(type) > candidates.get(type)) {
                 return false;

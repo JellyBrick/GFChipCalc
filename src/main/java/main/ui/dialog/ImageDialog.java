@@ -8,6 +8,8 @@ import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
 import main.util.ThreadPoolManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -38,6 +40,7 @@ public class ImageDialog extends JDialog {
     private static class RC {
 
         final Rectangle rect;
+        @Nullable
         Chip chip;
 
         public RC(Rectangle rect, Chip chip) {
@@ -62,6 +65,7 @@ public class ImageDialog extends JDialog {
     private boolean isMouseDown = false;
     private Point startP, currentP;
 
+    @NotNull
     public static List<Chip> getData(App app) {
         ImageDialog d = new ImageDialog(app);
         d.setVisible(true);
@@ -138,7 +142,7 @@ public class ImageDialog extends JDialog {
         };
         imageLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent me) {
+            public void mousePressed(@NotNull MouseEvent me) {
                 startP = me.getPoint();
                 isMouseDown = true;
             }
@@ -164,17 +168,17 @@ public class ImageDialog extends JDialog {
         });
         imageLabel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mouseDragged(MouseEvent me) {
+            public void mouseDragged(@NotNull MouseEvent me) {
                 updatePoint(me);
             }
 
             @Override
-            public void mouseMoved(MouseEvent me) {
+            public void mouseMoved(@NotNull MouseEvent me) {
                 updatePoint(me);
                 popupChipImage();
             }
 
-            public void updatePoint(MouseEvent me) {
+            public void updatePoint(@NotNull MouseEvent me) {
                 Point p = me.getPoint();
                 p.x = Fn.limit(p.x, 0, imageLabel.getWidth());
                 p.y = Fn.limit(p.y, 0, imageLabel.getHeight());
@@ -274,7 +278,7 @@ public class ImageDialog extends JDialog {
         });
     }
 
-    private void addRect(Rectangle rect, boolean addedByUser) {
+    private void addRect(@NotNull Rectangle rect, boolean addedByUser) {
         boolean overlapped = rcs.parallelStream().anyMatch((rc) -> Fn.isOverlapped(rect, rc.rect));
         if (!overlapped) {
             Chip c = ImageProcessor.idChip(image, rect);
@@ -308,7 +312,8 @@ public class ImageDialog extends JDialog {
         }
     }
 
-    private static Rectangle getRectWithPts(Point p1, Point p2) {
+    @NotNull
+    private static Rectangle getRectWithPts(@NotNull Point p1, @NotNull Point p2) {
         int x = Math.min(p1.x, p2.x);
         int y = Math.min(p1.y, p2.y);
         int width = Math.max(p1.x, p2.x) - x;
@@ -316,15 +321,17 @@ public class ImageDialog extends JDialog {
         return new Rectangle(x, y, width, height);
     }
 
-    private static Rectangle zoomRect(Rectangle r, int zoom) {
+    @NotNull
+    private static Rectangle zoomRect(@NotNull Rectangle r, int zoom) {
         return new Rectangle(r.x * zoom / 100, r.y * zoom / 100, r.width * zoom / 100, r.height * zoom / 100);
     }
 
-    private static Rectangle unzoomRect(Rectangle r, int zoom) {
+    @NotNull
+    private static Rectangle unzoomRect(@NotNull Rectangle r, int zoom) {
         return new Rectangle(r.x * 100 / zoom, r.y * 100 / zoom, r.width * 100 / zoom, r.height * 100 / zoom);
     }
 
-    public static boolean isValid(Chip chip) {
+    public static boolean isValid(@Nullable Chip chip) {
         if (chip == null || chip.getShape() == null || chip.getShape() == Shape.NONE) {
             return false;
         }
@@ -376,7 +383,8 @@ public class ImageDialog extends JDialog {
         imageLabel.repaint();
     }
 
-    private static JLabel genChipLabel(ImageIcon icon, Rectangle rect) {
+    @NotNull
+    private static JLabel genChipLabel(@NotNull ImageIcon icon, @NotNull Rectangle rect) {
         Rectangle fitRect = Fn.fit(icon.getIconWidth(), icon.getIconHeight(), rect);
         Image scaled = icon.getImage().getScaledInstance(fitRect.width, fitRect.height, Image.SCALE_SMOOTH);
         JLabel label = new JLabel();

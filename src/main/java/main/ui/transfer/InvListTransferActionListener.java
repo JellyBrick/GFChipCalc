@@ -31,6 +31,9 @@
  */
 package main.ui.transfer;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -47,6 +50,7 @@ import java.beans.PropertyChangeListener;
 public class InvListTransferActionListener implements ActionListener,
         PropertyChangeListener {
 
+    @Nullable
     private JComponent focusOwner = null;
 
     public InvListTransferActionListener() {
@@ -56,7 +60,7 @@ public class InvListTransferActionListener implements ActionListener,
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent e) {
+    public void propertyChange(@NotNull PropertyChangeEvent e) {
         Object o = e.getNewValue();
         if (o instanceof JComponent) {
             focusOwner = (JComponent) o;
@@ -66,7 +70,7 @@ public class InvListTransferActionListener implements ActionListener,
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(@NotNull ActionEvent e) {
         if (focusOwner == null) {
             return;
         }

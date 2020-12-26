@@ -1,5 +1,7 @@
 package main.ui.shortcut;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ public class ShortcutKeyAdapter extends KeyAdapter {
     }
 
     @Override
-    public void keyPressed(KeyEvent evt) {
+    public void keyPressed(@NotNull KeyEvent evt) {
         int key = evt.getKeyCode();
         boolean ctrl = evt.isControlDown();
         boolean shift = evt.isShiftDown();

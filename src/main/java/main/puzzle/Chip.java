@@ -5,6 +5,8 @@ import main.util.Fn;
 import main.util.IO;
 import main.util.Rational;
 import main.util.Version3;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -37,9 +39,11 @@ public class Chip implements Serializable {
     public static final int STAR_MIN = 2;
     public static final int STAR_MAX = 5;
 
+    @Nullable
     private final String id;
     private final Shape shape;
 
+    @Nullable
     private Stat pt;
     private int initRotation, rotation, initLevel, level, star, color, displayType;
     private int boardIndex = -1;
@@ -55,7 +59,7 @@ public class Chip implements Serializable {
     }
 
     // Pool to inventory init
-    public Chip(Chip c, int star, int color) {
+    public Chip(@NotNull Chip c, int star, int color) {
         this.id = UUID.randomUUID().toString();
         shape = c.shape;
         rotation = c.rotation;
@@ -69,7 +73,7 @@ public class Chip implements Serializable {
     }
 
     // Chip deep copy
-    public Chip(Chip c) {
+    public Chip(@NotNull Chip c) {
         id = c.getID();
         shape = c.shape;
         star = c.star;
@@ -92,7 +96,7 @@ public class Chip implements Serializable {
     public static final int COMBINATION = 1;
 
     // Pre 5.3.0
-    public Chip(Version3 version, String[] data, int type) {
+    public Chip(@NotNull Version3 version, @NotNull String[] data, int type) {
         if (version.isCurrent(4, 0, 0)) {
             // 4.0.0+
             int i = 0;
@@ -184,8 +188,8 @@ public class Chip implements Serializable {
     }
 
     // ImageProcessor
-    public Chip(Shape shape, int star, int color, Stat pt,
-            int level, int rotation) {
+    public Chip(@NotNull Shape shape, int star, int color, Stat pt,
+                int level, int rotation) {
         this.id = UUID.randomUUID().toString();
         this.shape = shape;
         this.star = star;
@@ -202,8 +206,8 @@ public class Chip implements Serializable {
     }
 
     // json (Inventory)
-    public Chip(String id, Shape shape, int star, int color, Stat pt,
-            int level, int rotation) {
+    public Chip(String id, @NotNull Shape shape, int star, int color, Stat pt,
+                int level, int rotation) {
         this.id = id;
         this.shape = shape;
         this.star = star;
@@ -220,9 +224,9 @@ public class Chip implements Serializable {
     }
 
     public Chip(String id,
-            Shape shape, int star, int color, Stat pt,
-            int level, int rotation,
-            boolean marked, Set<Tag> tags) {
+                @NotNull Shape shape, int star, int color, Stat pt,
+                int level, int rotation,
+                boolean marked, Set<Tag> tags) {
         this.id = id;
         this.shape = shape;
         this.star = star;
@@ -240,6 +244,7 @@ public class Chip implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="ID">
+    @Nullable
     public String getID() {
         return id;
     }
@@ -260,11 +265,12 @@ public class Chip implements Serializable {
         return shape.getType();
     }
 
-    public boolean typeGeq(Shape.Type type) {
+    public boolean typeGeq(@NotNull Shape.Type type) {
         return shape.getType().compareTo(type) >= 0;
     }
 
-    public static Rational getTypeMult(Shape.Type type, int star) {
+    @NotNull
+    public static Rational getTypeMult(@NotNull Shape.Type type, int star) {
         int a = type.getSize() < 5 ? 16 : 20;
         int b = type.getSize() < 3 || type == Shape.Type._5A ? 4 : 0;
         int c = type.getSize() < 4 || type == Shape.Type._5A ? 4 : 0;
@@ -356,6 +362,7 @@ public class Chip implements Serializable {
         return getTotalPts() == getSize();
     }
 
+    @Nullable
     public Stat getPt() {
         return pt;
     }
@@ -364,14 +371,14 @@ public class Chip implements Serializable {
         pt = new Stat(dmg, brk, hit, rld);
     }
 
-    public boolean anyPtOver(Stat ptLimit) {
+    public boolean anyPtOver(@NotNull Stat ptLimit) {
         return pt.dmg > ptLimit.dmg
                 || pt.brk > ptLimit.brk
                 || pt.hit > ptLimit.hit
                 || pt.rld > ptLimit.rld;
     }
 
-    public static int getPt(Rational rate, Shape.Type type, int star, int level, int stat) {
+    public static int getPt(@NotNull Rational rate, @NotNull Shape.Type type, int star, int level, int stat) {
         for (int pt = 0; pt < PT_MAX; pt++) {
             if (getStat(rate, type, star, level, pt) == stat) {
                 return pt;
@@ -380,6 +387,7 @@ public class Chip implements Serializable {
         return -1;
     }
 
+    @NotNull
     public Stat getStat() {
         return new Stat(
                 getStat(RATE_DMG, this, pt.dmg),
@@ -389,15 +397,16 @@ public class Chip implements Serializable {
         );
     }
 
-    public static int getStat(Rational rate, Chip c, int pt) {
+    public static int getStat(@NotNull Rational rate, @NotNull Chip c, int pt) {
         return getStat(rate, c.getType(), c.star, c.level, pt);
     }
 
-    public static int getStat(Rational rate, Shape.Type type, int star, int level, int pt) {
+    public static int getStat(@NotNull Rational rate, @NotNull Shape.Type type, int star, int level, int pt) {
         int base = new Rational(pt).mult(rate).mult(getTypeMult(type, star)).getIntCeil();
         return getLevelMult(level).mult(base).getIntCeil();
     }
 
+    @NotNull
     public Stat getOldStat() {
         int dmg = getOldStat(RATE_DMG, this, pt.dmg);
         int brk = getOldStat(RATE_BRK, this, pt.brk);
@@ -406,16 +415,17 @@ public class Chip implements Serializable {
         return new Stat(dmg, brk, hit, rld);
     }
 
-    private static int getOldStat(Rational rate, Chip c, int pt) {
+    private static int getOldStat(@NotNull Rational rate, @NotNull Chip c, int pt) {
         return getOldStat(rate, c.shape, c.star, c.level, pt);
     }
 
-    private static int getOldStat(Rational rate, Shape shape, int star, int level, int pt) {
+    private static int getOldStat(@NotNull Rational rate, @NotNull Shape shape, int star, int level, int pt) {
         Rational base = new Rational(pt).mult(rate).mult(getTypeMult(shape.getType(), star));
         return getLevelMult(level).mult(base).getIntCeil();
     }
 
-    public static Stat getPtMultStat(Chip c) {
+    @NotNull
+    public static Stat getPtMultStat(@NotNull Chip c) {
         return new Stat(
                 getStat(Chip.RATE_DMG, c, 1) * c.pt.dmg,
                 getStat(Chip.RATE_BRK, c, 1) * c.pt.brk,
@@ -424,17 +434,17 @@ public class Chip implements Serializable {
         );
     }
 
-    public static int getMaxEffStat(Rational rate, int pt) {
+    public static int getMaxEffStat(@NotNull Rational rate, int pt) {
         int base = new Rational(pt).mult(rate).getIntCeil();
         return getLevelMult(LEVEL_MAX).mult(base).getIntCeil();
     }
 
-    public static int getMaxEffStat(Rational rate, int pt, int level) {
+    public static int getMaxEffStat(@NotNull Rational rate, int pt, int level) {
         int base = new Rational(pt).mult(rate).getIntCeil();
         return getLevelMult(level).mult(base).getIntCeil();
     }
 
-    public double getFitness(Stat maxSG) {
+    public double getFitness(@NotNull Stat maxSG) {
         double out = 0.0;
         int[] s = getStat().toArray();
         int[] m = maxSG.toArray();
@@ -476,6 +486,7 @@ public class Chip implements Serializable {
         setInitLevel(LEVEL_MAX);
     }
 
+    @NotNull
     public static Rational getLevelMult(int level) {
         return level < 10 ? new Rational(level).mult(8, 100).add(1) : new Rational(level).mult(7, 100).add(11, 10);
     }
@@ -506,6 +517,7 @@ public class Chip implements Serializable {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Tag">
+    @NotNull
     public Set<Tag> getTags() {
         return new HashSet<>(tags);
     }
@@ -543,12 +555,14 @@ public class Chip implements Serializable {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Matrix">
+    @NotNull
     public static PuzzleMatrix<Boolean> generateMatrix(Shape shape, int rotation) {
         PuzzleMatrix<Boolean> matrix = new PuzzleMatrix<>(Shape.MATRIX_MAP.get(shape));
         matrix.rotate(rotation);
         return matrix;
     }
 
+    @NotNull
     public PuzzleMatrix<Boolean> generateMatrix() {
         return generateMatrix(shape, rotation);
     }
@@ -577,19 +591,20 @@ public class Chip implements Serializable {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Compare">
-    public static int compare(Chip c1, Chip c2) {
+    public static int compare(@NotNull Chip c1, @NotNull Chip c2) {
         return Shape.compare(c1.shape, c2.shape);
     }
 
-    public static int compareStar(Chip c1, Chip c2) {
+    public static int compareStar(@NotNull Chip c1, @NotNull Chip c2) {
         return c1.getStar() - c2.getStar();
     }
 
-    public static int compareLevel(Chip c1, Chip c2) {
+    public static int compareLevel(@NotNull Chip c1, @NotNull Chip c2) {
         return c1.getLevel() - c2.getLevel();
     }
     // </editor-fold>
 
+    @NotNull
     public String toData() {
         String[] s = {
             id,
@@ -607,7 +622,7 @@ public class Chip implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -625,6 +640,7 @@ public class Chip implements Serializable {
         return hash;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return id == null ? "null" : id;

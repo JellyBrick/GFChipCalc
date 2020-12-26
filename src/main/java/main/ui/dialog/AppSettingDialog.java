@@ -8,6 +8,7 @@ import main.ui.resource.AppText;
 import main.util.Fn;
 import main.util.IO;
 import main.util.Ref;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -26,6 +27,7 @@ public class AppSettingDialog extends JDialog {
     private Ref<Integer> size;
     private ColorLabel aLabel;
 
+    @NotNull
     public static AppSettingDialog getInstance(App app) {
         return new AppSettingDialog(app);
     }
@@ -83,7 +85,8 @@ public class AppSettingDialog extends JDialog {
 
     private int colorPreset;
 
-    private static String getLocaleName(Locale locale) {
+    @NotNull
+    private static String getLocaleName(@NotNull Locale locale) {
         return locale.toLanguageTag() + " : " + locale.getDisplayName(locale);
     }
 
@@ -120,6 +123,7 @@ public class AppSettingDialog extends JDialog {
         return IO.getLocales().get(localeComboBox.getSelectedIndex());
     }
 
+    @NotNull
     private Font getSelectedFont() {
         return AppFont.getDefault().deriveFont(Float.valueOf(size.v));
     }

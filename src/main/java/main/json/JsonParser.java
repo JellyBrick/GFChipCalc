@@ -3,6 +3,7 @@ package main.json;
 import main.App;
 import main.puzzle.Shape;
 import main.puzzle.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -24,7 +25,8 @@ public class JsonParser {
     private static final String CHIPKEY_CHIP = "chip_with_user_info";
     private static final String UNKNOWN_HOC = "Unknown HOC";
 
-    public static List<Chip> readFile(String filePath) {
+    @NotNull
+    public static List<Chip> readFile(@NotNull String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String data = br.lines().collect(Collectors.joining());
             List<Chip> chips = parseChip(data);
@@ -35,12 +37,13 @@ public class JsonParser {
         }
     }
 
-    public static String parseSign(String data) {
+    public static String parseSign(@NotNull String data) {
         ObjectJson o = Json.getObjectJson(Json.parse(data));
         return Json.getText(o.getValue(SIGNKEY));
     }
 
-    public static List<Chip> parseChip(String data) {
+    @NotNull
+    public static List<Chip> parseChip(@NotNull String data) {
         // Init
         Map<Integer, Tag> squadMap = new HashMap<>();
         List<Chip> chips = new ArrayList<>();
@@ -74,7 +77,7 @@ public class JsonParser {
         return chips;
     }
 
-    private static void parseChip_squad(Map<Integer, Tag> squadMap, Stream<ObjectJson> stream) {
+    private static void parseChip_squad(@NotNull Map<Integer, Tag> squadMap, @NotNull Stream<ObjectJson> stream) {
         stream.forEach((squadJ) -> {
             int squadID = Integer.parseInt(Json.getText(squadJ.getValue("id")));
             int squadIndex = Integer.parseInt(Json.getText(squadJ.getValue("squad_id"))) - 1;
@@ -82,7 +85,7 @@ public class JsonParser {
         });
     }
 
-    private static void parseChip_chip(Map<Integer, Tag> squadMap, List<Chip> chips, Stream<ObjectJson> stream) {
+    private static void parseChip_chip(@NotNull Map<Integer, Tag> squadMap, @NotNull List<Chip> chips, @NotNull Stream<ObjectJson> stream) {
         stream.forEach((chipJ) -> {
             // Raw
             String id = ((TextJson) chipJ.getValue("id")).getText();
@@ -111,6 +114,7 @@ public class JsonParser {
         });
     }
 
+    @NotNull
     private static Tag boardTag(int index) {
         if (index < Board.NAMES.length) {
             return new Tag(Color.GRAY, Board.NAMES[index]);

@@ -6,6 +6,7 @@ import main.puzzle.Stat;
 import main.ui.resource.AppColor;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -19,16 +20,17 @@ import java.util.List;
 public class StatDialog extends JDialog {
 
     private final App app;
+    @NotNull
     private final Board board;
     private final String name;
     private final int star;
 
-    public static void open(App app, Board board) {
+    public static void open(@NotNull App app, @NotNull Board board) {
         StatDialog dialog = new StatDialog(app, board);
         Fn.open(app.mf, dialog);
     }
 
-    private StatDialog(App app, Board board) {
+    private StatDialog(App app, @NotNull Board board) {
         this.app = app;
         this.board = board;
         name = board.getName();
@@ -151,7 +153,7 @@ public class StatDialog extends JDialog {
         Fn.addEscDisposeListener(this);
     }
 
-    private static void setData(JLabel keyLabel, JLabel valueLabel, List<String> keys, List<String> values) {
+    private static void setData(@NotNull JLabel keyLabel, @NotNull JLabel valueLabel, @NotNull List<String> keys, @NotNull List<String> values) {
         if (keys.isEmpty()) {
             keyLabel.setText("");
             valueLabel.setText("");

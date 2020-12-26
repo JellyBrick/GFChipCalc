@@ -1,6 +1,8 @@
 package main.util;
 
 import main.puzzle.Chip;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -23,6 +25,7 @@ import java.util.Set;
 public class Fn {
 
     // <editor-fold defaultstate="collapsed" desc="GUI Methods"> 
+    @NotNull
     public static Set<Component> getAllComponents(Component component) {
         Set<Component> components = new HashSet<>();
         components.add(component);
@@ -34,7 +37,7 @@ public class Fn {
         return components;
     }
 
-    public static void setUIFont(Font font) {
+    public static void setUIFont(@NotNull Font font) {
         for (Enumeration<Object> keys = UIManager.getDefaults().keys(); keys.hasMoreElements();) {
             Object key = keys.nextElement();
             Object value = UIManager.get(key);
@@ -44,10 +47,10 @@ public class Fn {
         }
     }
 
-    public static void addEscDisposeListener(JDialog aDialog) {
+    public static void addEscDisposeListener(@NotNull JDialog aDialog) {
         getAllComponents(aDialog).forEach((c) -> c.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent evt) {
+            public void keyPressed(@NotNull KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     aDialog.dispose();
                 }
@@ -55,10 +58,10 @@ public class Fn {
         }));
     }
 
-    public static void addEscListener(JDialog aDialog, Runnable r) {
+    public static void addEscListener(JDialog aDialog, @NotNull Runnable r) {
         getAllComponents(aDialog).forEach((c) -> c.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent evt) {
+            public void keyPressed(@NotNull KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     r.run();
                 }
@@ -66,17 +69,17 @@ public class Fn {
         }));
     }
 
-    public static void open(Component c, JDialog dialog) {
+    public static void open(Component c, @NotNull JDialog dialog) {
         dialog.setLocationRelativeTo(c);
         dialog.setVisible(true);
     }
 
-    public static void open(Component c, JFrame frame) {
+    public static void open(Component c, @NotNull JFrame frame) {
         frame.setLocationRelativeTo(c);
         frame.setVisible(true);
     }
 
-    public static int getWidth(String str, Font font) {
+    public static int getWidth(@NotNull String str, Font font) {
         Canvas c = new Canvas();
         return c.getFontMetrics(font).stringWidth(str);
     }
@@ -86,7 +89,7 @@ public class Fn {
         return c.getFontMetrics(font).getHeight();
     }
 
-    public static void popup(JComponent comp, String title, String text) {
+    public static void popup(@NotNull JComponent comp, String title, String text) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(new CompoundBorder(new EtchedBorder(), new EmptyBorder(5, 5, 0, 5)));
 
@@ -118,21 +121,25 @@ public class Fn {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="String">
-    public static String toHTML(String s) {
+    @NotNull
+    public static String toHTML(@NotNull String s) {
         String out = "<html>";
         out += s.replaceAll("\\r\\n|\\r|\\n", "<br>").trim();
         out += "</html>";
         return out;
     }
 
-    public static String htmlColor(String s, Color c) {
+    @NotNull
+    public static String htmlColor(String s, @NotNull Color c) {
         return "<font color=" + Fn.colorToHexcode(c) + ">" + s + "</font>";
     }
 
-    public static String htmlColor(int i, Color c) {
+    @NotNull
+    public static String htmlColor(int i, @NotNull Color c) {
         return htmlColor(String.valueOf(i), c);
     }
 
+    @NotNull
     public static String getTime(long s) {
         long hour = s / 3600;
         long min = (s % 3600) / 60;
@@ -148,14 +155,17 @@ public class Fn {
         return String.format("%." + len + "f", d);
     }
 
+    @NotNull
     public static String fPercStr(double d) {
         return String.format("%.2f", d * 100) + "%";
     }
 
+    @NotNull
     public static String iPercStr(double d) {
         return Math.round(d * 100) + "%";
     }
 
+    @NotNull
     public static String pad(String s, int i) {
         return String.valueOf(s).repeat(Math.max(0, i));
     }
@@ -166,7 +176,7 @@ public class Fn {
         return Math.min(Math.max(i, min), max);
     }
 
-    public static int max(int... ints) {
+    public static int max(@NotNull int... ints) {
         if (ints.length == 0) {
             return 0;
         }
@@ -185,7 +195,7 @@ public class Fn {
         return floor(n, d) + (n % d == 0 ? 0 : 1);
     }
 
-    public static int sum(int... ints) {
+    public static int sum(@NotNull int... ints) {
         int out = 0;
         for (int i : ints) {
             out += i;
@@ -208,8 +218,9 @@ public class Fn {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Array"> 
+    @NotNull
     @SafeVarargs
-    public static <T> T[] concatAll(T[] first, T[]... rest) {
+    public static <T> T[] concatAll(@NotNull T[] first, @NotNull T[]... rest) {
         int totalLength = first.length;
         for (T[] array : rest) {
             totalLength += array.length;
@@ -225,20 +236,24 @@ public class Fn {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Color">
-    public static String colorToHexcode(Color c) {
+    @NotNull
+    public static String colorToHexcode(@NotNull Color c) {
         String colorHex = Integer.toHexString(c.getRGB());
         return "#" + colorHex.substring(2);
     }
 
-    public static Color percColor(Color c1, Color c2, Color c3, double value, double min, double max) {
+    @NotNull
+    public static Color percColor(@NotNull Color c1, @NotNull Color c2, @NotNull Color c3, double value, double min, double max) {
         return percColor(c1, c2, c3, getPerc(value, min, max));
     }
 
-    public static Color percColor(Color c1, Color c2, double value, double min, double max) {
+    @NotNull
+    public static Color percColor(@NotNull Color c1, @NotNull Color c2, double value, double min, double max) {
         return percColor(c1, c2, getPerc(value, min, max));
     }
 
-    public static Color percColor(Color c1, Color c2, double d) {
+    @NotNull
+    public static Color percColor(@NotNull Color c1, @NotNull Color c2, double d) {
         int r1 = c1.getRed();
         int g1 = c1.getGreen();
         int b1 = c1.getBlue();
@@ -253,7 +268,8 @@ public class Fn {
         return new Color(r3, g3, b3);
     }
 
-    private static Color percColor(Color c1, Color c2, Color c3, double d) {
+    @NotNull
+    private static Color percColor(@NotNull Color c1, @NotNull Color c2, @NotNull Color c3, double d) {
         if (d < 0.5f) {
             return percColor(c1, c2, d * 2);
         } else {
@@ -261,44 +277,48 @@ public class Fn {
         }
     }
 
+    @NotNull
     public static Color getColor(float hue) {
         return Color.getHSBColor(hue, 0.75f, 0.75f);
     }
 
+    @NotNull
     public static Color getSizeColor(int size) {
         float hue = ((float) 6 - size) / Chip.SIZE_MAX;
         return Color.getHSBColor(hue, 0.5f, 0.75f);
     }
 
-    public static float[] getHSB(Color c) {
+    @NotNull
+    public static float[] getHSB(@NotNull Color c) {
         float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
         return hsb;
     }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Dimension">
-    public static boolean isInside(Point p, Rectangle r) {
+    public static boolean isInside(@Nullable Point p, @NotNull Rectangle r) {
         if (p == null) {
             return false;
         }
         return isInside(p.x, p.y, r);
     }
 
-    public static boolean isInside(int x, int y, Rectangle r) {
+    public static boolean isInside(int x, int y, @NotNull Rectangle r) {
         return r.x < x
                 && x < r.x + r.width
                 && r.y < y
                 && y < r.y + r.height;
     }
 
-    public static boolean isOverlapped(Rectangle r1, Rectangle r2) {
+    public static boolean isOverlapped(@NotNull Rectangle r1, @NotNull Rectangle r2) {
         return r2.x < r1.x + r1.width
                 && r1.x < r2.x + r2.width
                 && r2.y < r1.y + r1.height
                 && r1.y < r2.y + r2.height;
     }
 
-    public static Rectangle fit(int width, int height, Rectangle container) {
+    @NotNull
+    public static Rectangle fit(int width, int height, @NotNull Rectangle container) {
         int newWidth = container.width;
         int newHeight = height * container.width / width;
         if (container.height < newHeight) {

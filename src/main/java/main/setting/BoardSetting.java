@@ -3,6 +3,8 @@ package main.setting;
 import main.puzzle.Board;
 import main.puzzle.Stat;
 import main.util.DoubleKeyHashMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,9 @@ public class BoardSetting {
     public static final int MAX_PT = 2;
     public static final int MAX_PRESET = 3;
 
+    @NotNull
     private final DoubleKeyHashMap<String, Integer, Stat> statMap, ptMap;
+    @NotNull
     private final DoubleKeyHashMap<String, Integer, Integer> modeMap, presetIndexMap;
 
     public BoardSetting() {
@@ -37,6 +41,7 @@ public class BoardSetting {
         }
     }
 
+    @NotNull
     public String toData() {
         List<String> lines = new ArrayList<>();
         for (String name : Board.NAMES) {
@@ -71,6 +76,7 @@ public class BoardSetting {
         presetIndexMap.put(name, star, index);
     }
 
+    @Nullable
     public Stat getStat(String name, int star) {
         if (statMap.containsKey(name, star)) {
             return statMap.get(name, star);
@@ -78,6 +84,7 @@ public class BoardSetting {
         return new Stat();
     }
 
+    @Nullable
     public Stat getPt(String name, int star) {
         if (ptMap.containsKey(name, star)) {
             return ptMap.get(name, star);

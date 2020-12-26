@@ -3,6 +3,7 @@ package main.iterator;
 import main.puzzle.Board;
 import main.puzzle.Chip;
 import main.puzzle.Shape;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -15,12 +16,12 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
     private List<List<Shape>> next;
     private final int total;
 
-    public PerTypeShapeCiterator(Map<Shape.Type, Integer> typeCountMap) {
+    public PerTypeShapeCiterator(@NotNull Map<Shape.Type, Integer> typeCountMap) {
         next = initComb(typeCountMap);
         total = total(typeCountMap);
     }
 
-    public PerTypeShapeCiterator(List<Shape> progress) {
+    public PerTypeShapeCiterator(@NotNull List<Shape> progress) {
         next = toComb(progress);
         total = total(getTypeCount(progress));
     }
@@ -30,6 +31,7 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return !next.isEmpty();
     }
 
+    @NotNull
     @Override
     public List<Shape> next() {
         List<Shape> out = peek();
@@ -37,6 +39,7 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return out;
     }
 
+    @NotNull
     public List<Shape> peek() {
         List<Shape> out = new ArrayList<>();
         for (List<Shape> nextType : next) {
@@ -49,7 +52,8 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return total;
     }
 
-    private static List<List<Shape>> nextComb(List<List<Shape>> comb) {
+    @NotNull
+    private static List<List<Shape>> nextComb(@NotNull List<List<Shape>> comb) {
         int n = comb.size() - 1;
         while (0 <= n) {
             List<Shape> chips = nextComb_type(comb.get(n));
@@ -72,7 +76,8 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return new ArrayList<>();
     }
 
-    private static List<Shape> nextComb_type(List<Shape> chips) {
+    @NotNull
+    private static List<Shape> nextComb_type(@NotNull List<Shape> chips) {
         int n = chips.size() - 1;
         while (0 <= n) {
             Shape shape = nextShape(chips.get(n));
@@ -92,7 +97,7 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return new ArrayList<>();
     }
 
-    private static Shape nextShape(Shape shape) {
+    private static Shape nextShape(@NotNull Shape shape) {
         List<Shape> chips = Arrays.asList(Shape.getShapes(shape.getType()));
         int i = chips.indexOf(shape) + 1;
         if (chips.size() <= i) {
@@ -101,7 +106,8 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return chips.get(i);
     }
 
-    private static List<List<Shape>> initComb(Map<Shape.Type, Integer> combType) {
+    @NotNull
+    private static List<List<Shape>> initComb(@NotNull Map<Shape.Type, Integer> combType) {
         List<List<Shape>> out = new ArrayList<>(combType.keySet().size());
         List<Shape.Type> types = new ArrayList<>(combType.keySet());
 
@@ -113,7 +119,8 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return out;
     }
 
-    private static List<Shape> initComb_type(Shape.Type type, int length) {
+    @NotNull
+    private static List<Shape> initComb_type(@NotNull Shape.Type type, int length) {
         Shape shape = Shape.getShapes(type)[0];
         List<Shape> out = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
@@ -122,7 +129,8 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return out;
     }
 
-    public static Map<Shape.Type, Integer> getTypeCount(List<Shape> comb) {
+    @NotNull
+    public static Map<Shape.Type, Integer> getTypeCount(@NotNull List<Shape> comb) {
         Map<Shape.Type, Integer> combType = new HashMap<>();
         for (Shape shape : comb) {
             Shape.Type type = shape.getType();
@@ -136,7 +144,7 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return combType;
     }
 
-    public static int total(Map<Shape.Type, Integer> typeCountMap) {
+    public static int total(@NotNull Map<Shape.Type, Integer> typeCountMap) {
         int total = 1;
         for (Shape.Type type : typeCountMap.keySet()) {
             int nHr = nHr(Shape.getShapes(type).length, typeCountMap.get(type));
@@ -161,12 +169,14 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return num;
     }
 
-    public static List<Map<Shape.Type, Integer>> getTypeCountMaps(String name, int star, Set<Shape.Type> types) {
+    @NotNull
+    public static List<Map<Shape.Type, Integer>> getTypeCountMaps(String name, int star, @NotNull Set<Shape.Type> types) {
         int nCell = Board.getCellCount(name, star);
         return getTypeCountMaps(nCell, types);
     }
 
-    private static List<Map<Shape.Type, Integer>> getTypeCountMaps(int nCell, Set<Shape.Type> types) {
+    @NotNull
+    private static List<Map<Shape.Type, Integer>> getTypeCountMaps(int nCell, @NotNull Set<Shape.Type> types) {
         List<Map<Shape.Type, Integer>> out = new ArrayList<>();
         List<Shape.Type> typesAvail = new ArrayList<>(types);
         typesAvail.sort(Shape.Type::compare);
@@ -174,7 +184,7 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         return out;
     }
 
-    private static void getTypeCountMaps_rec(List<Map<Shape.Type, Integer>> out, List<Shape.Type> typesAvail, int nCell, Stack<Shape.Type> typeBuffer) {
+    private static void getTypeCountMaps_rec(@NotNull List<Map<Shape.Type, Integer>> out, @NotNull List<Shape.Type> typesAvail, int nCell, @NotNull Stack<Shape.Type> typeBuffer) {
         if (nCell == 0) {
             Map<Shape.Type, Integer> e = new HashMap<>();
             for (Shape.Type type : typeBuffer) {
@@ -203,7 +213,8 @@ class PerTypeShapeCiterator implements Iterator<List<Shape>> {
         }
     }
 
-    private static List<List<Shape>> toComb(List<Shape> shapes) {
+    @NotNull
+    private static List<List<Shape>> toComb(@NotNull List<Shape> shapes) {
         Map<Shape.Type, List<Shape>> map = new HashMap<>();
         for (Shape shape : shapes) {
             Shape.Type type = shape.getType();

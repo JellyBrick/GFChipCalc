@@ -1,5 +1,7 @@
 package main.json;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,8 @@ public interface Json {
 
     int getType();
 
-    static Json parse(String data) {
+    @NotNull
+    static Json parse(@NotNull String data) {
         String dataTrim = data.trim();
         switch (dataTrim.charAt(0)) {
             // Object
@@ -42,7 +45,7 @@ public interface Json {
         }
     }
 
-    static int getEndIndex(String data, int i) {
+    static int getEndIndex(@NotNull String data, int i) {
         while (i < data.length()) {
             char next = data.charAt(i);
             if (!Character.isWhitespace(next)) {
@@ -99,7 +102,7 @@ public interface Json {
         return -1;
     }
 
-    static int getBracketEndIndex(String data, int i, int type) {
+    static int getBracketEndIndex(@NotNull String data, int i, int type) {
         try {
             int bracketLevel = 0;
             boolean quoting = false;
@@ -126,63 +129,65 @@ public interface Json {
         }
     }
 
-    static boolean getBoolean(Json data) throws ClassCastException {
+    static boolean getBoolean(@NotNull Json data) throws ClassCastException {
         if (data.getType() != BOOLEAN) {
             throw new ClassCastException(getClassCastExceptionMessage(data, BooleanJson.class.getName()));
         }
         return ((BooleanJson) data).getBoolean();
     }
 
-    static int getInteger(Json data) throws ClassCastException {
+    static int getInteger(@NotNull Json data) throws ClassCastException {
         if (data.getType() != NUMBER) {
             throw new ClassCastException(getClassCastExceptionMessage(data, NumberJson.class.getName()));
         }
         return ((NumberJson) data).getInteger();
     }
 
-    static double getDouble(Json data) throws ClassCastException {
+    static double getDouble(@NotNull Json data) throws ClassCastException {
         if (data.getType() != NUMBER) {
             throw new ClassCastException(getClassCastExceptionMessage(data, NumberJson.class.getName()));
         }
         return ((NumberJson) data).getDouble();
     }
 
-    static String getText(Json data) throws ClassCastException {
+    static String getText(@NotNull Json data) throws ClassCastException {
         if (data.getType() != TEXT) {
             throw new ClassCastException(getClassCastExceptionMessage(data, TextJson.class.getName()));
         }
         return ((TextJson) data).getText();
     }
 
-    static List<Json> getList(Json data) throws ClassCastException {
+    static List<Json> getList(@NotNull Json data) throws ClassCastException {
         if (data.getType() != ARRAY) {
             throw new ClassCastException(getClassCastExceptionMessage(data, ArrayJson.class.getName()));
         }
         return ((ArrayJson) data).getList();
     }
 
-    static ObjectJson getObjectJson(Json data) throws ClassCastException {
+    @NotNull
+    static ObjectJson getObjectJson(@NotNull Json data) throws ClassCastException {
         if (data.getType() != OBJECT) {
             throw new ClassCastException(getClassCastExceptionMessage(data, ObjectJson.class.getName()));
         }
         return (ObjectJson) data;
     }
 
-    static List<String> getObjectKeys(Json data) throws ClassCastException {
+    static List<String> getObjectKeys(@NotNull Json data) throws ClassCastException {
         if (data.getType() != OBJECT) {
             throw new ClassCastException(getClassCastExceptionMessage(data, ObjectJson.class.getName()));
         }
         return ((ObjectJson) data).getKeys();
     }
 
-    static Json getObjectValue(Json data, String key) throws ClassCastException {
+    static Json getObjectValue(@NotNull Json data, String key) throws ClassCastException {
         if (data.getType() != OBJECT) {
             throw new ClassCastException(getClassCastExceptionMessage(data, ObjectJson.class.getName()));
         }
         return ((ObjectJson) data).getValue(key);
     }
 
-    static String getClassCastExceptionMessage(Json data, String cast) {
+    @NotNull
+    static String getClassCastExceptionMessage(@NotNull Json data, String cast) {
         StringBuilder sb = new StringBuilder();
         sb.append(Json.class.getName()).append(" cannot be cast to ").append(cast).append("- It should be cast to ");
         switch (data.getType()) {

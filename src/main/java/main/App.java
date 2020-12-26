@@ -7,6 +7,7 @@ import main.ui.resource.AppColor;
 import main.ui.resource.AppText;
 import main.util.IO;
 import main.util.Version3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,6 +44,7 @@ public class App {
         return AppColor.Three.blue(setting.colorPreset);
     }
 
+    @NotNull
     public Color[] colors() {
         return AppColor.Index.colors(setting.colorPreset);
     }
@@ -50,6 +52,7 @@ public class App {
 
     private static final Logger LOGGER = Logger.getLogger("gfchipcalc");
 
+    @NotNull
     public final MainFrame mf;
     public final Setting setting = IO.loadSettings();
     public final Filter filter = new Filter();
@@ -67,10 +70,10 @@ public class App {
     private App() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
+        } catch (@NotNull ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex1) {
+            } catch (@NotNull ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex1) {
                 log(ex1);
             }
         }
@@ -82,15 +85,15 @@ public class App {
         mf.afterLoad();
     }
 
-    public String getText(String key) {
+    public String getText(@NotNull String key) {
         return text.getText(setting.locale, key);
     }
 
-    public String getText(String key, String... replaces) {
+    public String getText(@NotNull String key, String... replaces) {
         return text.getText(setting.locale, key, replaces);
     }
 
-    public String getText(String key, int... replaces) {
+    public String getText(@NotNull String key, @NotNull int... replaces) {
         String[] repStrs = new String[replaces.length];
         for (int i = 0; i < replaces.length; i++) {
             repStrs[i] = String.valueOf(replaces[i]);
@@ -105,7 +108,7 @@ public class App {
                 FileHandler fh = new FileHandler("Error_" + formatter.format(new Date()) + ".log");
                 fh.setFormatter(new SimpleFormatter());
                 LOGGER.addHandler(fh);
-            } catch (IOException | SecurityException ex1) {
+            } catch (@NotNull IOException | SecurityException ex1) {
                 Logger.getLogger("GFChipCalc").log(Level.SEVERE, null, ex1);
             }
         }

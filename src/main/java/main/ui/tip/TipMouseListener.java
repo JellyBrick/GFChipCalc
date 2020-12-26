@@ -1,5 +1,7 @@
 package main.ui.tip;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -14,6 +16,7 @@ import java.util.Map;
 public class TipMouseListener implements MouseListener {
 
     private final JLabel label;
+    @NotNull
     private final Map<Component, String> map;
 
     public TipMouseListener(JLabel label) {
@@ -42,7 +45,7 @@ public class TipMouseListener implements MouseListener {
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(@NotNull MouseEvent e) {
         Component c = e.getComponent();
         if (c != null && map.containsKey(c)) {
             label.setText(map.get(c));

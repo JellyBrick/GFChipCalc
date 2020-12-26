@@ -6,6 +6,7 @@ import main.puzzle.Tag;
 import main.ui.component.TagPanel;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,14 +19,17 @@ import java.util.List;
 public class TagDialog extends JDialog {
 
     private final App app;
+    @NotNull
     private final TagPanel tp;
+    @NotNull
     private final List<Chip> chips;
 
-    public static TagDialog getInstance(App app, List<Chip> chips) {
+    @NotNull
+    public static TagDialog getInstance(App app, @NotNull List<Chip> chips) {
         return new TagDialog(app, chips);
     }
 
-    private TagDialog(App app, List<Chip> chips) {
+    private TagDialog(App app, @NotNull List<Chip> chips) {
         initComponents();
         this.app = app;
         this.chips = chips;
@@ -50,7 +54,7 @@ public class TagDialog extends JDialog {
         pack();
     }
 
-    private static boolean allChipContainsTag(List<Chip> chips, Tag t) {
+    private static boolean allChipContainsTag(@NotNull List<Chip> chips, Tag t) {
         return chips.parallelStream().allMatch((chip) -> (chip.containsTag(t)));
     }
 

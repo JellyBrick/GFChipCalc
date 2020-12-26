@@ -5,6 +5,8 @@
  */
 package main.puzzle.assembly.dxz.dlx;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  *
  * @author Bunnyspa
@@ -25,7 +27,8 @@ public class DLXNode {
         column = c;
     }
 
-    DLXNode linkDown(DLXNode node) {
+    @NotNull
+    DLXNode linkDown(@NotNull DLXNode node) {
         node.D = this.D;
         node.D.U = node;
         node.U = this;
@@ -33,7 +36,8 @@ public class DLXNode {
         return node;
     }
 
-    DLXNode linkRight(DLXNode node) {
+    @NotNull
+    DLXNode linkRight(@NotNull DLXNode node) {
         node.R = this.R;
         node.R.L = node;
         node.L = this;
@@ -63,6 +67,7 @@ public class DLXNode {
         D.U = this;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "(" + rowIndex + ", " + column.colIndex + ")";

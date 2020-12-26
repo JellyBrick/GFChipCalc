@@ -3,6 +3,7 @@ package main.puzzle.assembly;
 import main.puzzle.Board;
 import main.puzzle.Chip;
 import main.setting.Setting;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -16,6 +17,7 @@ public class Progress {
     public int nComb;
     public int nDone;
     public int nTotal;
+    @NotNull
     private final TreeSet<Board> boards;
 
     public Progress(int sortType) {
@@ -32,6 +34,7 @@ public class Progress {
         this.boards.addAll(boards);
     }
 
+    @NotNull
     public List<Board> getBoards() {
         return new ArrayList<>(boards);
     }
@@ -48,6 +51,7 @@ public class Progress {
         boards.pollLast();
     }
 
+    @NotNull
     private static Comparator<Board> getComparator(int sortType) {
         return sortType == Setting.BOARD_SORTTYPE_XP
                 ? (o1, o2) -> {
@@ -82,6 +86,7 @@ public class Progress {
                 };
     }
 
+    @NotNull
     public List<ChipFreq> getChipFreqs() {
         Map<String, Integer> countMap = new HashMap<>();
         Map<String, Double> percMap = new HashMap<>();

@@ -9,6 +9,7 @@ import main.setting.StatPresetMap;
 import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -23,6 +24,7 @@ public class CalcSettingDialog extends JDialog {
 
     private static final int MARK_MIN = 0;
     private static final int MARK_MAX = 64;
+    @NotNull
     private final App app;
     private final String name;
     private final int star;
@@ -33,11 +35,12 @@ public class CalcSettingDialog extends JDialog {
     private boolean radioLoading;
     private int markType;
 
-    public static CalcSettingDialog getInstance(App app) {
+    @NotNull
+    public static CalcSettingDialog getInstance(@NotNull App app) {
         return new CalcSettingDialog(app);
     }
 
-    private CalcSettingDialog(App app) {
+    private CalcSettingDialog(@NotNull App app) {
         initComponents();
         this.app = app;
         name = app.mf.getBoardName();

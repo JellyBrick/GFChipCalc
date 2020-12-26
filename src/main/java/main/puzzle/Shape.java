@@ -7,6 +7,8 @@ package main.puzzle;
 
 import main.util.DoubleKeyHashMap;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -59,7 +61,8 @@ public enum Shape {
             return byId.get(id);
         }
 
-        public static Type byName(String s) {
+        @NotNull
+        public static Type byName(@NotNull String s) {
             switch (s) {
                 case "6":
                     return _6;
@@ -86,10 +89,11 @@ public enum Shape {
             return id - (6 <= id ? 1 : 0);
         }
 
-        public static int compare(Type o1, Type o2) {
+        public static int compare(@NotNull Type o1, @NotNull Type o2) {
             return Integer.compare(o1.id, o2.id);
         }
 
+        @NotNull
         @Override
         public String toString() {
             switch (id) {
@@ -136,7 +140,8 @@ public enum Shape {
         return byId.get(id);
     }
 
-    public static Shape byName(String name) {
+    @NotNull
+    public static Shape byName(@NotNull String name) {
         switch (name) {
             // 1 = A
             case "1":
@@ -253,6 +258,7 @@ public enum Shape {
         return 0;
     }
 
+    @NotNull
     public Type getType() {
         if (30 <= id) {
             return Type._6;
@@ -278,7 +284,8 @@ public enum Shape {
         return Type.NONE;
     }
 
-    public static Shape[] getShapes(Type type) {
+    @NotNull
+    public static Shape[] getShapes(@NotNull Type type) {
         switch (type) {
             case _6:
                 return SHAPES_6;
@@ -299,6 +306,7 @@ public enum Shape {
         }
     }
 
+    @NotNull
     public static Shape[] getShapes(int size) {
         switch (size) {
             case 6:
@@ -322,10 +330,12 @@ public enum Shape {
         return MAX_ROTATIONS.get(this);
     }
 
+    @Nullable
     public Point getPivot(int rotation) {
         return new Point(PIVOTS.get(this, rotation));
     }
 
+    @NotNull
     public Set<Point> getPoints(int rotation) {
         Set<Point> points = new HashSet<>();
         for (Point point : POINTS.get(this, rotation)) {
@@ -588,7 +598,7 @@ public enum Shape {
         }
     }; // </editor-fold>
 
-    public static int compare(Shape o1, Shape o2) {
+    public static int compare(@NotNull Shape o1, @NotNull Shape o2) {
         return Integer.compare(o1.id, o2.id);
     }
 }

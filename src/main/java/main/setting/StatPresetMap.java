@@ -6,6 +6,8 @@ import main.puzzle.Shape;
 import main.puzzle.Stat;
 import main.ui.resource.AppText;
 import main.util.DoubleKeyHashMap;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +102,7 @@ public class StatPresetMap {
         return data.containsKey(name, star);
     }
 
+    @Nullable
     private List<StatPreset> get(String name, int star) {
         if (containsKey(name, star)) {
             return data.get(name, star);
@@ -107,6 +110,7 @@ public class StatPresetMap {
         return null;
     }
 
+    @Nullable
     public StatPreset get(String name, int star, int index) {
         if (containsKey(name, star)) {
             return data.get(name, star).get(index);
@@ -121,7 +125,8 @@ public class StatPresetMap {
         return 0;
     }
 
-    public List<String> getStrings(App app, String name, int star) {
+    @NotNull
+    public List<String> getStrings(@NotNull App app, String name, int star) {
         List<StatPreset> bps = get(name, star);
         List<String> out = new ArrayList<>(bps.size());
         for (int i = 0; i < bps.size(); i++) {
@@ -142,6 +147,7 @@ public class StatPresetMap {
         return out;
     }
 
+    @NotNull
     public boolean[] getTypeFilter(String name, int star, int index) {
         if (!containsKey(name, star)) {
             return new boolean[Filter.NUM_TYPE];

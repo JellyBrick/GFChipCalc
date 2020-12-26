@@ -8,6 +8,8 @@ import main.ui.resource.AppColor;
 import main.ui.resource.AppImage;
 import main.util.DoubleKeyHashMap;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,11 +53,11 @@ public class ImageProcessor {
         }
     }
 
-    public static List<Rectangle> detectChips(BufferedImage image) {
+    public static List<Rectangle> detectChips(@NotNull BufferedImage image) {
         return detectChips(new ColorMatrix(image));
     }
 
-    private static List<Rectangle> detectChips(ColorMatrix matrix) {
+    private static List<Rectangle> detectChips(@NotNull ColorMatrix matrix) {
         List<Rectangle> rects_ratio = new ArrayList<>();
 
         // Ratio
@@ -74,11 +76,13 @@ public class ImageProcessor {
         return rects;
     }
 
-    public static Chip idChip(BufferedImage image, Rectangle rect) {
+    @NotNull
+    public static Chip idChip(@NotNull BufferedImage image, @NotNull Rectangle rect) {
         return idChip(new ColorMatrix(image).crop(rect), null);
     }
 
-    private static Chip idChip(ColorMatrix matrix, DebugInfo debug) {
+    @NotNull
+    private static Chip idChip(@NotNull ColorMatrix matrix, @Nullable DebugInfo debug) {
         //System.out.println("====================");
         float factor = (float) matrix.getWidth() / 100;
 
@@ -244,7 +248,8 @@ public class ImageProcessor {
 //            ), color.getRed(), color.getGreen(), color.getBlue());
 //        }
 //    }
-    private static Color used(Color c) {
+    @NotNull
+    private static Color used(@NotNull Color c) {
         int red = c.getRed();
         int green = c.getGreen();
         int blue = c.getBlue();
@@ -255,16 +260,19 @@ public class ImageProcessor {
         );
     }
 
-    private static ColorMatrix simplify(ColorMatrix matrix, boolean used, int color) {
+    @NotNull
+    private static ColorMatrix simplify(@NotNull ColorMatrix matrix, boolean used, int color) {
         return matrix.simplify(used, STAR, LEVEL, WHITE, GRAY, BLACK, AppColor.CHIPS.get(color));
     }
 
-    private static ColorMatrix simplify_statDigits(ColorMatrix matrix, boolean used, boolean leveled) {
+    @NotNull
+    private static ColorMatrix simplify_statDigits(@NotNull ColorMatrix matrix, boolean used, boolean leveled) {
         Color textColor = leveled ? LEVEL : WHITE;
         return matrix.simplify(used, textColor, GRAY, Fn.percColor(textColor, GRAY, 0.5));
     }
 
-    private static Set<Rectangle> filterRects_star(Set<Rectangle> rects, float factor) {
+    @NotNull
+    private static Set<Rectangle> filterRects_star(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
         rects.parallelStream()
                 .filter((r) -> 3 * factor < r.width)
@@ -275,7 +283,8 @@ public class ImageProcessor {
         return out;
     }
 
-    private static Rectangle filterRect_level(Set<Rectangle> rects, float factor) {
+    @Nullable
+    private static Rectangle filterRect_level(@NotNull Set<Rectangle> rects, float factor) {
         for (Rectangle r : rects) {
             if (15 * factor < r.width
                     && 70 * factor < r.x
@@ -286,7 +295,8 @@ public class ImageProcessor {
         return null;
     }
 
-    private static Set<Rectangle> filterRects_levelDigit(Set<Rectangle> rects, float factor) {
+    @NotNull
+    private static Set<Rectangle> filterRects_levelDigit(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
         rects.parallelStream()
                 .filter((r) -> 6 * factor > r.width)
@@ -296,7 +306,8 @@ public class ImageProcessor {
         return out;
     }
 
-    private static Set<Rectangle> filterRects_statIconArea(Set<Rectangle> rects, float factor) {
+    @NotNull
+    private static Set<Rectangle> filterRects_statIconArea(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
         rects.parallelStream()
                 .filter((r) -> 18 * factor < r.width)
@@ -307,7 +318,8 @@ public class ImageProcessor {
         return out;
     }
 
-    private static Set<Rectangle> filterRects_statDigit(Set<Rectangle> rects, float factor) {
+    @NotNull
+    private static Set<Rectangle> filterRects_statDigit(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
         rects.parallelStream()
                 .filter((r) -> 9 * factor > r.width)
@@ -317,6 +329,7 @@ public class ImageProcessor {
         return out;
     }
 
+    @Nullable
     private static final ColorMatrix[] CM_STATS = new ColorMatrix[]{
         new ColorMatrix(AppImage.IP_DMG),
         new ColorMatrix(AppImage.IP_BRK),
@@ -324,7 +337,7 @@ public class ImageProcessor {
         new ColorMatrix(AppImage.IP_RLD)
     };
 
-    private static int idStatType(ColorMatrix matrix) {
+    private static int idStatType(@NotNull ColorMatrix matrix) {
         double[] sims = new double[4];
         for (int i = 0; i < 4; i++) {
             sims[i] = matrix.similarity(CM_STATS[i]);
@@ -355,7 +368,7 @@ public class ImageProcessor {
         new ColorMatrix(AppImage.IP_DIGITS[9])
     };
 
-    private static int idDigits(ColorMatrix monochromed, Set<Rectangle> rects) {
+    private static int idDigits(@NotNull ColorMatrix monochromed, @NotNull Set<Rectangle> rects) {
         int out = 0;
         List<Rectangle> rectList = new ArrayList<>(rects);
         rectList.sort(Comparator.comparingInt(o -> o.x));
@@ -368,7 +381,7 @@ public class ImageProcessor {
         return out;
     }
 
-    private static int idDigit(ColorMatrix monochromed) {
+    private static int idDigit(@NotNull ColorMatrix monochromed) {
         int digit = -1;
         double maxSim = 0;
         // double[] sims = new double[10];
@@ -403,6 +416,7 @@ public class ImageProcessor {
     private static final int SHAPE_EDGE = 1;
     private static final int SHAPE_SQUARE = 8;
 
+    @NotNull
     private static ColorMatrix genShapeResource(Shape shape, int rotation) {
         PuzzleMatrix<Boolean> pm = Chip.generateMatrix(shape, rotation);
         ColorMatrix out = new ColorMatrix(SHAPE_SQUARE * pm.getNumCol() + SHAPE_EDGE * 2, SHAPE_SQUARE * pm.getNumRow() + SHAPE_EDGE * 2);
@@ -464,11 +478,12 @@ public class ImageProcessor {
         return out;
     }
 
-    private static void genShape_rect(ColorMatrix out, int x1, int y1, int x2, int y2) {
+    private static void genShape_rect(@NotNull ColorMatrix out, int x1, int y1, int x2, int y2) {
         out.fillWhiteRect(x1 + SHAPE_EDGE, y1 + SHAPE_EDGE, x2 + SHAPE_EDGE, y2 + SHAPE_EDGE);
     }
     // </editor-fold>
 
+    @Nullable
     private static ColorMatrix getShapeResource(Shape shape, int rotation) {
         if (!SHAPES.containsKey(shape, rotation)) {
             return null;
@@ -476,7 +491,8 @@ public class ImageProcessor {
         return SHAPES.get(shape, rotation);
     }
 
-    private static ShapeRot idShape(ColorMatrix monochromed) {
+    @NotNull
+    private static ShapeRot idShape(@NotNull ColorMatrix monochromed) {
         Shape s = Shape.DEFAULT;
         int r = 0;
         double maxSim = 0;
@@ -501,11 +517,12 @@ public class ImageProcessor {
         return new ShapeRot(s, r);
     }
 
-    private static double getRatio(ColorMatrix matrix) {
+    private static double getRatio(@NotNull ColorMatrix matrix) {
         return (double) Math.max(matrix.getWidth(), matrix.getHeight()) / Math.min(matrix.getWidth(), matrix.getHeight());
     }
 
-    private static Rectangle filterRect_shape(Set<Rectangle> rects, double factor) {
+    @Nullable
+    private static Rectangle filterRect_shape(@NotNull Set<Rectangle> rects, double factor) {
         Set<Rectangle> filtered = new HashSet<>();
         rects.parallelStream()
                 .filter((r) -> 10 * factor < r.width)
@@ -514,21 +531,22 @@ public class ImageProcessor {
         return merge(filtered);
     }
 
-    private static int getMinY(Set<Rectangle> rects, int defaultValue) {
+    private static int getMinY(@NotNull Set<Rectangle> rects, int defaultValue) {
         if (rects.isEmpty()) {
             return defaultValue;
         }
         return rects.parallelStream().map((r) -> r.y).min(Integer::compare).get();
     }
 
-    private static int getMaxY(Set<Rectangle> rects, int defaultValue) {
+    private static int getMaxY(@NotNull Set<Rectangle> rects, int defaultValue) {
         if (rects.isEmpty()) {
             return defaultValue;
         }
         return rects.parallelStream().map((r) -> r.y + r.height).max(Integer::compare).get();
     }
 
-    private static Rectangle biggest(Collection<Rectangle> rects) {
+    @Nullable
+    private static Rectangle biggest(@NotNull Collection<Rectangle> rects) {
         Rectangle out = null;
         for (Rectangle r : rects) {
             if (out == null || out.width * out.height < r.width * r.height) {
@@ -538,7 +556,8 @@ public class ImageProcessor {
         return out;
     }
 
-    private static Rectangle merge(Collection<Rectangle> rects) {
+    @Nullable
+    private static Rectangle merge(@NotNull Collection<Rectangle> rects) {
         int xMin = -1;
         int xMax = -1;
         int yMin = -1;
@@ -677,7 +696,7 @@ public class ImageProcessor {
 //        frame.pack();
 //        frame.setVisible(true);
 //    }
-    private static void testImage(ColorMatrix matrix) {
+    private static void testImage(@NotNull ColorMatrix matrix) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         JLabel label = new JLabel(new ImageIcon(matrix.getImage()));

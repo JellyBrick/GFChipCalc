@@ -6,6 +6,7 @@
 package main.puzzle.assembly;
 
 import main.util.IO;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class ProgressFile {
         this.p = p;
     }
 
+    @NotNull
     public String toData() {
         List<String> lines = new ArrayList<>();
 

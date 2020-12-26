@@ -7,6 +7,7 @@ import main.ui.component.TagPanel;
 import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,8 +23,10 @@ import java.util.function.Consumer;
 public class ApplyDialog extends JDialog {
 
     private final App app;
+    @NotNull
     private final TagPanel tp;
 
+    @NotNull
     public static ApplyDialog getInstance(App app) {
         return new ApplyDialog(app);
     }
@@ -64,7 +67,7 @@ public class ApplyDialog extends JDialog {
 
         tp.addTableMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent mouseEvent) {
+            public void mousePressed(@NotNull MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() >= 2 && tp.getSelectedRow() > -1) {
                     applyTag();
                 }

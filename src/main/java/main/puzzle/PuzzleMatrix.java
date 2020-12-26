@@ -1,5 +1,8 @@
 package main.puzzle;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.*;
 import java.io.Serializable;
 import java.util.List;
@@ -15,7 +18,7 @@ public class PuzzleMatrix<E> implements Serializable {
     private int nRow, nCol;
     private List<E> list;
 
-    public PuzzleMatrix(E[][] data) {
+    public PuzzleMatrix(@NotNull E[][] data) {
         nRow = data.length;
         nCol = nRow > 0 ? data[0].length : 0;
         list = new ArrayList<>(nCol * nRow);
@@ -24,7 +27,7 @@ public class PuzzleMatrix<E> implements Serializable {
         }
     }
 
-    public PuzzleMatrix(PuzzleMatrix<E> a) {
+    public PuzzleMatrix(@NotNull PuzzleMatrix<E> a) {
         nRow = a.nRow;
         nCol = a.nCol;
         list = new ArrayList<>(a.list);
@@ -43,6 +46,7 @@ public class PuzzleMatrix<E> implements Serializable {
         return (0 <= row && row < nRow && 0 <= col && col < nCol);
     }
 
+    @Nullable
     public E get(int row, int col) {
         if (isValid(row, col)) {
             return list.get(row * nCol + col);
@@ -92,6 +96,7 @@ public class PuzzleMatrix<E> implements Serializable {
         return count;
     }
 
+    @Nullable
     public Point getPivot(E e) {
         for (int row = 0; row < nRow; row++) {
             for (int col = 0; col < nCol; col++) {
@@ -103,6 +108,7 @@ public class PuzzleMatrix<E> implements Serializable {
         return null;
     }
 
+    @NotNull
     public Set<Point> getPoints(E e) {
         Set<Point> ps = new HashSet<>();
         for (int row = 0; row < nRow; row++) {
@@ -115,6 +121,7 @@ public class PuzzleMatrix<E> implements Serializable {
         return ps;
     }
 
+    @NotNull
     private Set<Point> getCoordsExcept(E e) {
         Set<Point> ps = new HashSet<>();
         for (int row = 0; row < nRow; row++) {
@@ -326,6 +333,7 @@ public class PuzzleMatrix<E> implements Serializable {
         return sym;
     }
 
+    @NotNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -352,7 +360,7 @@ public class PuzzleMatrix<E> implements Serializable {
 
     // For Chip.CHIP_ROTATION_MAP
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

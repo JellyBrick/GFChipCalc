@@ -1,6 +1,8 @@
 package main.puzzle;
 
 import main.util.IO;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
@@ -13,10 +15,13 @@ import java.util.stream.Collectors;
  */
 public class BoardTemplate implements Comparable<BoardTemplate> {
 
+    @Nullable
     private final List<Puzzle> puzzles;
+    @Nullable
     private final Map<Shape, Integer> shapeCountMap;
     private final boolean symmetry;
 
+    @Nullable
     private final PuzzleMatrix<Integer> placement;
 
     public static final int END = 0;
@@ -36,15 +41,17 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
         state = isEnd ? END : EMPTY;
     }
 
+    @NotNull
     public static BoardTemplate empty() {
         return BOARD_EMPTY;
     }
 
+    @NotNull
     public static BoardTemplate end() {
         return BOARD_END;
     }
 
-    public BoardTemplate(String name, int star, List<Puzzle> puzzles) {
+    public BoardTemplate(String name, int star, @NotNull List<Puzzle> puzzles) {
         this.puzzles = puzzles;
         shapeCountMap = new HashMap<>();
 
@@ -58,7 +65,7 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
         state = NORMAL;
     }
 
-    public BoardTemplate(String name, int star, List<Puzzle> puzzles, boolean symmetry) {
+    public BoardTemplate(String name, int star, @NotNull List<Puzzle> puzzles, boolean symmetry) {
         this.puzzles = puzzles;
         shapeCountMap = new HashMap<>();
 
@@ -82,6 +89,7 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
         }
     }
 
+    @Nullable
     public PuzzleMatrix<Integer> getMatrix() {
         return new PuzzleMatrix<>(placement);
     }
@@ -102,10 +110,12 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
         return placement.isSymmetric(Board.UNUSED);
     }
 
+    @Nullable
     public Map<Shape, Integer> getShapeCountMap() {
         return shapeCountMap;
     }
 
+    @NotNull
     public List<Integer> getChipRotations() {
         List<Integer> list = new ArrayList<>();
         for (Puzzle p : puzzles) {
@@ -115,6 +125,7 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
         return list;
     }
 
+    @NotNull
     public List<Point> getChipLocations() {
         List<Point> list = new ArrayList<>();
         for (Puzzle p : puzzles) {
@@ -124,6 +135,7 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
         return list;
     }
 
+    @NotNull
     public String toData() {
         // Names
 
@@ -148,7 +160,7 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
     }
 
     @Override
-    public int compareTo(BoardTemplate o) {
+    public int compareTo(@NotNull BoardTemplate o) {
         for (int i = 0; i < Math.min(puzzles.size(), o.puzzles.size()); i++) {
             int nameC = Shape.compare(puzzles.get(i).shape, o.puzzles.get(i).shape);
             if (nameC != 0) {

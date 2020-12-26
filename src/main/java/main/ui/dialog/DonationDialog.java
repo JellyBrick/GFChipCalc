@@ -5,6 +5,7 @@ import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
 import main.util.IO;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -16,6 +17,7 @@ public class DonationDialog extends JDialog {
 
     private final App app;
 
+    @NotNull
     public static DonationDialog getInstance(App app) {
         return new DonationDialog(app);
     }

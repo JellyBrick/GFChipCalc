@@ -1,5 +1,8 @@
 package main.http;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
@@ -45,7 +48,9 @@ public class ProxyHandlerThread extends Thread {
     private final Proxy proxy;
     private final Socket cpSocket;
     private DataInputStream ctpIS;
+    @NotNull
     private final ProxyMessage pm;
+    @NotNull
     private SaveType saveType = SaveType.NONE;
 
     public ProxyHandlerThread(Proxy proxy, Socket cpSocket) {
@@ -70,7 +75,7 @@ public class ProxyHandlerThread extends Thread {
                     } else {
                         handle_default();
                     }
-                } catch (UnknownHostException | MalformedURLException ex) {
+                } catch (@NotNull UnknownHostException | MalformedURLException ex) {
                     handleEx(404);
                 } catch (SocketTimeoutException ex) {
                     handleEx(504);
@@ -146,7 +151,8 @@ public class ProxyHandlerThread extends Thread {
         }
     }
 
-    private static String readLine(DataInputStream is) throws IOException {
+    @Nullable
+    private static String readLine(@NotNull DataInputStream is) throws IOException {
         StringBuilder sb = new StringBuilder();
         int i1, i2;
         while ((i1 = is.read()) != -1) {
@@ -168,7 +174,7 @@ public class ProxyHandlerThread extends Thread {
         return sb.toString();
     }
 
-    private void handleRequest(HttpURLConnection connection) throws IOException {
+    private void handleRequest(@NotNull HttpURLConnection connection) throws IOException {
         connection.setRequestMethod(pm.reqMethod);
         // Header
         pm.getReqHeaders().parallelStream().forEach((key) -> connection.setRequestProperty(key, pm.getReqHeader(key)));
@@ -188,7 +194,7 @@ public class ProxyHandlerThread extends Thread {
         }
     }
 
-    private void handleResponse(HttpURLConnection connection) throws IOException {
+    private void handleResponse(@NotNull HttpURLConnection connection) throws IOException {
         pm.resCode = connection.getResponseCode();
         pm.resMsg = connection.getResponseMessage();
         try (DataOutputStream ptcOS = getDOS(cpSocket.getOutputStream())) {
@@ -236,7 +242,7 @@ public class ProxyHandlerThread extends Thread {
         }
     }
 
-    private static void handleBody_chunkedTransferEncoding(DataInputStream is, DataOutputStream os, List<Byte> cache, boolean saveEnabled) throws IOException {
+    private static void handleBody_chunkedTransferEncoding(@NotNull DataInputStream is, @NotNull DataOutputStream os, @NotNull List<Byte> cache, boolean saveEnabled) throws IOException {
         int readLen;
         byte[] buffer = new byte[Math.max(is.available(), 1)];
         while ((readLen = is.read(buffer)) != -1) {
@@ -255,7 +261,7 @@ public class ProxyHandlerThread extends Thread {
         os.flush();
     }
 
-    private static void handleBody_contentLength(DataInputStream is, DataOutputStream os, List<Byte> cache, boolean saveEnabled, int cl) throws IOException {
+    private static void handleBody_contentLength(@NotNull DataInputStream is, @NotNull DataOutputStream os, @NotNull List<Byte> cache, boolean saveEnabled, int cl) throws IOException {
         while (0 < cl) {
             byte[] buffer = new byte[cl];
             int readLen = is.read(buffer);
@@ -271,6 +277,7 @@ public class ProxyHandlerThread extends Thread {
         os.flush();
     }
 
+    @NotNull
     private HttpURLConnection getConnection() throws IOException {
         URL remoteURL = new URL(pm.reqUrl);
         HttpURLConnection connection = (HttpURLConnection) remoteURL.openConnection();
@@ -278,10 +285,12 @@ public class ProxyHandlerThread extends Thread {
         return connection;
     }
 
-    private static DataInputStream getDIS(InputStream is) {
+    @NotNull
+    private static DataInputStream getDIS(@NotNull InputStream is) {
         return new DataInputStream(is);
     }
 
+    @NotNull
     private static DataOutputStream getDOS(OutputStream os) {
         return new DataOutputStream(os);
     }

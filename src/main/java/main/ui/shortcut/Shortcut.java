@@ -1,5 +1,7 @@
 package main.ui.shortcut;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  *
  * @author Bunnyspa
@@ -28,7 +30,7 @@ public class Shortcut {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

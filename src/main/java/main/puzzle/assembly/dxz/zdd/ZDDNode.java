@@ -1,6 +1,8 @@
 package main.puzzle.assembly.dxz.zdd;
 
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +17,9 @@ public class ZDDNode {
     private final UUID uuid = UUID.randomUUID();
 
     final int label;
+    @Nullable
     final ZDDNode loChild; // false terminal
+    @Nullable
     final ZDDNode hiChild; // true terminal
 
     ZDDNode() {
@@ -38,6 +42,7 @@ public class ZDDNode {
         return label == i && loChild == l && hiChild == h;
     }
 
+    @NotNull
     public Set<Set<Integer>> get() {
         Set<Set<Integer>> out = new HashSet<>();
         if (isTerminal()) {
@@ -58,11 +63,13 @@ public class ZDDNode {
         return out;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return toString_tree(0);
     }
 
+    @NotNull
     private String toString_tree(int depth) {
         StringBuilder sb = new StringBuilder();
         sb.append(label).append(" ").append(uuid.toString(), 0, 4);

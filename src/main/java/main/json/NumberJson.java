@@ -1,14 +1,17 @@
 package main.json;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  *
  * @author Bunnyspa
  */
 public class NumberJson implements Json {
 
+    @NotNull
     private final String data;
 
-    public NumberJson(String data) {
+    public NumberJson(@NotNull String data) {
         this.data = data.trim();
     }
 
@@ -25,6 +28,7 @@ public class NumberJson implements Json {
         return Json.NUMBER;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return data;

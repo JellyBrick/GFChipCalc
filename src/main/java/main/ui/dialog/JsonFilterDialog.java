@@ -4,6 +4,7 @@ import main.App;
 import main.puzzle.Chip;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,15 +22,17 @@ public class JsonFilterDialog extends JDialog {
 
     private final App app;
 
+    @NotNull
     private final List<Chip> chipsInput, chipsOutput;
 
-    public static List<Chip> filter(App app, Component c, List<Chip> chips) {
+    @NotNull
+    public static List<Chip> filter(App app, Component c, @NotNull List<Chip> chips) {
         JsonFilterDialog dialog = new JsonFilterDialog(app, chips);
         Fn.open(c, dialog);
         return dialog.chipsOutput;
     }
 
-    private JsonFilterDialog(App app, List<Chip> chips) {
+    private JsonFilterDialog(App app, @NotNull List<Chip> chips) {
         this.app = app;
         this.chipsInput = new ArrayList<>(chips);
         this.chipsOutput = new ArrayList<>();
