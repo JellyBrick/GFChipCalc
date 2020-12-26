@@ -49,13 +49,13 @@ public class ZDDNode {
             out.add(new HashSet<>());
             return out;
         }
-        hiChild.get().parallelStream().forEach((set) -> {
+        hiChild.get().forEach((set) -> {
             Set<Integer> e = new HashSet<>(set);
             e.add(label);
             out.add(e);
         });
         if (loChild != null) {
-            loChild.get().parallelStream().forEach((set) -> {
+            loChild.get().forEach((set) -> {
                 Set<Integer> e = new HashSet<>(set);
                 out.add(e);
             });

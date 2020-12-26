@@ -94,7 +94,7 @@ public class ProxyMessage {
     }
 
     private static boolean containsHeader(@NotNull String header, @NotNull Map<String, String> headerMap) {
-        return headerMap.keySet().parallelStream().map(String::toLowerCase).anyMatch((key) -> key.equals(header.toLowerCase()));
+        return headerMap.keySet().stream().map(String::toLowerCase).anyMatch((key) -> key.equals(header.toLowerCase()));
     }
 
     @Nullable
@@ -117,7 +117,7 @@ public class ProxyMessage {
     @NotNull
     private static String getBodyHex(@NotNull List<Byte> byteList) {
         StringBuilder sb = new StringBuilder();
-        byteList.parallelStream().forEach((b) -> sb.append(byteToHex(b)));
+        byteList.forEach((b) -> sb.append(byteToHex(b)));
         return sb.toString();
     }
 
@@ -125,7 +125,7 @@ public class ProxyMessage {
     public String getRequestHeader() {
         String out = reqMethod + " " + reqUrl + " " + reqVersion + System.lineSeparator();
         List<String> headers = new ArrayList<>();
-        reqHeader.keySet().parallelStream().map((key) -> key + ": " + reqHeader.get(key)).parallel().forEach(headers::add);
+        reqHeader.keySet().stream().map((key) -> key + ": " + reqHeader.get(key)).forEach(headers::add);
         Collections.sort(headers);
         out += String.join(System.lineSeparator(), headers);
         return out;
@@ -168,7 +168,7 @@ public class ProxyMessage {
         fixForConnect();
         String out = reqVersion + " " + resCode + " " + resMsg + System.lineSeparator();
         List<String> headers = new ArrayList<>();
-        resHeader.keySet().parallelStream().map((key) -> key + ": " + resHeader.get(key)).parallel().forEach(headers::add);
+        resHeader.keySet().stream().map((key) -> key + ": " + resHeader.get(key)).forEach(headers::add);
         Collections.sort(headers);
         out += String.join(System.lineSeparator(), headers);
         return out;

@@ -55,20 +55,20 @@ public class JsonParser {
             Json squadsJ = o.getValue(CHIPKEY_SQUAD);
             if (squadsJ.getType() == Json.OBJECT) {
                 List<String> squadJKeys = Json.getObjectKeys(squadsJ);
-                parseChip_squad(squadMap, squadJKeys.parallelStream().map((jKey) -> Json.getObjectJson(Json.getObjectValue(squadsJ, jKey))));
+                parseChip_squad(squadMap, squadJKeys.stream().map((jKey) -> Json.getObjectJson(Json.getObjectValue(squadsJ, jKey))));
             } else if (squadsJ.getType() == Json.ARRAY) {
                 List<Json> squadJs = Json.getList(squadsJ);
-                parseChip_squad(squadMap, squadJs.parallelStream().map(Json::getObjectJson));
+                parseChip_squad(squadMap, squadJs.stream().map(Json::getObjectJson));
             }
 
             // Chip
             Json chipsJ = o.getValue(CHIPKEY_CHIP);
             if (chipsJ.getType() == Json.OBJECT) {
                 List<String> chipJKeys = Json.getObjectKeys(chipsJ);
-                parseChip_chip(squadMap, chips, chipJKeys.parallelStream().map((jKey) -> Json.getObjectJson(Json.getObjectValue(chipsJ, jKey))));
+                parseChip_chip(squadMap, chips, chipJKeys.stream().map((jKey) -> Json.getObjectJson(Json.getObjectValue(chipsJ, jKey))));
             } else if (chipsJ.getType() == Json.ARRAY) {
                 List<Json> chipJs = Json.getList(chipsJ);
-                parseChip_chip(squadMap, chips, chipJs.parallelStream().map(Json::getObjectJson));
+                parseChip_chip(squadMap, chips, chipJs.stream().map(Json::getObjectJson));
             }
 
             Collections.reverse(chips);

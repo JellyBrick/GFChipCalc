@@ -137,7 +137,11 @@ public class Proxy {
                 return text;
             }
             if (text.startsWith("#")) {
-                return decode_gzip(AuthCode.decodeWithGzip(text.substring(1), key));
+                byte[] data = AuthCode.decodeWithGzip(text.substring(1), key);
+                if (data == null)
+                    return "";
+                else
+                    return decode_gzip(data);
             }
             return AuthCode.decode(text, key);
         } catch (Exception ignored) {
@@ -162,7 +166,7 @@ public class Proxy {
 
     public void stop() {
         isRunning = false;
-        threads.parallelStream()
+        threads.stream()
                 .filter(Thread::isAlive)
                 .forEach(Thread::interrupt);
         threads.clear();

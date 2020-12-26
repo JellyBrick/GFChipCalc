@@ -546,10 +546,9 @@ public class ColorMatrix {
                             yMax = pt.y;
                         }
 
-                        get8Neighbors(pt, width, height).parallelStream()
+                        get8Neighbors(pt, width, height).stream()
                                 .filter((p) -> temp.getRed(p.x, p.y) == 0)
                                 .filter((p) -> !pts.contains(p))
-                                .parallel()
                                 .forEach(pts::add);
                     }
                     rects.add(new Rectangle(xMin, yMin, xMax - xMin, yMax - yMin));

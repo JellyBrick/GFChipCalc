@@ -139,15 +139,15 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
     public String toData() {
         // Names
 
-        String sb = puzzles.parallelStream().map(p -> String.valueOf(p.shape.id)).collect(Collectors.joining(",")) +
+        String sb = puzzles.stream().map(p -> String.valueOf(p.shape.id)).collect(Collectors.joining(",")) +
                 ";" +
 
                 // Rotations
-                puzzles.parallelStream().map(p -> String.valueOf(p.rotation)).collect(Collectors.joining(",")) +
+                puzzles.stream().map(p -> String.valueOf(p.rotation)).collect(Collectors.joining(",")) +
                 ";" +
 
                 // Locations
-                puzzles.parallelStream().map(p -> IO.data(p.location)).collect(Collectors.joining(",")) +
+                puzzles.stream().map(p -> IO.data(p.location)).collect(Collectors.joining(",")) +
                 ";" +
 
                 // Symmetry

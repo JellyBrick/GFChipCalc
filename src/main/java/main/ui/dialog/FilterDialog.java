@@ -48,8 +48,8 @@ public class FilterDialog extends JDialog {
         initComponents();
 
         this.app = app;
-        this.tip = new TagPanel(app, this, (t1) -> app.filter.includedTags.parallelStream().anyMatch(t1::equals), false);
-        this.txp = new TagPanel(app, this, (t1) -> app.filter.excludedTags.parallelStream().anyMatch(t1::equals), false);
+        this.tip = new TagPanel(app, this, (t1) -> app.filter.includedTags.stream().anyMatch(t1::equals), false);
+        this.txp = new TagPanel(app, this, (t1) -> app.filter.excludedTags.stream().anyMatch(t1::equals), false);
 
         starTBs = new JToggleButton[]{star5TB, star4TB, star3TB, star2TB};
         colorTBs = new JToggleButton[]{colorOrangeTB, colorBlueTB};

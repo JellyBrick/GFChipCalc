@@ -279,7 +279,7 @@ public class ImageDialog extends JDialog {
     }
 
     private void addRect(@NotNull Rectangle rect, boolean addedByUser) {
-        boolean overlapped = rcs.parallelStream().anyMatch((rc) -> Fn.isOverlapped(rect, rc.rect));
+        boolean overlapped = rcs.stream().anyMatch((rc) -> Fn.isOverlapped(rect, rc.rect));
         if (!overlapped) {
             Chip c = ImageProcessor.idChip(image, rect);
             rcs.add(new RC(rect, c));

@@ -61,7 +61,7 @@ public class ImageProcessor {
         List<Rectangle> rects_ratio = new ArrayList<>();
 
         // Ratio
-        matrix.monochrome(0.5).findRects().parallelStream()
+        matrix.monochrome(0.5).findRects().stream()
                 .filter((r) -> 90 <= r.width)
                 .filter((r) -> {
                     double ratio = (double) r.height / r.width;
@@ -71,7 +71,7 @@ public class ImageProcessor {
         // Remove outliers using width median
         rects_ratio.sort(Comparator.comparingInt(o -> o.width));
         int medianWidth = rects_ratio.get(rects_ratio.size() / 2).width;
-        List<Rectangle> rects = rects_ratio.parallelStream().filter((r) -> Math.abs(r.width - medianWidth) < 10).collect(Collectors.toList());
+        List<Rectangle> rects = rects_ratio.stream().filter((r) -> Math.abs(r.width - medianWidth) < 10).collect(Collectors.toList());
 
         return rects;
     }
@@ -274,7 +274,7 @@ public class ImageProcessor {
     @NotNull
     private static Set<Rectangle> filterRects_star(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
-        rects.parallelStream()
+        rects.stream()
                 .filter((r) -> 3 * factor < r.width)
                 .filter((r) -> 9 * factor > r.width)
                 .filter((r) -> 3 * factor < r.height)
@@ -298,7 +298,7 @@ public class ImageProcessor {
     @NotNull
     private static Set<Rectangle> filterRects_levelDigit(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
-        rects.parallelStream()
+        rects.stream()
                 .filter((r) -> 6 * factor > r.width)
                 .filter((r) -> 8 * factor < r.height)
                 .filter((r) -> 12 * factor > r.height)
@@ -309,7 +309,7 @@ public class ImageProcessor {
     @NotNull
     private static Set<Rectangle> filterRects_statIconArea(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
-        rects.parallelStream()
+        rects.stream()
                 .filter((r) -> 18 * factor < r.width)
                 .filter((r) -> 22 * factor > r.width)
                 .filter((r) -> (0 <= r.x && r.x <= 5 * factor)
@@ -321,7 +321,7 @@ public class ImageProcessor {
     @NotNull
     private static Set<Rectangle> filterRects_statDigit(@NotNull Set<Rectangle> rects, float factor) {
         Set<Rectangle> out = new HashSet<>();
-        rects.parallelStream()
+        rects.stream()
                 .filter((r) -> 9 * factor > r.width)
                 .filter((r) -> 12 * factor < r.height)
                 .filter((r) -> 18 * factor > r.height)
@@ -524,7 +524,7 @@ public class ImageProcessor {
     @Nullable
     private static Rectangle filterRect_shape(@NotNull Set<Rectangle> rects, double factor) {
         Set<Rectangle> filtered = new HashSet<>();
-        rects.parallelStream()
+        rects.stream()
                 .filter((r) -> 10 * factor < r.width)
                 .filter((r) -> 10 * factor < r.height)
                 .forEach(filtered::add);
@@ -535,14 +535,14 @@ public class ImageProcessor {
         if (rects.isEmpty()) {
             return defaultValue;
         }
-        return rects.parallelStream().map((r) -> r.y).min(Integer::compare).get();
+        return rects.stream().map((r) -> r.y).min(Integer::compare).get();
     }
 
     private static int getMaxY(@NotNull Set<Rectangle> rects, int defaultValue) {
         if (rects.isEmpty()) {
             return defaultValue;
         }
-        return rects.parallelStream().map((r) -> r.y + r.height).max(Integer::compare).get();
+        return rects.stream().map((r) -> r.y + r.height).max(Integer::compare).get();
     }
 
     @Nullable
