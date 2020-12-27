@@ -187,7 +187,7 @@ public class ProxyHandlerThread extends Thread {
             try (DataOutputStream ptsOS = getDOS(connection.getOutputStream())) {
                 if (bodyTE) {
                     handleBody_chunkedTransferEncoding(ctpIS, ptsOS, pm.reqBody, saveType != SaveType.NONE);
-                } else if (bodyCL) {
+                } else {
                     handleBody_contentLength(ctpIS, ptsOS, pm.reqBody, saveType != SaveType.NONE, Integer.parseInt(pm.getReqHeader(Proxy.CONTENT_LENGTH)));
                 }
             }
@@ -225,7 +225,7 @@ public class ProxyHandlerThread extends Thread {
                 try (DataInputStream stpIS = getDIS(cis)) {
                     if (bodyTE) {
                         handleBody_chunkedTransferEncoding(stpIS, ptcOS, pm.resBody, saveType != SaveType.NONE);
-                    } else if (bodyCL) {
+                    } else {
                         handleBody_contentLength(stpIS, ptcOS, pm.resBody, saveType != SaveType.NONE, Integer.parseInt(pm.getResHeader(Proxy.CONTENT_LENGTH)));
                     }
                 } catch (NullPointerException ignored) {

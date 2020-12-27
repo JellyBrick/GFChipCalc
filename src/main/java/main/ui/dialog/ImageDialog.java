@@ -37,18 +37,30 @@ public class ImageDialog extends JDialog {
 
     private boolean cancelled = true;
 
-    private static class RC {
-
-        final Rectangle rect;
-        @Nullable
-        Chip chip;
-
-        public RC(Rectangle rect, Chip chip) {
-            this.rect = rect;
-            this.chip = chip;
-        }
-
+    private void readImage(@NotNull BufferedImage image) {
+        this.image = image;
+        ThreadPoolManager.getThreadPool().execute(() -> {
+            SwingUtilities.invokeLater(() -> scanProgressBar.setIndeterminate(true));
+            List<Rectangle> candidates = ImageProcessor.detectChips(image);
+            rcs.clear();
+            SwingUtilities.invokeLater(() -> {
+                scanProgressBar.setIndeterminate(false);
+                scanProgressBar.setMaximum(candidates.size());
+                scanProgressBar.setValue(0);
+            });
+            candidates.sort((o1, o2) -> {
+                if (o2.y < o1.y + o1.height && o1.y < o2.y + o2.height) {
+                    return Integer.compare(o1.x, o2.x);
+                }
+                return Integer.compare(o1.y, o2.y);
+            });
+            candidates.forEach((r) -> {
+                addRect(r, false);
+                SwingUtilities.invokeLater(() -> scanProgressBar.setValue(scanProgressBar.getValue() + 1));
+            });
+        });
     }
+
     private final List<RC> rcs = new ArrayList<>();
     private final Map<Integer, JLabel> chipImagePoppedup = new HashMap<>();
 
@@ -254,28 +266,17 @@ public class ImageDialog extends JDialog {
         return false;
     }
 
-    private void readImage(BufferedImage image) {
-        this.image = image;
-        ThreadPoolManager.getThreadPool().execute(() -> {
-            SwingUtilities.invokeLater(() -> scanProgressBar.setIndeterminate(true));
-            List<Rectangle> candidates = ImageProcessor.detectChips(image);
-            rcs.clear();
-            SwingUtilities.invokeLater(() -> {
-                scanProgressBar.setIndeterminate(false);
-                scanProgressBar.setMaximum(candidates.size());
-                scanProgressBar.setValue(0);
-            });
-            candidates.sort((o1, o2) -> {
-                if (o2.y < o1.y + o1.height && o1.y < o2.y + o2.height) {
-                    return Integer.compare(o1.x, o2.x);
-                }
-                return Integer.compare(o1.y, o2.y);
-            });
-            candidates.forEach((r) -> {
-                addRect(r, false);
-                SwingUtilities.invokeLater(() -> scanProgressBar.setValue(scanProgressBar.getValue() + 1));
-            });
-        });
+    private static class RC {
+
+        final Rectangle rect;
+        @Nullable
+        Chip chip;
+
+        public RC(Rectangle rect, @Nullable Chip chip) {
+            this.rect = rect;
+            this.chip = chip;
+        }
+
     }
 
     private void addRect(@NotNull Rectangle rect, boolean addedByUser) {

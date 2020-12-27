@@ -10,6 +10,7 @@ import main.ui.resource.AppColor;
 import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -29,6 +30,7 @@ public class ImageModifyDialog extends JDialog {
     private Shape shape = Shape.DEFAULT;
     private int star = 5;
     private int color = Chip.COLOR_ORANGE;
+    @NotNull
     private int[] pt = new int[4];
     private int level = 0;
     private int rotation = 0;

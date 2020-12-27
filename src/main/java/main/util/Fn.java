@@ -290,8 +290,7 @@ public class Fn {
 
     @NotNull
     public static float[] getHSB(@NotNull Color c) {
-        float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
-        return hsb;
+        return Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
     }
     // </editor-fold>
 
@@ -327,8 +326,7 @@ public class Fn {
         }
         int x = container.x + container.width / 2 - newWidth / 2;
         int y = container.y + container.height / 2 - newHeight / 2;
-        Rectangle out = new Rectangle(x, y, newWidth, newHeight);
-        return out;
+        return new Rectangle(x, y, newWidth, newHeight);
     }
     // </editor-fold>
 }

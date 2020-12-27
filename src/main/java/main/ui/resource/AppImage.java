@@ -203,10 +203,8 @@ public class AppImage {
             }
             if (statExists) {
                 g.setColor(AppColor.YELLOW_STAR);
-                StringBuilder starString = new StringBuilder();
-                starString.append(AppText.TEXT_STAR_FULL.repeat(Math.max(0, star)));
                 int xOffset = iw / 2;
-                g.drawString(starString.toString(), CHIP_GAP, CHIP_TILESIZE + CHIP_GAP);
+                g.drawString(AppText.TEXT_STAR_FULL.repeat(Math.max(0, star)), CHIP_GAP, CHIP_TILESIZE + CHIP_GAP);
                 // Level
                 g.setFont(AppFont.FONT_DIGIT);
                 if (0 < level) {
@@ -263,7 +261,7 @@ public class AppImage {
         public static int width(boolean statExists) {
             int width = CHIP_TILESIZE * 6 + CHIP_GAP * 2;
             if (statExists) {
-                width = Math.max(width, CHIP_TILESIZE * 5);
+                width = width;
             }
             return width;
         }

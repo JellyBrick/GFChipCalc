@@ -8,7 +8,6 @@ package main.puzzle;
 import main.util.DoubleKeyHashMap;
 import main.util.Fn;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -330,7 +329,7 @@ public enum Shape {
         return MAX_ROTATIONS.get(this);
     }
 
-    @Nullable
+    @NotNull
     public Point getPivot(int rotation) {
         return new Point(PIVOTS.get(this, rotation));
     }

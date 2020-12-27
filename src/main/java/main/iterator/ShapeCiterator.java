@@ -43,7 +43,7 @@ public class ShapeCiterator implements Iterator<List<Shape>> {
         limited = true;
     }
 
-    public ShapeCiterator(String name, int star, Set<Shape.Type> types) {
+    public ShapeCiterator(String name, int star, @NotNull Set<Shape.Type> types) {
         chipNameCountMap = new HashMap<>();
 
         List<Map<Shape.Type, Integer>> typeCountMaps = PerTypeShapeCiterator.getTypeCountMaps(name, star, types);
@@ -88,6 +88,7 @@ public class ShapeCiterator implements Iterator<List<Shape>> {
         return getIterator().hasNext();
     }
 
+    @NotNull
     @Override
     public List<Shape> next() {
         if (iterators.isEmpty()) {

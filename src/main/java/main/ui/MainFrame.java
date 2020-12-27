@@ -28,6 +28,7 @@ import main.util.IO;
 import main.util.Ref;
 import main.util.ThreadPoolManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Timer;
 import javax.swing.*;
@@ -1911,6 +1912,7 @@ public class MainFrame extends JFrame {
         }
     }
 
+    @Nullable
     private CalcSetting calcSetting;
     private CalcExtraSetting calcExtraSetting;
     private Progress progress;
@@ -1961,7 +1963,7 @@ public class MainFrame extends JFrame {
             else {
                 // Check if any chip size is smaller than dictionary chip size
                 Enumeration<Chip> elements = invLM.elements();
-                while (elements.hasMoreElements() && calcMode == CalcExtraSetting.CALCMODE_DICTIONARY) {
+                while (elements.hasMoreElements()) {
                     Chip c = elements.nextElement();
                     if (!c.typeGeq(minType)) {
                         calcMode = CalcExtraSetting.CALCMODE_ALGX;

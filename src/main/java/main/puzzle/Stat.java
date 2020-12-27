@@ -148,8 +148,7 @@ public class Stat implements Comparable<Stat>, Serializable {
 
     @NotNull
     public int[] toArray() {
-        int[] out = {dmg, brk, hit, rld};
-        return out;
+        return new int[]{dmg, brk, hit, rld};
     }
 
     public int sum() {

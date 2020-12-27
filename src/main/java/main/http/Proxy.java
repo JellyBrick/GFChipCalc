@@ -103,8 +103,7 @@ public class Proxy {
                 while (!keyReceived) {
                     wait();
                 }
-                String decoded = decode(data, key);
-                data = decoded;
+                data = decode(data, key);
             } catch (Exception ignored) {
             }
         }
@@ -160,7 +159,7 @@ public class Proxy {
         return byteOS.toString();
     }
 
-    private void parse(String s) {
+    private void parse(@NotNull String s) {
         SwingUtilities.invokeLater(() -> dialog.parse(s));
     }
 

@@ -21,8 +21,7 @@ public class Rational {
     }
 
     public int getIntFloor() {
-        int q = numerator / denominator;
-        return q;
+        return numerator / denominator;
     }
 
     public int getIntCeil() {
@@ -34,8 +33,7 @@ public class Rational {
     }
 
     public double getDouble() {
-        double nDouble = numerator;
-        return nDouble / denominator;
+        return (double) numerator / denominator;
     }
 
     @NotNull

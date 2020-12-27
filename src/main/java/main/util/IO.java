@@ -362,11 +362,9 @@ public class IO {
             // Symmetry
             boolean symmetry = parseBoolean(split[3]);
 
-            BoardTemplate pp = new BoardTemplate(name, star, puzzles, symmetry);
-            return pp;
+            return new BoardTemplate(name, star, puzzles, symmetry);
         } else {
-            BoardTemplate pp = new BoardTemplate(name, star, puzzles);
-            return pp;
+            return new BoardTemplate(name, star, puzzles);
         }
     }
 
@@ -385,8 +383,7 @@ public class IO {
     // <editor-fold defaultstate="collapsed" desc="Locales and Properties">
     @NotNull
     public static List<Locale> getInternalLocales() {
-        List<Locale> locales = new ArrayList<>(Arrays.asList(AppText.LOCALES));
-        return locales;
+        return new ArrayList<>(Arrays.asList(AppText.LOCALES));
     }
 
     @NotNull

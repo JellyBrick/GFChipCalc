@@ -511,9 +511,7 @@ public class Board implements Comparable<Board>, Serializable {
 
     @NotNull
     public static String getStarHTML_star(int star) {
-        StringBuilder starStr = new StringBuilder();
-        starStr.append(AppText.TEXT_STAR_FULL.repeat(Math.max(0, star)));
-        return Fn.toHTML(Fn.htmlColor(starStr.toString(), AppColor.YELLOW_STAR));
+        return Fn.toHTML(Fn.htmlColor(AppText.TEXT_STAR_FULL.repeat(Math.max(0, star)), AppColor.YELLOW_STAR));
     }
 
     @NotNull
@@ -526,11 +524,8 @@ public class Board implements Comparable<Board>, Serializable {
         StringBuilder halfRedStr = new StringBuilder();
         halfRedStr.append(AppText.TEXT_STAR_EMPTY.repeat(Math.max(0, nHalfRed)));
 
-        StringBuilder yellowStr = new StringBuilder();
-        yellowStr.append(AppText.TEXT_STAR_FULL.repeat(Math.max(0, 5 - (fullRedStr.length() + halfRedStr.length()))));
-
         return Fn.toHTML(Fn.htmlColor(fullRedStr.toString() + halfRedStr, AppColor.RED_STAR)
-                + Fn.htmlColor(yellowStr.toString(), AppColor.YELLOW_STAR)
+                + Fn.htmlColor(AppText.TEXT_STAR_FULL.repeat(Math.max(0, 5 - (fullRedStr.length() + halfRedStr.length()))), AppColor.YELLOW_STAR)
         );
     }
     // </editor-fold>
@@ -667,9 +662,7 @@ public class Board implements Comparable<Board>, Serializable {
             }
         }
 
-        Stat pt = new Stat(optimalPtArray);
-
-        return pt;
+        return new Stat(optimalPtArray);
     }
     // </editor-fold>
 
@@ -964,6 +957,7 @@ public class Board implements Comparable<Board>, Serializable {
         return bm;
     }
 
+    @NotNull
     private static Set<Point> rs_getPts(Shape shape, int rotation, @NotNull Point location) {
         PuzzleMatrix<Boolean> cm = new PuzzleMatrix<>(Chip.generateMatrix(shape, rotation));
         Point pivot = cm.getPivot(true);

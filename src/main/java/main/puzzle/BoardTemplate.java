@@ -89,7 +89,7 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
         }
     }
 
-    @Nullable
+    @NotNull
     public PuzzleMatrix<Integer> getMatrix() {
         return new PuzzleMatrix<>(placement);
     }
@@ -139,7 +139,7 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
     public String toData() {
         // Names
 
-        String sb = puzzles.stream().map(p -> String.valueOf(p.shape.id)).collect(Collectors.joining(",")) +
+        return puzzles.stream().map(p -> String.valueOf(p.shape.id)).collect(Collectors.joining(",")) +
                 ";" +
 
                 // Rotations
@@ -152,7 +152,6 @@ public class BoardTemplate implements Comparable<BoardTemplate> {
 
                 // Symmetry
                 IO.data(calcSymmetry());
-        return sb;
     }
 
     public void sortPuzzle() {

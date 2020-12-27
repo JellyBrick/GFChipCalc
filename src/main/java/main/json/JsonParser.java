@@ -29,14 +29,14 @@ public class JsonParser {
     public static List<Chip> readFile(@NotNull String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String data = br.lines().collect(Collectors.joining());
-            List<Chip> chips = parseChip(data);
-            return chips;
+            return parseChip(data);
         } catch (IOException ex) {
             App.log(ex);
             return new ArrayList<>();
         }
     }
 
+    @NotNull
     public static String parseSign(@NotNull String data) {
         ObjectJson o = Json.getObjectJson(Json.parse(data));
         return Json.getText(o.getValue(SIGNKEY));

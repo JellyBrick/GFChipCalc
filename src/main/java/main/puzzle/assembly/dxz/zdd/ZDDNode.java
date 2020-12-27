@@ -28,7 +28,7 @@ public class ZDDNode {
         this.hiChild = null;
     }
 
-    ZDDNode(int i, ZDDNode l, ZDDNode h) {
+    ZDDNode(int i, @Nullable ZDDNode l, @Nullable ZDDNode h) {
         this.label = i;
         this.loChild = l;
         this.hiChild = h;

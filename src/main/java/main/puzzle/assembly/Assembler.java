@@ -89,12 +89,57 @@ public class Assembler {
         return getBT(name, star, alt) != null;
     }
 
-    private List<BoardTemplate> getBT(String name, int star, boolean alt) {
-        return alt ? partialBTM.get(name, star) : fullBTM.get(name, star);
+    @NotNull
+    public static BoardTemplate generateTemplate(String boardName, int boardStar, @NotNull List<Shape> shapes, BooleanSupplier checkPause) {
+        return generateTemplate_DXZ(boardName, boardStar, shapes, checkPause);
     }
 
-    public Shape.Type getMinType(String name, int star, boolean alt) {
-        return alt ? partialBTM.getMinType(name, star) : fullBTM.getMinType(name, star);
+    @NotNull
+    private static BoardTemplate generateTemplate_DXZ(String boardName, int boardStar, @NotNull List<Shape> shapes, BooleanSupplier checkPause) {
+        PuzzleMatrix<Integer> puzzle = Board.initMatrix(boardName, boardStar);
+
+        Set<Point> emptyCoords = puzzle.getPoints(Board.EMPTY);
+
+        int nCol_name = shapes.size();
+        int nCol_cell = puzzle.getNumContaining(Board.EMPTY);
+        int nCol = nCol_name + nCol_cell;
+
+        List<Point> cols_pt = new ArrayList<>(emptyCoords);
+        List<boolean[]> rows = new ArrayList<>();
+        List<Puzzle> rows_puzzle = new ArrayList<>();
+
+        for (int i = 0; i < nCol_name; i++) {
+            Shape shape = shapes.get(i);
+            for (int rot = 0; rot < shape.getMaxRotation(); rot++) {
+                for (Point bp : emptyCoords) {
+                    Set<Point> tps = translate(shape, rot, bp);
+                    if (Board.isChipPlaceable(puzzle, tps)) {
+                        boolean[] row = new boolean[nCol];
+                        row[i] = true;
+                        tps.forEach((p) -> row[nCol_name + cols_pt.indexOf(p)] = true);
+                        rows.add(row);
+                        rows_puzzle.add(new Puzzle(shape, rot, bp));
+                    }
+                }
+            }
+        }
+
+        if (rows.isEmpty()) {
+            return BoardTemplate.empty();
+        }
+
+        Set<Integer> resultRows = DXZ.solve(rows, checkPause);
+        if (resultRows == null) {
+            return BoardTemplate.empty();
+        }
+
+        List<Puzzle> puzzles = new ArrayList<>();
+
+        List<Integer> sortedRows = new ArrayList<>(resultRows);
+        sortedRows.sort((o1, o2) -> Shape.compare(rows_puzzle.get(o1).shape, rows_puzzle.get(o2).shape));
+        sortedRows.forEach((r) -> puzzles.add(rows_puzzle.get(r)));
+        // System.out.println(puzzles);
+        return new BoardTemplate(boardName, boardStar, puzzles);
     }
 
     public boolean hasPartial(String name, int star) {
@@ -214,6 +259,17 @@ public class Assembler {
         offer(q, BoardTemplate.end());
     }
 
+    @Nullable
+    private List<BoardTemplate> getBT(String name, int star, boolean alt) {
+        return alt ? partialBTM.get(name, star) : fullBTM.get(name, star);
+    }
+
+    @Nullable
+    public Shape.Type getMinType(String name, int star, boolean alt) {
+        return alt ? partialBTM.getMinType(name, star) : fullBTM.getMinType(name, star);
+    }
+
+    @NotNull
     private BoardTemplate combine_template_algX(@NotNull ShapeCiterator iterator) {
         if (!iterator.isNextValid()) {
             iterator.skip();
@@ -221,58 +277,6 @@ public class Assembler {
         }
         List<Shape> shapes = iterator.next();
         return generateTemplate(cs.boardName, cs.boardStar, shapes, checkPause);
-    }
-
-    public static BoardTemplate generateTemplate(String boardName, int boardStar, @NotNull List<Shape> shapes, BooleanSupplier checkPause) {
-        return generateTemplate_DXZ(boardName, boardStar, shapes, checkPause);
-    }
-
-    private static BoardTemplate generateTemplate_DXZ(String boardName, int boardStar, @NotNull List<Shape> shapes, BooleanSupplier checkPause) {
-        PuzzleMatrix<Integer> puzzle = Board.initMatrix(boardName, boardStar);
-
-        Set<Point> emptyCoords = puzzle.getPoints(Board.EMPTY);
-
-        int nCol_name = shapes.size();
-        int nCol_cell = puzzle.getNumContaining(Board.EMPTY);
-        int nCol = nCol_name + nCol_cell;
-
-        List<Point> cols_pt = new ArrayList<>(emptyCoords);
-        List<boolean[]> rows = new ArrayList<>();
-        List<Puzzle> rows_puzzle = new ArrayList<>();
-
-        for (int i = 0; i < nCol_name; i++) {
-            Shape shape = shapes.get(i);
-            for (int rot = 0; rot < shape.getMaxRotation(); rot++) {
-                for (Point bp : emptyCoords) {
-                    Set<Point> tps = translate(shape, rot, bp);
-                    if (Board.isChipPlaceable(puzzle, tps)) {
-                        boolean[] row = new boolean[nCol];
-                        row[i] = true;
-                        tps.forEach((p) -> row[nCol_name + cols_pt.indexOf(p)] = true);
-                        rows.add(row);
-                        rows_puzzle.add(new Puzzle(shape, rot, bp));
-                    }
-                }
-            }
-        }
-
-        if (rows.isEmpty()) {
-            return BoardTemplate.empty();
-        }
-
-        Set<Integer> resultRows = DXZ.solve(rows, checkPause);
-        if (resultRows == null) {
-            return BoardTemplate.empty();
-        }
-
-        List<Puzzle> puzzles = new ArrayList<>();
-
-        List<Integer> sortedRows = new ArrayList<>(resultRows);
-        sortedRows.sort((o1, o2) -> Shape.compare(rows_puzzle.get(o1).shape, rows_puzzle.get(o2).shape));
-        sortedRows.forEach((r) -> puzzles.add(rows_puzzle.get(r)));
-        // System.out.println(puzzles);
-        BoardTemplate bt = new BoardTemplate(boardName, boardStar, puzzles);
-        return bt;
     }
 
     @NotNull

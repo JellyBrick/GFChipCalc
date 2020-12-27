@@ -116,6 +116,7 @@ public class BoardSetting {
         return StatPresetMap.PRESET.get(name, star, 0).stat.equals(Board.getMaxStat(name, star));
     }
 
+    @Nullable
     public static StatPreset getPreset(String name, int star, int index) {
         return StatPresetMap.PRESET.get(name, star, index);
     }

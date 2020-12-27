@@ -60,7 +60,7 @@ public class Tag implements Serializable, Comparable<Object> {
     }
 
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(@NotNull Object o) {
         Tag t = (Tag) o;
         return this.name.compareTo(t.name);
     }

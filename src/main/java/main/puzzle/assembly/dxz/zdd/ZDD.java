@@ -10,6 +10,7 @@ public class ZDD {
 
     public static final ZDDNode TRUE_TERMINAL = new ZDDNode();
 
+    @NotNull
     public static ZDDNode unique(int i, ZDDNode l, ZDDNode h, @NotNull ZDDNodeTable Z) {
         ZDDNode element = Z.get(i, l, h);
         if (element != null) {

@@ -107,7 +107,7 @@ public class ProxyDialog extends JDialog {
     }
     // </editor-fold>
 
-    public void parse(String data) {
+    public void parse(@NotNull String data) {
         chips = JsonParser.parseChip(data);
         setStage(Stage.DONE);
     }

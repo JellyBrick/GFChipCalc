@@ -10,6 +10,7 @@ import main.ui.resource.AppImage;
 import main.ui.resource.AppText;
 import main.util.Fn;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -31,6 +32,7 @@ public class CalcSettingDialog extends JDialog {
 
     private boolean advancedSetting;
     private int mode, presetIndex;
+    @Nullable
     private Stat stat, pt;
     private boolean radioLoading;
     private int markType;

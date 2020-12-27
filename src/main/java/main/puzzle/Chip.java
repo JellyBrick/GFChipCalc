@@ -188,7 +188,7 @@ public class Chip implements Serializable {
     }
 
     // ImageProcessor
-    public Chip(@NotNull Shape shape, int star, int color, Stat pt,
+    public Chip(@NotNull Shape shape, int star, int color, @Nullable Stat pt,
                 int level, int rotation) {
         this.id = UUID.randomUUID().toString();
         this.shape = shape;
@@ -206,7 +206,7 @@ public class Chip implements Serializable {
     }
 
     // json (Inventory)
-    public Chip(String id, @NotNull Shape shape, int star, int color, Stat pt,
+    public Chip(@Nullable String id, @NotNull Shape shape, int star, int color, @Nullable Stat pt,
                 int level, int rotation) {
         this.id = id;
         this.shape = shape;
@@ -223,8 +223,8 @@ public class Chip implements Serializable {
         this.tags = new HashSet<>();
     }
 
-    public Chip(String id,
-                @NotNull Shape shape, int star, int color, Stat pt,
+    public Chip(@Nullable String id,
+                @NotNull Shape shape, int star, int color, @Nullable Stat pt,
                 int level, int rotation,
                 boolean marked, Set<Tag> tags) {
         this.id = id;
@@ -261,6 +261,7 @@ public class Chip implements Serializable {
         return shape.getSize();
     }
 
+    @NotNull
     public Shape.Type getType() {
         return shape.getType();
     }
@@ -320,8 +321,7 @@ public class Chip implements Serializable {
     }
 
     public void setRotation(int r) {
-        int rot = r % shape.getMaxRotation();
-        this.rotation = rot;
+        this.rotation = r % shape.getMaxRotation();
     }
 
     public void resetRotation() {

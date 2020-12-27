@@ -1,6 +1,7 @@
 package main.json;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -150,6 +151,7 @@ public interface Json {
         return ((NumberJson) data).getDouble();
     }
 
+    @NotNull
     static String getText(@NotNull Json data) throws ClassCastException {
         if (data.getType() != TEXT) {
             throw new ClassCastException(getClassCastExceptionMessage(data, TextJson.class.getName()));
@@ -157,6 +159,7 @@ public interface Json {
         return ((TextJson) data).getText();
     }
 
+    @NotNull
     static List<Json> getList(@NotNull Json data) throws ClassCastException {
         if (data.getType() != ARRAY) {
             throw new ClassCastException(getClassCastExceptionMessage(data, ArrayJson.class.getName()));
@@ -172,6 +175,7 @@ public interface Json {
         return (ObjectJson) data;
     }
 
+    @NotNull
     static List<String> getObjectKeys(@NotNull Json data) throws ClassCastException {
         if (data.getType() != OBJECT) {
             throw new ClassCastException(getClassCastExceptionMessage(data, ObjectJson.class.getName()));
@@ -179,6 +183,7 @@ public interface Json {
         return ((ObjectJson) data).getKeys();
     }
 
+    @Nullable
     static Json getObjectValue(@NotNull Json data, String key) throws ClassCastException {
         if (data.getType() != OBJECT) {
             throw new ClassCastException(getClassCastExceptionMessage(data, ObjectJson.class.getName()));
