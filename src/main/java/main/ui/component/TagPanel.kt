@@ -1,0 +1,294 @@
+package main.ui.component
+
+import main.App
+import main.puzzle.Tag
+import main.ui.renderer.TagTableCellRenderer
+import main.ui.resource.AppText
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.event.ActionEvent
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
+import java.awt.event.MouseListener
+import java.util.function.Consumer
+import java.util.function.Predicate
+import javax.swing.*
+import javax.swing.event.ListSelectionEvent
+import javax.swing.event.TableModelListener
+import javax.swing.table.DefaultTableModel
+import kotlin.math.max
+
+/**
+ *
+ * @author Bunnyspa
+ */
+class TagPanel(app: App, dialog: JDialog, checkFn: Predicate<Tag?>?, editable: Boolean) : JPanel() {
+    private val app: App
+    private val dialog: JDialog
+    private val checkFn: Predicate<Tag?>?
+    private val checkBox: Boolean
+    private val tm: DefaultTableModel
+    private fun init() {
+        addButton!!.text = app.getText(AppText.ACTION_ADD)
+        colorButton!!.text = app.getText(AppText.CHIP_COLOR)
+        applyButton!!.text = app.getText(AppText.ACTION_APPLY)
+        tagTable!!.model = tm
+        tagTable!!.selectionBackground = app.orange()
+        tagTable!!.setDefaultRenderer(Tag::class.java, TagTableCellRenderer(app, checkBox))
+        if (checkBox) {
+            tm.addColumn("bool")
+        }
+        tm.addColumn("tag")
+        tagTable!!.tableHeader.setUI(null)
+        app.mf.inv_getAllTags().forEach(Consumer { t: Tag? ->
+            if (checkBox) {
+                val obj = arrayOf<Any?>(checkFn!!.test(t), t)
+                tm.addRow(obj)
+            } else {
+                val obj = arrayOf<Any?>(t)
+                tm.addRow(obj)
+            }
+        })
+        if (checkBox) {
+            resizeCheckBoxWidth(tagTable!!)
+        }
+        addListeners()
+    }
+
+    private fun addListeners() {
+        nameTextField!!.addKeyListener(object : KeyAdapter() {
+            override fun keyTyped(e: KeyEvent) {
+                val c = e.keyChar
+                if (c == ',' || c == ';') {
+                    e.consume() // ignore event
+                }
+            }
+        })
+        tagTable!!.selectionModel.addListSelectionListener { e: ListSelectionEvent? ->
+            val selected = tagTable!!.selectedRowCount > 0
+            nameTextField!!.isEnabled = selected
+            colorButton!!.isEnabled = selected
+            applyButton!!.isEnabled = selected
+            if (selected) {
+                val tag = getTag(selectedRow)
+                nameTextField!!.text = tag.name
+                nameTextField!!.foreground = tag.color
+            } else {
+                nameTextField!!.text = ""
+                nameTextField!!.foreground = Color.BLACK
+            }
+        }
+    }
+
+    fun addTableModelListener(l: TableModelListener?) {
+        tm.addTableModelListener(l)
+    }
+
+    fun addTableMouseListener(l: MouseListener?) {
+        tagTable!!.addMouseListener(l)
+    }
+
+    val count: Int
+        get() = tm.rowCount
+    val selectedRow: Int
+        get() = tagTable!!.selectedRow
+
+    fun isChecked(i: Int): Boolean {
+        return if (checkBox) {
+            tm.getValueAt(i, 0) as Boolean
+        } else false
+    }
+
+    fun setChecked(i: Int, b: Boolean) {
+        if (checkBox) {
+            tm.setValueAt(b, i, 0)
+        }
+    }
+
+    fun getTag(i: Int): Tag {
+        return if (checkBox) {
+            tm.getValueAt(i, 1) as Tag
+        } else tm.getValueAt(i, 0) as Tag
+    }
+
+    private fun addTag() {
+        val tag = Tag()
+        if (checkBox) {
+            tm.addRow(arrayOf<Any>(false, tag))
+            resizeCheckBoxWidth(tagTable!!)
+        } else {
+            tm.addRow(arrayOf<Any>(tag))
+        }
+    }
+
+    private fun applyTagChange() {
+        val tag = getTag(selectedRow)
+        tag.name = nameTextField!!.text
+        tag.color = nameTextField!!.foreground
+        app.mf.inv_getAllTags().stream().filter { obj: Tag? -> tag == obj }.forEach { t: Tag? ->
+            t!!.name = nameTextField!!.text
+            t.color = nameTextField!!.foreground
+        }
+        tagTable!!.repaint()
+        app.mf.invStat_enableSave()
+        app.mf.invStat_loadStats()
+    }
+
+    private fun changeColor() {
+        val color = JColorChooser.showDialog(dialog, "색상", nameTextField!!.foreground)
+        nameTextField!!.foreground = color
+    }
+
+    private class TagTableModel(private val checkBox: Boolean) : DefaultTableModel() {
+        override fun isCellEditable(row: Int, column: Int): Boolean {
+            return checkBox && column == 0
+        }
+
+        override fun getColumnClass(columnIndex: Int): Class<*> {
+            return if (checkBox && columnIndex == 0) Boolean::class.java else Tag::class.java
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private fun initComponents() {
+        jScrollPane2 = JScrollPane()
+        tagTable = JTable()
+        editPanel = JPanel()
+        applyButton = JButton()
+        nameTextField = JTextField()
+        colorButton = JButton()
+        addButton = JButton()
+        jScrollPane2!!.preferredSize = Dimension(250, 250)
+        tagTable!!.setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
+        tagTable!!.showHorizontalLines = false
+        tagTable!!.showVerticalLines = false
+        jScrollPane2!!.setViewportView(tagTable)
+        applyButton!!.text = "적용"
+        applyButton!!.isEnabled = false
+        applyButton!!.addActionListener { evt: ActionEvent -> applyButtonActionPerformed(evt) }
+        nameTextField!!.isEnabled = false
+        nameTextField!!.preferredSize = Dimension(100, 22)
+        colorButton!!.text = "색상"
+        colorButton!!.isEnabled = false
+        colorButton!!.addActionListener { evt: ActionEvent -> colorButtonActionPerformed(evt) }
+        addButton!!.text = "추가"
+        addButton!!.addActionListener { evt: ActionEvent -> addButtonActionPerformed(evt) }
+        val editPanelLayout = GroupLayout(editPanel)
+        editPanel!!.layout = editPanelLayout
+        editPanelLayout.setHorizontalGroup(
+            editPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    editPanelLayout.createSequentialGroup()
+                        .addComponent(colorButton)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(
+                            nameTextField,
+                            GroupLayout.DEFAULT_SIZE,
+                            GroupLayout.DEFAULT_SIZE,
+                            Short.MAX_VALUE.toInt()
+                        )
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(applyButton)
+                )
+                .addComponent(addButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE.toInt())
+        )
+        editPanelLayout.setVerticalGroup(
+            editPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    editPanelLayout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(
+                            editPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(colorButton)
+                                .addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(applyButton)
+                        )
+                )
+        )
+        val layout = GroupLayout(this)
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE.toInt())
+                .addComponent(editPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE.toInt())
+        )
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(
+                            editPanel,
+                            GroupLayout.PREFERRED_SIZE,
+                            GroupLayout.DEFAULT_SIZE,
+                            GroupLayout.PREFERRED_SIZE
+                        )
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(
+                            jScrollPane2,
+                            GroupLayout.DEFAULT_SIZE,
+                            GroupLayout.DEFAULT_SIZE,
+                            Short.MAX_VALUE.toInt()
+                        )
+                )
+        )
+    } // </editor-fold>//GEN-END:initComponents
+
+    private fun applyButtonActionPerformed(evt: ActionEvent) { //GEN-FIRST:event_applyButtonActionPerformed
+        applyTagChange()
+    } //GEN-LAST:event_applyButtonActionPerformed
+
+    private fun colorButtonActionPerformed(evt: ActionEvent) { //GEN-FIRST:event_colorButtonActionPerformed
+        changeColor()
+    } //GEN-LAST:event_colorButtonActionPerformed
+
+    private fun addButtonActionPerformed(evt: ActionEvent) { //GEN-FIRST:event_addButtonActionPerformed
+        addTag()
+    } //GEN-LAST:event_addButtonActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private var addButton: JButton? = null
+    private var applyButton: JButton? = null
+    private var colorButton: JButton? = null
+    private var editPanel: JPanel? = null
+    private var jScrollPane2: JScrollPane? = null
+    private var nameTextField: JTextField? = null
+    private var tagTable: JTable? = null // End of variables declaration//GEN-END:variables
+
+    companion object {
+        private fun resizeCheckBoxWidth(tagTable: JTable) {
+            if (tagTable.rowCount > 0) {
+                // Col 0
+                val tcr0 = tagTable.getCellRenderer(0, 0)
+                val c0 = tagTable.prepareRenderer(tcr0, 0, 0)
+                val width = c0.preferredSize.width
+                var height = c0.preferredSize.height
+                tagTable.columnModel.getColumn(0).maxWidth = width
+                // Col 1
+                val tcr1 = tagTable.getCellRenderer(0, 1)
+                val c1 = tagTable.prepareRenderer(tcr1, 0, 1)
+                height = max(height, c1.preferredSize.height)
+                for (i in 0 until tagTable.rowCount) {
+                    tagTable.rowHeight = height
+                }
+            }
+        }
+    }
+
+    init {
+        initComponents()
+        this.app = app
+        this.dialog = dialog
+        this.checkFn = checkFn
+        checkBox = checkFn != null
+        tm = TagTableModel(checkBox)
+        init()
+        if (!editable) {
+            editPanel!!.isVisible = false
+        }
+    }
+}
